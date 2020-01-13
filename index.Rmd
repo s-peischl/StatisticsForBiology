@@ -31,7 +31,7 @@ library(dplyr)
 
 
 
-# Visualization using ggplot
+# Visualizations with ggplot2
 
 We are going start with some examples of how to visulaize data. This should show you how easy it is to produce high quality visulaizations using R and motivate you to learn more about programming and data analysis with R. You will be learning the basic structure of a ggplot2 plot, and powerful techniques for turning data into plots.
 
@@ -145,7 +145,7 @@ p+theme_classic()
 p+theme_dark()
 ```
 
-# Loading datasets and calcualting summary statistics
+# Loading datasets
 
 First we need to make sure R knows where our working directory is:
 ```{r}
@@ -154,7 +154,7 @@ setwd("/Users/stephan/Dropbox/Teaching/StatisticsForBiology/")
 
 Now we can load a data frame using the function *read.csv* and store it in the variable stickleback
 ```{r}
-stickleback = read.csv("ABD_all_data/chapter03/chap03e3SticklebackPlates.csv")
+stickleback = read.csv("/Users/stephan/Dropbox/Teaching/StatisticsForBiology/ABD_all_data/chapter03/chap03e3SticklebackPlates.csv")
 ```
 
 The variable *stickleback* now contains a so called data frame. We can have a quick summary of the content of this data frame using the command *str* (short for STRucture):
@@ -201,7 +201,7 @@ mean(stickleback$plates)
 There is again something new here, the $ operator: it allows you to access a specific column of a data frame. 
 Try typing the name of a dataframe, followed by the $ operator in RStudio; it should automatically suggest you the availbale variable names in your data frame.  
 
-You may have noticed that we have no calcualted the mean number of plates for ALL fish in our data set. what if we want to calcualte the number of plates for a specific genotype? We can use the function filter (as always in R, there are other ways to do this - I chose to present filter because I think it is easy to undersand and very  "readable"):
+You may have noticed that we have no calcualted the mean number of plates for *ALL* fish in our data set. What if we want to calcualte the number of plates for a specific genotype? We can use the function filter (as always in R, there are other ways to do this - I chose to present filter because I think it is easy to undersand and very  "readable"):
 
 ```{r}
 stickleback.mm = filter(stickleback,genotype=="mm")
@@ -221,12 +221,14 @@ stickleback %>%
 group_by(genotype) %>%
 summarise(avg = mean(plates))
 ```
-This is very readblae: you take the dataframe stickleback, group it by genotye and summarize it by calcualting the mean number of plates. 
+This is very readblae: you take the dataframe stickleback, group it by genotye and summarize it by calcualting the mean number of plates.
 
-## Calculating statiscis in R
-Now 
 
-## Visulizing distirbutions 
+# A bit of workflow
+
+# Distributions
+
+## Visualizing distributions 
 We can visualize continous data in a histogram, for instnace how many cars we have in each class:
 
 ```{r}
@@ -281,19 +283,15 @@ ggplot(mpgSE, aes(x = reorder(class, hwy, FUN = median), y = hwy)) +
 
 
 
-# A bit of workflow
 
-# Distributions
-
-## Binomial 
-
-## Normal 
 
 # Hypothesis Tests
 
 ## Binomial-test, t-test
 
 # Deviations from Normailty
+
+## QQ Plots
 
 ## Transformations
 
@@ -302,6 +300,8 @@ ggplot(mpgSE, aes(x = reorder(class, hwy, FUN = median), y = hwy)) +
 ## Permutation Test
 
 # Testing for independence
+
+## Chi-square test
 
 # ANOVA
 
