@@ -25,6 +25,8 @@ We start by loading the relevant packages for this course. An R package is a col
 
 library(tidyverse)
 library(Rmisc)
+library(tibble)
+library(dplyr)
 ```
 
 
@@ -143,9 +145,86 @@ p+theme_classic()
 p+theme_dark()
 ```
 
+# Loading datasets and calcualting summary statistics
+
+First we need to make sure R knows where our working directory is:
+```{r}
+setwd("/Users/stephan/Dropbox/Teaching/StatisticsForBiology/")
+```
+
+Now we can load a data frame using the function *read.csv* and store it in the variable stickleback
+```{r}
+stickleback = read.csv("ABD_all_data/chapter03/chap03e3SticklebackPlates.csv")
+```
+
+The variable *stickleback* now contains a so called data frame. We can have a quick summary of the content of this data frame using the command *str* (short for STRucture):
+
+```{r}
+str(stickleback)
+```
+
+We can see form the output that we have 344 observations (= sample size) and for each individual we have measured 3 variables (id, plates and genotypes). ID and genotpye are so-called factors, that is, a catergorical variable and plates is of type integer.  
+
+We used the function *read.csv* because our data is stored in the csv format (short for comma seperate values - open the csv file to see what that means). CSV is a common format and you can export your data from software like Excel in that format. Of course, R provides functions for other formats as well. 
+
+Let us use our ggplot skills to create a nice figure that visualizes our data set. For this we introduce the fucntion *geom_bar()* which allows us to make a bar plot of the number of plates per indivudal, colored by genotype:
+```{r}
+ggplot(data = stickleback) + 
+  geom_bar(mapping = aes(x = plates,color=genotype)) + 
+  theme_classic()
+```
+
+This figure is a bit messy. A better way would be to show the distribution for each genotype in its own window. This can be done using the function *facet_wrap*. As before, we can simply add this to our ggplot command:
+
+```{r}
+ggplot(data = stickleback) + 
+  geom_bar(mapping = aes(x = plates),fill="darkred") + 
+  facet_wrap(~genotype,nrow = 3) +
+  theme_classic()
+```
+
+We used a new symbol here: the ~. This is part of an R object called formula and it will alter become clear why we used it here like this. For now, just remeber to use it in front of the varibale name in facet wrap. The second aprameter is simply the number of rows in the plot. Try changing it and see what happens. Note: the variable that you pass to facet_wrap shoudl **always** be categorical!
+
 # Descriptive Statistics 
+We continue using the stickleback data set and calcualte some statistics on it. A simple way to get a quick overview about the properties of your data frame is using the funciton *summary*:
+
+```{r}
+summary(stickleback)
+```
+
+If you want to calcualte a specific statistic, like the mean of a variable, this can be done easily:
+
+```{r}
+mean(stickleback$plates)
+```
+
+There is again something new here, the $ operator: it allows you to access a specific column of a data frame. 
+Try typing the name of a dataframe, followed by the $ operator in RStudio; it should automatically suggest you the availbale variable names in your data frame.  
+
+You may have noticed that we have no calcualted the mean number of plates for ALL fish in our data set. what if we want to calcualte the number of plates for a specific genotype? We can use the function filter (as always in R, there are other ways to do this - I chose to present filter because I think it is easy to undersand and very  "readable"):
+
+```{r}
+stickleback.mm = filter(stickleback,genotype=="mm")
+mean(stickleback.mm$plates)
+```
+You could now calcualte the mean plate numbers for each genotpye in this way.  To show you how to combine multiple commands quickly, we now are going to add two more functions to our set of tools:  *group_by* and *summarize*.
+
+```{r}
+summarise(avg = mean(plates),group_by(stickleback,genotype))
+```
+
+This is a very powerful combination: it allows you to calcualte the mean number of plates for each genotye in a single line. In fact this creates a new data frame that contains the variables "genotpye" (a factor) and the new variable "avg" (double, i.e., a decimal number) taht you can store and use for later analyses. 
+
+**Note:** the tidyverse offers us an elegant way to write a long series of commands in a very readable format. This operator is called the pipe %>%  (because we create a pipeline thorugh which our data "flows"). The above code to calculate the mean for each genotype would become:
+```{r}
+stickleback %>% 
+group_by(genotype) %>%
+summarise(avg = mean(plates))
+```
+This is very readblae: you take the dataframe stickleback, group it by genotye and summarize it by calcualting the mean number of plates. 
 
 ## Calculating statiscis in R
+Now 
 
 ## Visulizing distirbutions 
 We can visualize continous data in a histogram, for instnace how many cars we have in each class:
@@ -200,7 +279,7 @@ ggplot(mpgSE, aes(x = reorder(class, hwy, FUN = median), y = hwy)) +
 
 
 
-# Loading datastes
+
 
 # A bit of workflow
 
