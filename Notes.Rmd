@@ -1,30 +1,178 @@
 ---
-title: "Notes"
+title: "Lecture Notes for Statistics for Biology FS2020"
 author: "Stephan Peischl"
-date: "1/13/2020"
-output: html_document
+date: "1/10/2020"
+
+output:
+  html_document:
+    toc: true
+    toc_float: true
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+ 
+We start by loading the relevant packages for this course. An R package is a collection of functions, data, and documentation that extends the capabilities of base R. Using packages is key to the successful use of R. We aregoing to make use of the so-called tidyverse. The packages in the tidyverse share a common philosophy of data and R programming, and are designed to work together naturally.
+```{r libraries.eval,echo = TRUE,results='hide', message=F, warning=F}
+# make sure you have th packages installed using 
+# install.packages(packagename)
 
-## R Markdown
-
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars}
-summary(cars)
+library(tidyverse)
+library(Rmisc)
 ```
 
-## Including Plots
 
-You can also embed plots, for example:
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+# Visualization using ggplot
+Visualisation is a great place to start with R programming, because the payoff is so clear: you get to make elegant and informative plots that help you understand data. In data visualisation you’ll dive into visualisation, learning the basic structure of a ggplot2 plot, and powerful techniques for turning data into plots.
+
+This chapter will teach you how to visualise your data using ggplot2. R has several systems for making graphs, but ggplot2 is one of the most elegant and most versatile. ggplot2 implements the grammar of graphics, a coherent system for describing and building graphs. With ggplot2, you can do more faster by learning one system and applying it in many places.
+
+If you’d like to learn more about the theoretical underpinnings of ggplot2 before you start, I’d recommend reading “The Layered Grammar of Graphics”, http://vita.had.co.nz/papers/layered-grammar.pdf.
+
+### The MPG dataset
+Let’s use our first graph to answer a question: Do cars with big engines use more fuel than cars with small engines? You probably already have an answer, but try to make your answer precise. What does the relationship between engine size and fuel efficiency look like? Is it positive? Negative? Linear? Nonlinear?
+
+You can test your answer with the mpg data frame found in ggplot2 (aka ggplot2::mpg). A data frame is a rectangular collection of variables (in the columns) and observations (in the rows). mpg contains observations collected by the US Environmental Protection Agency on 38 models of car.
+```{r dataframe}
+mpg
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+Among the variables in mpg are:
+
+displ, a car’s engine size, in litres.
+
+hwy, a car’s fuel efficiency on the highway, in miles per gallon (mpg). A car with a low fuel efficiency consumes more fuel than a car with a high fuel efficiency when they travel the same distance.
+
+To learn more about mpg, open its help page by running ?mpg.
+
+```{r mileage}
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy)) 
+```
+
+
+### The grammar of ggplot
+With ggplot2, you begin a plot with the function ggplot(). ggplot() creates a coordinate system that you can add layers to. The first argument of ggplot() is the dataset to use in the graph. So ggplot(data = mpg) creates an empty graph, but it’s not very interesting so I’m not going to show it here.
+
+You complete your graph by adding one or more layers to ggplot(). The function geom_point() adds a layer of points to your plot, which creates a scatterplot. ggplot2 comes with many geom functions that each add a different type of layer to a plot. You’ll learn a whole bunch of them throughout this chapter.
+
+Each geom function in ggplot2 takes a mapping argument. This defines how variables in your dataset are mapped to visual properties. The mapping argument is always paired with aes(), and the x and y arguments of aes() specify which variables to map to the x and y axes. ggplot2 looks for the mapped variables in the data argument, in this case, mpg.
+
+Next, we use a different theme beacuse this gray background in the standard design is ugly.
+
+```{r mileage2}
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy)) +
+  theme_classic()
+```
+
+The general grammar of ggplot is
+
+ggplot(data = \<DATA\>) + 
+
+ \<GEOM_FUNCTION\>(mapping = aes(\<MAPPINGS\>))
+  
+We will explain each part step by step in examples. The DATA argument should be quite clear: here you specify the dataframe (we will learn more about that alter) that you want to work with.
+
+The second part, GEOM_FUNCTION, specifies what kind of plot you want. for instance, geom_point gives you a classic scatter plot, whereas geom_smooth would give you a smooth line theat best resembles the cloud of points (more on  that later):
+
+```{r mileage3}
+ggplot(data = mpg) + 
+  geom_smooth(mapping = aes(x = displ, y = hwy)) +
+  theme_classic()
+```
+
+Of course, we can put points and a smooth line on the same plot: 
+```{r mileage4}
+ggplot(data = mpg) + 
+  geom_smooth(mapping = aes(x = displ, y = hwy)) +
+  geom_point(mapping = aes(x = displ, y = hwy)) +
+  theme_classic()
+```
+
+You may wonder how the smooth line is determined. We will come back to this later in the chapter on linear regression. For now, we just mention that we can modify the method used for the plot, e.g., to get a linear regression line:
+```{r mileage_lm}
+ggplot(data = mpg) + 
+  geom_smooth(mapping = aes(x = displ, y = hwy),method='lm') +
+  geom_point(mapping = aes(x = displ, y = hwy)) +
+  theme_classic()
+```
+
+Finally, MAPPING specifies which variables hould be plotted. We ussually specify this with an aesthetics mapping of the form mapping = aes(x = ..., y =...) to deterimne the variables that give us the x- and y-coordinates. We can however also change the aesthetics of our plot in various way, for instance by giving data points different colors that indicate the value of a third variable:  
+```{r mileage_aes}
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy,color = class)) +
+  theme_classic()
+```
+
+Another important option is to set a clor manually:
+```{r mileage_aes_2}
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy), color = "blue") +
+  theme_classic()
+```
+
+As a final remark, you can also create a plot, store it in a variable and then explore themes after that:
+
+```{r mileage_aes_themes}
+p = ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy), color = "blue") 
+
+p+theme_classic()
+p+theme_dark()
+```
+
+# Descriptive Statistics 
+
+We can visualize continous data in a histogram, for instnace how many cars we have in each class:
+
+```{r}
+ggplot(data = mpg) + 
+  geom_bar(mapping = aes(x = class))
+```
+
+We can make stacked graphs using the argument $fill$ and a discrete variable such as number of cylinders 
+
+```{r}
+ggplot(data = mpg) + 
+  geom_bar(mapping = aes(x = class, fill = as.factor(cyl)))
+```
+
+If we want to show the distribution of a continous variable for each class, we can do boxplots, e.g., showing the mileage of each class
+```{r}
+ggplot(data = mpg) + 
+geom_boxplot(mapping = aes(x = reorder(class, hwy, FUN = median), y = hwy)) + 
+coord_flip()
+```
+
+
+
+Another way of summarizing data is by showing several statistics using whisker plots. A simple solution is using the stat_summary function. In the example below the dots show the median, and the whiskers extend to the minium and maximum in each category (class).
+
+```{r}
+ggplot(data = mpg) + 
+  stat_summary(
+    mapping = aes(x = reorder(class, hwy, FUN = median), y = hwy),
+    fun.ymin = min,
+    fun.ymax = max,
+    fun.y = median
+  ) +
+  coord_flip()
+```
+
+If we want to show confidnece intervalls (or any otehr quantity), a clean way to do this is to simply create a data set containing this information and then use it to plot the quantitites.
+
+```{r}
+
+mpgSE <- summarySE(mpg, measurevar="hwy", groupvars=c("class"))
+
+mpgSE
+
+ggplot(mpgSE, aes(x = reorder(class, hwy, FUN = median), y = hwy)) + 
+    geom_errorbar(aes(ymin=hwy-ci, ymax=hwy+ci), width=.1) +
+    geom_point() +
+    coord_flip()
+```
+
