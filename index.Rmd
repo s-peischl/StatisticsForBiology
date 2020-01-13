@@ -154,7 +154,7 @@ setwd("/Users/stephan/Dropbox/Teaching/StatisticsForBiology/")
 
 Now we can load a data frame using the function *read.csv* and store it in the variable stickleback
 ```{r}
-stickleback = read.csv("/Users/stephan/Dropbox/Teaching/StatisticsForBiology/ABD_all_data/chapter03/chap03e3SticklebackPlates.csv")
+stickleback = read.csv("chap03e3SticklebackPlates.csv")
 ```
 
 The variable *stickleback* now contains a so called data frame. We can have a quick summary of the content of this data frame using the command *str* (short for STRucture):
