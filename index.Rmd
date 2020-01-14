@@ -2,11 +2,12 @@
 title: "Lecture Notes for Statistics for Biology FS2020"
 author: "Stephan Peischl"
 date: "1/10/2020"
-
 output:
   html_document:
-    toc: true
-    toc_float: true
+    toc: yes
+    toc_float: yes
+  pdf_document:
+    toc: yes
 ---
 
 ```{r setup, include=FALSE}
@@ -17,7 +18,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 These notes should help you get started with the statistics software R, guide you through the practical part of the course and provide additional information on selected topics. Before you continue reading, make sure you have R and R Studio installed on your computer. Try to use R as an calcualtor as shown in the lecture slides and try to get yourelf acustomed to the different windows in the RStudio envrionment. No prior knwoledge about R is necessary and once everything is up and running yu can dive right in.
 
-We start by loading the relevant packages for this course. An R package is a collection of functions, data, and documentation that extends the capabilities of base R.  We are going to make use of the so-called tidyverse. 
+We start by loading some relevant packages for this course. An R package is a collection of functions, data, and documentation that extends the capabilities of base R. 
 
 ```{r libraries.eval,echo = TRUE,results='hide', message=F, warning=F}
 # make sure you have th packages installed using 
@@ -33,7 +34,7 @@ library(dplyr)
 
 # Visualizations with ggplot2
 
-We are going start with some examples of how to visulaize data. This should show you how easy it is to produce high quality visulaizations using R and motivate you to learn more about programming and data analysis with R. You will be learning the basic structure of a ggplot2 plot, and powerful techniques for turning data into plots.
+We start with some examples of how to visulaize data quickly and easily. This should show you how to produce high quality visulaizations using R and motivate you to learn more about programming and data analysis with R. 
 
 R has several systems for making graphs, and I have chosen to start with ggplot2 beacuse it is elegant, versatile and is easy to leanr if you have no prior knowledge about programming. For those of you who are already familiar wiht programming langauges, doing graphics in "base R" may seem more intuitive initially but I hope I can convince you that the grammar of plotting used by ggplot has lots of advantages and is very readable once you get the hang of it. 
 
@@ -64,12 +65,7 @@ To learn more about mpg, open its help page by running ?mpg. in the next seciton
 
 
 ### The grammar of ggplot2
-In general you begin a plot with the function *ggplot()*. ggplot() creates a coordinate system that you can add layers to. The first argument of ggplot() is the dataset to use in the graph. For instance, typing 
-
-```{r, echo = T,results='hide', message=F, warning=F}
-ggplot(data = mpg) 
-```
-
+In general you begin a plot with the function *ggplot()*. ggplot() creates a coordinate system that you can add layers to. The first argument of ggplot() is the dataset to use in the graph. For instance, typing ggplot(data = mpg)
 into the console creates an empty graph (which is boring so it is not shown here). You can now add layers to your plot. For example, the function geom_point() adds a layer of points to your plot creating a a scatterplot.
 
 ```{r mileage}
@@ -77,7 +73,7 @@ ggplot(data = mpg) +
   geom_point(mapping = aes(x = displ, y = hwy)) 
 ```
 
-There are many other such *geometirc functions" withing the ggplot2 universe and you can combine them in a single plot.  You’ll learn a whole bunch of them throughout this course, but be aware that we will only scratch the surface of what is available. After this course, you should be equipped with everthing you need to equip your self with new tools for data analysis whenever you need them.
+There are many other such *geometric functions* withing the ggplot2 universe and you can combine them in a single plot.  You’ll learn a whole bunch of them throughout this course, but be aware that we will only scratch the surface of what is available. After this course, you should be equipped with everthing you need to equip your self with new tools for data analysis whenever you need them.
 
 Each geom function in ggplot2 takes a mapping argument. This defines how variables in your dataset are mapped to visual properties. The mapping argument is always paired with aes(), and the x and y arguments of aes() specify which variables to map to the x and y axes. ggplot2 looks for the mapped variables in the data argument, in this case, mpg.
 
@@ -97,29 +93,7 @@ ggplot(data = \<DATA\>) +
   
 We will explain each part step by step in examples. The DATA argument should be quite clear: here you specify the dataframe (we will learn more about that alter) that you want to work with.
 
-The second part, GEOM_FUNCTION, specifies what kind of plot you want. for instance, geom_point gives you a classic scatter plot, whereas geom_smooth would give you a smooth line theat best resembles the cloud of points (more on  that later):
-
-```{r mileage3}
-ggplot(data = mpg) + 
-  geom_smooth(mapping = aes(x = displ, y = hwy)) +
-  theme_classic()
-```
-
-Of course, we can put points and a smooth line on the same plot: 
-```{r mileage4}
-ggplot(data = mpg) + 
-  geom_smooth(mapping = aes(x = displ, y = hwy)) +
-  geom_point(mapping = aes(x = displ, y = hwy)) +
-  theme_classic()
-```
-
-You may wonder how the smooth line is determined. We will come back to this later in the chapter on linear regression. For now, we just mention that we can modify the method used for the plot, e.g., to get a linear regression line:
-```{r mileage_lm}
-ggplot(data = mpg) + 
-  geom_smooth(mapping = aes(x = displ, y = hwy),method='lm') +
-  geom_point(mapping = aes(x = displ, y = hwy)) +
-  theme_classic()
-```
+The second part, GEOM_FUNCTION, specifies what kind of plot you want. As mentioned above *geom_point* gives you a classic scatter plot. Many other such funtions exist and we will encounter some of them. 
 
 Finally, MAPPING specifies which variables hould be plotted. We ussually specify this with an aesthetics mapping of the form mapping = aes(x = ..., y =...) to deterimne the variables that give us the x- and y-coordinates. We can however also change the aesthetics of our plot in various way, for instance by giving data points different colors that indicate the value of a third variable:  
 ```{r mileage_aes}
@@ -145,19 +119,66 @@ p+theme_classic()
 p+theme_dark()
 ```
 
-# Loading datasets
 
-First we need to make sure R knows where our working directory is:
+## Base R graphics
+
+Base R refers to the standard R functions. While ggplot allows us to make sophisticated graphs very quickly, I find that in some situations base R is just as good or even better. Let us recreate the same plot as before:
+
+```{r}
+plot(mpg$displ,mpg$hwy) 
+```
+ 
+Note how we use the $ symbol to access the variables stored in a data frame here; it allows you to access a specific column of a data frame. 
+Try typing the name of a dataframe, followed by the $ operator in RStudio; it should automatically suggest you the availbale variable names in your data frame.  
+
+We can alos add stuff to this plot, change colors, and pretty much everything else we would like to. A quikc look at the help function should give you an overview about the scope of the function plot and it's parameters. For instance, have a look at the following plot, where I first make a scatterplot and modifiy the appearance of the symbols, add some labels and a title, and then add a horizontal line at the value of the median fuel efficiency:
+
+```{r}
+plot(mpg$displ,mpg$hwy,pch=16,col="darkblue",xlab="displ",ylab="hwy", main ="a scatterplot")
+abline(h = median(mpg$hwy))
+```
+
+When working with data frames, ggplot may seem more attractive and easy to use than base r, simply because many steps are automated. You may want to try colro-coding the different points according to the varibale class, just as we did before. Then try to add a legend (look up the function *legend* in the R help). You will find out that it may be a bit tedious to put all this things together. However, it also gives you a lot of control about the final looks of your figure. Another advantge of base R function is that you are not restircted to the data frame format, which often makes things easier. For instance, consider this plot:
+
+```{r}
+x=seq(0,7,by=0.1)   
+# x = (0,0.1,0.2,0.3, … ,6.9,7)
+y=sin(x)
+
+
+plot(x,y,lwd=2,type="l",col="deepskyblue4",axes=FALSE) 
+#plot without axes
+
+axis(1) #add axes to plot
+axis(2)
+
+text(2.8,0.85,"y = sin(x)",col="deepskyblue4")   
+# add some text at coordinates x = 2.8, y = 0.85
+
+lines(x,cos(x),lwd=2,col="green4")  # add a cosine plot …
+text(1.5,-0.5,"y=cos(x)",col="green4")   # … and label it
+
+legend(3.5,0.8,legend=c("y=sin(x)","y=cos(x)"),
+col=c("deepskyblue4","green4"),lwd=2)   
+# add a legend to the plot
+```
+Instead of using a data frame, we have created vectors of variables and used them in several different ways. You will explore this more in the exercise sessions.
+
+By now you should see that R is very versatile. This course will teach you the basics of R so that you can start using it for your research projects. An essential part is that  you should also learn how to find and use additional resources, such as the help function in R, books, the internet, etc. Nobody knows all of R - it is an ever growing community endevaour and looking up how things work, which functions or packages are available, or how other people solved a problem is an essential part of learning to be proficient in R.
+
+# Loading datasets
+How to we feed R our data? Of course, we can jsut type it into the console, a bit like in the previous base R graphics example. However, for large data sets this is not practical. We want to load our data from a file, which makes our analysis easily reproducible if we share data and the script with someone. First we need to make sure R knows where our working directory is, using the function *setwd* (set working directory):
 ```{r}
 setwd("/Users/stephan/Dropbox/Teaching/StatisticsForBiology/")
 ```
+If you want to check your current working directory, you can do this with *getwd()*.
 
-Now we can load a data frame using the function *read.csv* and store it in the variable stickleback
+I use a dataset about the number of plates on sticklebacks. You can find this dataset (and many others) on ilias. We can load a dataset using the function *read.csv* and store it in the variable stickleback
 ```{r}
 stickleback = read.csv("chap03e3SticklebackPlates.csv")
 ```
 
-The variable *stickleback* now contains a so called data frame. We can have a quick summary of the content of this data frame using the command *str* (short for STRucture):
+The variable *stickleback* now contains a so called data frame.  We can have a quick summary of the content of this data frame using the command *str* (short for *STR*ucture):
 
 ```{r}
 str(stickleback)
@@ -185,7 +206,35 @@ ggplot(data = stickleback) +
 
 We used a new symbol here: the ~. This is part of an R object called formula and it will alter become clear why we used it here like this. For now, just remeber to use it in front of the varibale name in facet wrap. The second aprameter is simply the number of rows in the plot. Try changing it and see what happens. Note: the variable that you pass to facet_wrap shoudl **always** be categorical!
 
-# Descriptive Statistics 
+## Manipulating data frames
+A data frame is essentially a spreadsheet or a table (or rather a matrix). Therfore, we acess each column or each row, if we want to. This can be done using the *[,]* symbols. The element in row 3 and column 5 is given by:
+```{r}
+stickleback[3,5]
+```
+the whole 3rd column can be accesses by 
+```{r}
+stickleback[,3]
+```
+and the 5th row by
+```{r}
+stickleback[5,]
+```
+Note that stickleback[[,3]] gives you all measurment of the 3rd variable in our dataframe and is hence equivalent to stickleback$genotype. The vector stickleback[5,] on the other hand gives you a vector with the 3 measured values of the 5 th individual. 
+
+We can also use this way of accessing elements to find elements of a certain type, for instance, fi we want to know the genotype of all individuals with more then 30 plates, we can get this in the following way:
+```{r results = "hide"}
+stickleback[stickleback$plates>20,3]
+```
+Try to understand what is happening here by teasing apart and investigating the differnt parts of this (nested) command.
+
+A slightly more elegant way to get this is by using the function *filter* (make sure you have the package dyplr loaded!):
+```{r results = "hide"}
+filter(stickleback,plates>20)
+```
+which gives ou a data frame with only the individuals that satisfy the condition set in the argument.
+
+## Descriptive Statistics 
+
 We continue using the stickleback data set and calcualte some statistics on it. A simple way to get a quick overview about the properties of your data frame is using the funciton *summary*:
 
 ```{r}
@@ -198,33 +247,45 @@ If you want to calcualte a specific statistic, like the mean of a variable, this
 mean(stickleback$plates)
 ```
 
-There is again something new here, the $ operator: it allows you to access a specific column of a data frame. 
-Try typing the name of a dataframe, followed by the $ operator in RStudio; it should automatically suggest you the availbale variable names in your data frame.  
-
-You may have noticed that we have no calcualted the mean number of plates for *ALL* fish in our data set. What if we want to calcualte the number of plates for a specific genotype? We can use the function filter (as always in R, there are other ways to do this - I chose to present filter because I think it is easy to undersand and very  "readable"):
+You may have noticed that we have no calcualted the mean number of plates for *ALL* fish in our data set. What if we want to calcualte the number of plates for a specific genotype? We can use the function filter (*Question: Can you come up with anotehr way to do this whithout using filter? *):
 
 ```{r}
 stickleback.mm = filter(stickleback,genotype=="mm")
 mean(stickleback.mm$plates)
 ```
-You could now calcualte the mean plate numbers for each genotpye in this way.  To show you how to combine multiple commands quickly, we now are going to add two more functions to our set of tools:  *group_by* and *summarize*.
+
+You could now calcualte the mean plate numbers for each genotpye in this way: 
 
 ```{r}
-summarise(avg = mean(plates),group_by(stickleback,genotype))
+mean.mm = mean((filter(stickleback,genotype=="mm"))$plates)
+mean.mM = mean((filter(stickleback,genotype=="mM"))$plates)
+mean.MM = mean((filter(stickleback,genotype=="MM"))$plates)
 ```
 
-This is a very powerful combination: it allows you to calcualte the mean number of plates for each genotye in a single line. In fact this creates a new data frame that contains the variables "genotpye" (a factor) and the new variable "avg" (double, i.e., a decimal number) taht you can store and use for later analyses. 
 
-**Note:** the tidyverse offers us an elegant way to write a long series of commands in a very readable format. This operator is called the pipe %>%  (because we create a pipeline thorugh which our data "flows"). The above code to calculate the mean for each genotype would become:
+**Note:** The tidyverse offers  an elegant way to write a long series of commands in a very readable format. To show you how to combine multiple commands quickly, we first need two more functions,  *group_by* and *summarize*, and a new operator called the pipe: %>%  (because we create a pipeline thorugh which our data "flows"). The above code to calculate the mean for each genotype would become:
 ```{r}
 stickleback %>% 
 group_by(genotype) %>%
 summarise(avg = mean(plates))
 ```
-This is very readblae: you take the dataframe stickleback, group it by genotye and summarize it by calcualting the mean number of plates.
+This is very readable: you take the dataframe stickleback, group it by genotye and summarize it by calcualting the mean number of plates. However, errors might be more difficutl to spot when the code is written in that way, as intermediate steps cannot be checked.
 
+In the exercises you will learn a few more useful functions to rearrange, filter, extend and edit data frames.
 
 # A bit of workflow
+In this part you will see how to explore a data set and store your analysis in a reproducible and reusable way.  
+
+## What is an R script
+
+So far we only used the console of R. We enter commands and R executes them. Most of the time we want to have a whole bunch of commands stored in a single space: loading the file, preparing and cleaning the data,make figures, etc. The solution is easy, we jsut store our commands in a text file with the extension *.R* and tell R do execute this script. Evene better, RStudio has its own window panel for writing and executing scripts! Try to open a new R script (via File -> New -> R script) and just write your code in the newly opened window. When you have written your code, you can eitehr execute it step by step by putting the mouse cursor in the line you want to execute and then hit then *Run* button. If you want to eecute the whole script from beginning to end, just hit the *Source* button. This allows you to make reproducible scripts than you can modify and reuse whenever you need to. This is probably the biggest advantage of R. Once you have solved a problem and wrote a script for it, you can always reuse it. The more you use R, the less work will be necessary for each new project! 
+
+
+
+
+## Loops
+
+## If / else
 
 # Distributions
 
@@ -306,3 +367,27 @@ ggplot(mpgSE, aes(x = reorder(class, hwy, FUN = median), y = hwy)) +
 # ANOVA
 
 # Linear Regression
+
+ whereas geom_smooth would give you a smooth line theat best resembles the cloud of points (more on  that later):
+
+```{r mileage3}
+ggplot(data = mpg) + 
+  geom_smooth(mapping = aes(x = displ, y = hwy)) +
+  theme_classic()
+```
+
+Of course, we can put points and a smooth line on the same plot: 
+```{r mileage4}
+ggplot(data = mpg) + 
+  geom_smooth(mapping = aes(x = displ, y = hwy)) +
+  geom_point(mapping = aes(x = displ, y = hwy)) +
+  theme_classic()
+```
+
+You may wonder how the smooth line is determined. We will come back to this later in the chapter on linear regression. For now, we just mention that we can modify the method used for the plot, e.g., to get a linear regression line:
+```{r mileage_lm}
+ggplot(data = mpg) + 
+  geom_smooth(mapping = aes(x = displ, y = hwy),method='lm') +
+  geom_point(mapping = aes(x = displ, y = hwy)) +
+  theme_classic()
+```
