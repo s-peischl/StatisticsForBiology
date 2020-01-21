@@ -206,6 +206,7 @@ ggplot(data = stickleback) +
 
 We used a new symbol here: the ~. This is part of an R object called formula and it will alter become clear why we used it here like this. For now, just remeber to use it in front of the varibale name in facet wrap. The second aprameter is simply the number of rows in the plot. Try changing it and see what happens. Note: the variable that you pass to facet_wrap shoudl **always** be categorical!
 
+
 ## Manipulating data frames
 A data frame is essentially a spreadsheet or a table (or rather a matrix). Therfore, we acess each column or each row, if we want to. This can be done using the *[,]* symbols. The element in row 3 and column 5 is given by:
 ```{r}
@@ -225,7 +226,7 @@ We can also use this way of accessing elements to find elements of a certain typ
 ```{r results = "hide"}
 stickleback[stickleback$plates>20,3]
 ```
-Try to understand what is happening here by teasing apart and investigating the differnt parts of this (nested) command.
+Try to understand what is happening here by teasing apart and investigating the differnt parts of this (nested) command. What would happen if you removed the *stickleback$plates>20* from the command, or the *3*. 
 
 A slightly more elegant way to get this is by using the function *filter* (make sure you have the package dyplr loaded!):
 ```{r results = "hide"}
@@ -247,7 +248,7 @@ If you want to calcualte a specific statistic, like the mean of a variable, this
 mean(stickleback$plates)
 ```
 
-You may have noticed that we have no calcualted the mean number of plates for *ALL* fish in our data set. What if we want to calcualte the number of plates for a specific genotype? We can use the function filter (*Question: Can you come up with anotehr way to do this whithout using filter? *):
+You may have noticed that we have no calcualted the mean number of plates for *ALL* fish in our data set. What if we want to calcualte the number of plates for a specific genotype? We can use the function filter:
 
 ```{r}
 stickleback.mm = filter(stickleback,genotype=="mm")
@@ -273,6 +274,60 @@ This is very readable: you take the dataframe stickleback, group it by genotye a
 
 In the exercises you will learn a few more useful functions to rearrange, filter, extend and edit data frames.
 
+*Question: Can you come up with anotehr way to do this whithout using filter? *
+
+*An answer (there are many ways to do this):*
+```{r}
+mean.mm = mean(stickleback$plates[stickleback$genotype=="mm"])
+mean.mM = mean(stickleback$plates[stickleback$genotype=="mM"])
+mean.MM = mean(stickleback$plates[stickleback$genotype=="MM"])
+```
+
+*Question: Can you plot a histogram of plate numbers of individuals with genotpye mm using base R plotting functions? Hint: Use waht yu have learned here and look up the functionhist().*
+
+*Answer:*
+```{r}
+hist(stickleback$plates[stickleback$genotype=="mm"],col="darkred",xlab="plates",main="Genotype: mm")
+```
+
+## Adding variables to data frames (mutate)
+
+Sometimes we wish to extend our dataframe with calcualtions we did during our analysis or with additional measurements. This can be done with the function *mutate()*. It simply adds new columns at the end of your dataset. Let's say we want to identify which indivduals have fewer or more plates as comapred to the global mean:
+```{r}
+diff.to.mean = stickleback$plates - mean(stickleback$plates)
+stickleback2 = mutate(stickleback,difference = diff.to.mean)
+head(stickleback2)
+```
+
+
+
+*Questions:*
+
+*Add a new varaible to the stickleback data frame that contains the difference between plate number and the mean plate number for that individuals genotype.
+
+*Load the flights dataset:
+```{r}
+library(nycflights13)
+```
+Find all flights that
+
+** Had an arrival delay of two or more hours
+
+** Flew to Houston (IAH or HOU)
+
+** Were operated by United, American, or Delta
+
+** Departed in summer (July, August, and September)
+
+** Arrived more than two hours late, but didn’t leave late
+
+** Were delayed by at least an hour, but made up over 30 minutes in flight
+
+** Departed between midnight and 6am 
+
+Hint: look up logical operators!
+
+
 # A bit of workflow
 In this part you will see how to explore a data set and store your analysis in a reproducible and reusable way.  
 
@@ -281,11 +336,138 @@ In this part you will see how to explore a data set and store your analysis in a
 So far we only used the console of R. We enter commands and R executes them. Most of the time we want to have a whole bunch of commands stored in a single space: loading the file, preparing and cleaning the data,make figures, etc. The solution is easy, we jsut store our commands in a text file with the extension *.R* and tell R do execute this script. Evene better, RStudio has its own window panel for writing and executing scripts! Try to open a new R script (via File -> New -> R script) and just write your code in the newly opened window. When you have written your code, you can eitehr execute it step by step by putting the mouse cursor in the line you want to execute and then hit then *Run* button. If you want to eecute the whole script from beginning to end, just hit the *Source* button. This allows you to make reproducible scripts than you can modify and reuse whenever you need to. This is probably the biggest advantage of R. Once you have solved a problem and wrote a script for it, you can always reuse it. The more you use R, the less work will be necessary for each new project! 
 
 
+In the next part I will introduce the basic tools for creating an automated analysis that consists of several steps.
+
+## Defining and using Variables
+
+Defining variables is really easy in R. Unlike in other programming languages we do not need to precisly define what kind of variable we want. We can just werite down a name and assign a value, R figures out the rest. For instance:
+
+```{r}
+x = 5
+```
+
+automatically creates a *numeric* variable and assigns the value 5 to it. This command
+
+```{r}
+vec = c(1,2,3,4,5,6)
+```
+
+creates a vectors that contains the values 1 to 6. The *c* here stands for *concatenate* and tells us to combine all the numbers into a single vector. You can access the elements of the vector by their index, e.g., we can set the 5th element of the vector to 0 in the follwoing way:
+```{r}
+vec[5] = 0 
+```
+
+In general it is advised to define the type of a varible before using it, and also tell R how big this variable will be (that is, how much memory we need to reserve to store it). For instance, if we want to define a 3x4 matrix we can use the command *matrix*:
+```{r}
+mat=matrix(ncol=3,nrow=4)
+```
+
+You can then enter numbers in the rows and columns using the [] operator:
+
+```{r}
+mat
+mat[2,3]= 5 
+mat
+```
+You can see that the matrix is intially filled with the object *NA* which stands for *not available* and ist the term R uses for missing data. Just like in dataframes (after all a data frame is more or less a matrix with benefits), you can also name columns and rows and use them to access the elements:
+
+
+```{r}
+mat = matrix(1:25,nrow=5,ncol=5)
+colnames(mat) = c("var1","var2","var3","var4","var5")
+rownames(mat) = c("obs1","obs2","obs3","obs4","obs5")
+mat
+mat["obs2",]
+mat[,"var3"]
+mat["obs2","var3"]
+```
+
+
+
+If we want to store some text, we can write
+```{r}
+word = "hello"
+```
+and R will automatically recognize that the string of letters "hello" is not numeric and will creat a variable of type *character*. Try to see how this is different from 
+
+```{r}
+letters = c("h","e","l","l","o")
+```
+
+Next try to see what happens here:
+```{r}
+hello = 10
+word1 = "hello"
+word2 = hello
+print(word1)
+print(word2)
+```
+
+
+
 
 
 ## Loops
 
+Before we have seen how to calcualte the mean number of plates for each genotype. Essentially we have done the same thing 3 times. Imagine we woul dhave hundreeds of genotypes. In such situations loops come in handy. They allow us to automate a process that needs to be repeated many times. We only introduce the so-called *for-loop* here, which will allow you to do a lot of things. Once you have understood how it works, it will be easy to figure out how a *while-loop* works and what the differences are.
+
+Here is a simple for loop that calcualtes the mean number of plates for each genotpye in our stickleback data set:
+
+```{r}
+
+# first we create a vector that contains all genotpyes in our dataset
+# we can do this manually: 
+# genotypes = c("mm","mM","MM")
+# or by using the function levels()
+# that gives us a vector with all the different entries found in a 
+# vector of type factor
+
+genotypes = levels(stickleback$genotype)
+
+# next, we define a vector that has the same length as the number 
+# of different genotypes and name the elements accordingly
+
+plate.numbers = vector("numeric",length(genotypes)) 
+names(plate.numbers)=genotypes
+
+# no comes the actual loop:
+for(g in genotypes)
+{
+  plate.numbers[g]=mean(stickleback$plates[stickleback$genotype==g])
+}
+
+```
+
+We can see what is happening here by showing the intermediate steps more explicitly:
+
+```{r}
+i = 1
+for(g in genotypes)
+{
+  print(paste("This is iteration ",i," of our for-loop"))
+  print(paste("Genotype ",i," = ",g))
+  mean.temp = mean(stickleback$plates[stickleback$genotype==g])
+  print(paste("The mean number of plates of genotype ",g," is ",mean.temp))
+  plate.numbers[g]=mean.temp
+  i = i+1
+}
+
+```
+
+There are 3 basics steps here:
+
+* Reserve memory for the output
+* Set up how often the loop should be iterated
+* The code that should be repeatedly calcualted
+
+
+*Question: Could you come up with an alterantive way to solve this problem using a loop?*
+
+
 ## If / else
+
+
+## Functions
 
 # Distributions
 
