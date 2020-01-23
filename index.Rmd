@@ -234,7 +234,44 @@ filter(stickleback,plates>20)
 ```
 which gives ou a data frame with only the individuals that satisfy the condition set in the argument.
 
-## Descriptive Statistics 
+## Adding variables to data frames 
+
+Sometimes we wish to extend our dataframe with calcualtions we did during our analysis or with additional measurements. This can be done with the function *mutate()*. It simply adds new columns at the end of your dataset. Let's say we want to identify which indivduals have fewer or more plates as comapred to the global mean:
+```{r}
+diff.to.mean = stickleback$plates - mean(stickleback$plates)
+stickleback2 = mutate(stickleback,difference = diff.to.mean)
+head(stickleback2)
+```
+
+
+
+*Questions:*
+
+*Add a new varaible to the stickleback data frame that contains the difference between plate number and the mean plate number for that individuals genotype.
+
+*Load the flights dataset:
+```{r}
+library(nycflights13)
+```
+Find all flights that
+
+** Had an arrival delay of two or more hours
+
+** Flew to Houston (IAH or HOU)
+
+** Were operated by United, American, or Delta
+
+** Departed in summer (July, August, and September)
+
+** Arrived more than two hours late, but didn’t leave late
+
+** Were delayed by at least an hour, but made up over 30 minutes in flight
+
+** Departed between midnight and 6am 
+
+Hint: look up logical operators!
+
+# Calculating Descriptive Statistics 
 
 We continue using the stickleback data set and calcualte some statistics on it. A simple way to get a quick overview about the properties of your data frame is using the funciton *summary*:
 
@@ -283,49 +320,32 @@ mean.mM = mean(stickleback$plates[stickleback$genotype=="mM"])
 mean.MM = mean(stickleback$plates[stickleback$genotype=="MM"])
 ```
 
-*Question: Can you plot a histogram of plate numbers of individuals with genotpye mm using base R plotting functions? Hint: Use waht yu have learned here and look up the functionhist().*
+## Plots
+
+We can do a boxplot easily using ggplot:
+```{r}
+ggplot(data = stickleback) + 
+  geom_boxplot(mapping = aes(x = genotype, y = plates))
+```
+
+In base R, this can be done as well:
+```{r}
+boxplot(stickleback$plates[stickleback$genotype=="MM"],
+        stickleback$plates[stickleback$genotype=="Mm"],
+        stickleback$plates[stickleback$genotype=="mm"],
+names = c("MM","Mm","mm")
+)
+```
+
+*Question: Can you plot a histogram of plate numbers of individuals with genotpye mm using base R plotting functions? Hint: Use what you have learned here and look up the function hist(). Alternaticel, use ggplot and the geom_function *
 
 *Answer:*
 ```{r}
 hist(stickleback$plates[stickleback$genotype=="mm"],col="darkred",xlab="plates",main="Genotype: mm")
+
+ggplot(data=filter(stickleback,genotype == "mm")) + 
+  geom_histogram(mapping = aes(x = plates))
 ```
-
-## Adding variables to data frames (mutate)
-
-Sometimes we wish to extend our dataframe with calcualtions we did during our analysis or with additional measurements. This can be done with the function *mutate()*. It simply adds new columns at the end of your dataset. Let's say we want to identify which indivduals have fewer or more plates as comapred to the global mean:
-```{r}
-diff.to.mean = stickleback$plates - mean(stickleback$plates)
-stickleback2 = mutate(stickleback,difference = diff.to.mean)
-head(stickleback2)
-```
-
-
-
-*Questions:*
-
-*Add a new varaible to the stickleback data frame that contains the difference between plate number and the mean plate number for that individuals genotype.
-
-*Load the flights dataset:
-```{r}
-library(nycflights13)
-```
-Find all flights that
-
-** Had an arrival delay of two or more hours
-
-** Flew to Houston (IAH or HOU)
-
-** Were operated by United, American, or Delta
-
-** Departed in summer (July, August, and September)
-
-** Arrived more than two hours late, but didn’t leave late
-
-** Were delayed by at least an hour, but made up over 30 minutes in flight
-
-** Departed between midnight and 6am 
-
-Hint: look up logical operators!
 
 
 # A bit of workflow
@@ -483,75 +503,189 @@ for (i in 1:number.obs)
 }
 
 
-sticklback3= mutate(stickleback2,diff.per.genotype = diff.to.mean)
+stickleback3= mutate(stickleback2,diff.per.genotype = diff.to.mean)
 
-head(sticklbeack3)
+head(stickleback3)
 ```
 
-## Functions
 
-# Distributions
 
-## Visualizing distributions 
-We can visualize continous data in a histogram, for instnace how many cars we have in each class:
+# Working with Distributions and random variables
+
+## Functions to work with probaility distirbutions
+R has a set of functions to work with distirbutions and random numbres. Have a look at 
+```{r}
+help(Distributions)
+```
+if you want to know more. Let us focus on the normal distirbution. It's density is given by
+$$f(x|\mu,\sigma) = \frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{(x-\mu)^2}{2\sigma^2}}$$
+The function *dnorm* returns the value of the probability density function for the normal distribution given parameters for x, μ, and σ. Some examples of using dnorm are below:
 
 ```{r}
-ggplot(data = mpg) + 
-  geom_bar(mapping = aes(x = class))
+# We use the pdf of the normal with x = 0, 
+# mu = 0 and sigma = 0. 
+# The dnorm function takes three main arguments, 
+# as do all of the *norm functions in R.
+
+dnorm(0, mean = 0, sd = 1)
+
+# Another exmaple of dnorm where parameters have been changed.
+
+dnorm(2, mean = 5, sd = 3)
 ```
 
-We can make stacked graphs using the argument $fill$ and a discrete variable such as number of cylinders 
+Let us do a  plot showing the density fucntion of the normal distirbution. We use base R as ggplot works fine with data frames and here we prefer to wrok with vectors instead. 
 
 ```{r}
-ggplot(data = mpg) + 
-  geom_bar(mapping = aes(x = class, fill = as.factor(cyl)))
+# The plot should show x values on the x-axis and the dnorm(x,...) 
+# values on the y-axis
+
+# First I'll make a vector of x values
+x_vals <- seq(-3, 3, by = .1)
+
+# Let's have a look
+x_vals
+
+# The y values are then given by dnorm
+y_vals <- dnorm(x_vals,0,1)
+
+# Now we'll plot these values
+plot(x_vals,y_vals, 
+     type = "l", # Make it a line plot
+     main = "pdf of the Standard Normal",
+     xlab= "x",ylab="density") 
 ```
 
-If we want to show the distribution of a continous variable for each class, we can do boxplots, e.g., showing the mileage of each class
-```{r}
-ggplot(data = mpg) + 
-geom_boxplot(mapping = aes(x = reorder(class, hwy, FUN = median), y = hwy)) + 
-coord_flip()
-```
+Of course, you could create a data frame with these values and then use ggplot if you want to:
 
-
-
-Another way of summarizing data is by showing several statistics using whisker plots. A simple solution is using the stat_summary function. In the example below the dots show the median, and the whiskers extend to the minium and maximum in each category (class).
-
-```{r}
-ggplot(data = mpg) + 
-  stat_summary(
-    mapping = aes(x = reorder(class, hwy, FUN = median), y = hwy),
-    fun.ymin = min,
-    fun.ymax = max,
-    fun.y = median
-  ) +
-  coord_flip()
-```
-
-If we want to show confidnece intervalls (or any otehr quantity), a clean way to do this is to simply create a data set containing this information and then use it to plot the quantitites.
 
 ```{r}
+std_norm = data.frame(x= x_vals,y=y_vals)
 
-mpgSE <- summarySE(mpg, measurevar="hwy", groupvars=c("class"))
+ggplot(data = std_norm) +
+  geom_line(mapping = aes(x = x,y=y))
+```
 
-mpgSE
+The other three most relevant functions are:
+*pnorm* (cumulative distribution function), *qnorm* (quantiles) and *rnorm* (draw random numbers). The ue of *pnorm* is completely analogous to *dnorm*, so we skip it here and focus on themore interesting *qnorm* and *rnorm*.
 
-ggplot(mpgSE, aes(x = reorder(class, hwy, FUN = median), y = hwy)) + 
-    geom_errorbar(aes(ymin=hwy-ci, ymax=hwy+ci), width=.1) +
-    geom_point() +
-    coord_flip()
+## Quantiles
+The function qnorm gives us the quantiles of the normal distirbution:
+```{r}
+# Let's make a vector of : 
+# from 0 to 1 by increments of .05
+quantiles <- seq(0, 1, by = .05)
+quantiles
+
+# Now we'll find the value for each of those quantiles
+# Remeber that the q-quantile is the value Q such that
+# P(X>Q) = q 
+# In other words, the quantile is the inverse of the CDF
+
+qvalues <- qnorm(quantiles)
+qvalues
 ```
 
 
 
+## Drawing random numbers
+
+R also allows us to draw random numbers. This is very handy in many situations. The parameters of rnorm are 
+* the number of observations
+* the mean of the distirbution
+* the standard deviation of the distribution
+
+Here is an example, where we calculate a sample of 0, 100 and 1000 observations of the same distirbution.
+```{r}
+
+# Let's generate three different vectors of random numbers 
+# from a normal  distribution
+n10 <- rnorm(10, mean = 70, sd = 5)
+n100 <- rnorm(100, mean = 70, sd = 5)
+n10000 <-  rnorm(10000, mean = 70, sd = 5)
+
+# Let's just look at one of the vectors
+n10
 
 
+# The breaks argument specifies how many bars are in the histogram
+hist(n10, breaks = 5)
+hist(n100, breaks = 20)
+hist(n10000, breaks = 100)
+```
+
+*Note:* If we set a *seed* for our random number generator (the algorithm that is used to calcualte a radnom number), we can make our analysis replicable:
+
+```{r}
+set.seed(100)
+rnorm(1,0,1)
+rnorm(1,0,1)
+
+set.seed(100)
+rnorm(1,0,1)
+rnorm(1,0,1)
+```
+
+
+## Example: A simple simulation 
+Copy and paste this R code into a script. Before you run it, try to figure out what it does.
+```{r fig.show='hide'}
+reps = 1000
+sample_size = 10
+mu = 10
+sigma = 5
+means = vector("numeric",reps)
+
+for (i in 1:reps)
+{
+  sample = rnorm(sample_size,mu,sigma)
+  means[i] = mean(sample)
+}
+
+hist(means,freq=F,main="A distribution")
+
+x = seq(mu-2*sigma,mu+2*sigma,by=0.01)
+
+SE = sigma/sqrt(sample_size)
+
+y = dnorm(x,mu,SE)
+
+lines(x,y)
+```
+
+
+## Plotting Confidence intervalls
+We first generate a data frame with a summary of our data (this can be done in many ways, this is a concise one):
+
+```{r}
+CIs <- summarySE(stickleback, measurevar="plates", groupvars=c("genotype"))
+
+CIs
+```
+and then we use the data frame with our summary to add error bars to our plot:
+```{r}
+ggplot(data = CIs) +
+  geom_point(mapping = aes(x = genotype,y=plates)) +
+  geom_errorbar(mapping = aes(x = genotype,y=plates,ymin=plates-ci, ymax=plates+ci), width=.1) 
+```
+
+*Note:* One can shorten things by specifying the aesthetics in the ggplot command - this simply means that all geom_functions use the same x and y variables (which is very often the case, but not always!):
+
+```{r}
+ggplot(data = CIs, aes(x = genotype,y=plates)) +
+  geom_point() +
+  geom_errorbar(mapping = aes(ymin=plates-ci, ymax=plates+ci), width=.1) 
+```                        
+
+
+*Note:* The function *t.test()* can also be used to calcualte confidence intervalls assuming a normal distribution.  
 
 
 # Hypothesis Tests
 
-## Binomial-test, t-test
+## Binomial-test
+## t-test
+## Chi-square test
 
 # Deviations from Normailty
 
@@ -563,9 +697,7 @@ ggplot(mpgSE, aes(x = reorder(class, hwy, FUN = median), y = hwy)) +
 
 ## Permutation Test
 
-# Testing for independence
 
-## Chi-square test
 
 # ANOVA
 
