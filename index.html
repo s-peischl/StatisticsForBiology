@@ -1842,6 +1842,23 @@ for(g in genotypes)
 </div>
 <div id="if-else" class="section level2">
 <h2>If / else</h2>
+<p>Another useful tool are if/else constructs. They allow you to make choices during your script. Let us again consider the sticklbeack data set. Let say we want to calcualte the difference between the number of plates of plates of an individual and the mean of that indivudal’s genotype. We can do this by combining loops with if/else statements (admittedly, there are better ways to achieve this but it is a good instuctive example):</p>
+<pre class="r"><code>number.obs = dim(stickleback)[1]
+diff.to.mean = vector(&quot;numeric&quot;,length=number.obs)
+for (i in 1:number.obs)
+{
+  if(stickleback$genotype[i] == &quot;mm&quot;)
+    diff.to.mean[i] = stickleback$plate[i] - mean.mm
+  
+  if(stickleback$genotype[i] == &quot;mM&quot;)
+    diff.to.mean = stickleback$plate[i] - mean.mM
+  
+  if(stickleback$genotype[i] == &quot;MM&quot;)
+    diff.to.mean = stickleback$plate[i] - mean.MM
+}
+
+
+sticklback3= mutate(stickleback2,diff.per.genotype = diff.to.mean)</code></pre>
 </div>
 <div id="functions" class="section level2">
 <h2>Functions</h2>

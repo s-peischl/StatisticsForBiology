@@ -465,7 +465,28 @@ There are 3 basics steps here:
 
 
 ## If / else
+Another useful tool are if/else constructs. They allow you to make choices during your script. Let us again consider the sticklbeack data set. Let say we want to calcualte the difference between the  number of plates of plates of an individual and the mean of that indivudal's genotype. We can do this by combining loops with if/else statements (admittedly, there are better ways to achieve this but it is a good instuctive example):
 
+```{r}
+number.obs = dim(stickleback)[1]
+diff.to.mean = vector("numeric",length=number.obs)
+for (i in 1:number.obs)
+{
+  if(stickleback$genotype[i] == "mm")
+    diff.to.mean[i] = stickleback$plate[i] - mean.mm
+  
+  if(stickleback$genotype[i] == "mM")
+    diff.to.mean = stickleback$plate[i] - mean.mM
+  
+  if(stickleback$genotype[i] == "MM")
+    diff.to.mean = stickleback$plate[i] - mean.MM
+}
+
+
+sticklback3= mutate(stickleback2,diff.per.genotype = diff.to.mean)
+
+head(sticklbeack3)
+```
 
 ## Functions
 
