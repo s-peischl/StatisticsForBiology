@@ -680,26 +680,398 @@ ggplot(data = CIs, aes(x = genotype,y=plates)) +
 
 *Note:* The function *t.test()* can also be used to calcualte confidence intervalls assuming a normal distribution.  
 
+```{r}
+genotpyes = c("MM","Mm","mm") 
+CI.upper = vector("numeric",3)
+CI.lower = vector("numeric",3)
+means = vector("numeric",3)
+
+i = 1
+
+for(g in genotypes)
+{
+  
+  results = t.test(stickleback$plates[stickleback$genotype == g])
+  
+  CI.lower[i] = results$conf.int[1]
+  CI.upper[i]= results$conf.int[2]
+  means[i] = results$estimate
+  i = i + 1
+}
+
+CI.data = data.frame(genotype = genotpyes,mean = means,CI.lower = CI.lower,CI.upper = CI.upper)
+
+ggplot(data = CI.data, aes(x = genotype,y=means)) +
+  geom_point() +
+  geom_errorbar(mapping = aes(ymin=CI.lower, ymax=CI.upper), width=.1) 
+
+
+```
+
 
 # Hypothesis Tests
 
+In this chpater we will learn how to do hypotehsis tests in R. This is very simple, as you will see - often a single line of code is sufficient for conducting a test.
+
 ## Binomial-test
-## t-test
+We use the binomial test to test whether spermatogenesis genes in the mouse genome occur with unusual frequency on the X chromosome. First, we load the dat set and inspect it:
+
+```{r message = FALSE}
+mouseGenes <- read_csv("~/Dropbox/Teaching/StatisticsForBiology/chap07e2SexAndX.csv")
+
+head(mouseGenes)
+
+# Tabulate the number of spermatogenesis genes on the 
+# X-chromosome and the number not on the X-chromosome.
+
+table(mouseGenes$onX)
+
+
+# Calculate the binomial probabilities of all possible outcomes
+# under the null hypothesis. Under the binomial
+# distribution with n = 25 and p = 0.061, the number of successes
+# can be any integer between 0 and 25.
+
+xsuccesses <- 0:25
+probx <- dbinom(xsuccesses, size = 25, prob = 0.061)
+data.frame(xsuccesses, probx)
+
+barplot(probx,names.arg=xsuccesses,xlab="# successes",ylab="probability")
+
+
+
+# Use these probabilities to calculate the P-value corresponding to
+# an observed 10 spermatogenesis genes on the X chromosome. 
+# Remember to multiply the probability of 10 or more successes 
+# by 2 for the two-tailed test result.
+
+2 * sum(probx[xsuccesses >= 10])
+
+# For a faster result, try R's built-in binomial test. 
+# The resulting P-value is slightly different from our calculation. # The output of binom.test includes a confidence interval for the 
+# proportion using the Clopper-Pearson method, which is more 
+# conservative than the Agresti-Coull method.
+
+binom.test(10, n = 25, p = 0.061)
+
+# Agresti-Coull 95% confidence interval for the proportion 
+# using the binom package.
+
+library(binom)
+binom.confint(30, n = 87, method = "ac")
+
+```
+
+
+
+
 ## Chi-square test
+
+We perform a goodness-of-fit test of the Poisson probability model to frequency data on number of marine invertebrate extinctions per time block in the fossil record.We first read and inspect the data. Each row is a time block, with the observed number of extinctions listed.
+```{r echo = F, warning = F,message = FALSE}
+extinctData <- read_csv("~/Dropbox/Teaching/StatisticsForBiology/ABD_all_data/chapter08/chap08e6MassExtinctions.csv")
+
+
+```
+
+
+Generate the frequency table for the number of time blocks in each number-of-extinctions category. Notice that a simple table does what's needed, but some extinction categories are not represented (e.g., 0, 12 and 13 extinctions).
+
+```{r}
+extinctTable <- table(extinctData$numberOfExtinctions)
+data.frame(Frequency = addmargins(extinctTable))
+```
+
+To remedy the problem of missing categories, save the original variable as a factor that has all counts between 0 and 20 as levels (note that 20 is not the maximum possible number of extinctions, but it is a convenient cutoff for this table).
+
+```{r}
+extinctData$nExtinctFactor = factor(extinctData$numberOfExtinctions, levels = c(0:20))
+extinctTable2 <- table(extinctData$nExtinctFactor)
+data.frame(Frequency = addmargins(extinctTable2))
+```
+
+Estimate the mean number of extinctions per time block from the data. The estimate is needed for the goodness-of-fit test.
+
+```{r}
+meanExtinctions <- mean(extinctData$numberOfExtinctions)
+meanExtinctions
+```
+
+Calculate expected frequencies under the Poisson distribution using the estimated mean. (For now, continue to use 20 extinctions as the cutoff, but don't forget that the Poisson distribution includes the number-of-extinctions categories 21, 22, 23, and so on.)
+
+```{r}
+expectedProportion <- dpois(0:20, lambda = meanExtinctions)
+expectedFrequency <- expectedProportion * 76
+```
+
+Show the frequency distribution in a histogram.
+
+```{r}
+hist(extinctData$numberOfExtinctions, right = FALSE, breaks = seq(0, 21, 1),
+	xlab = "Number of extinctions")
+
+```
+
+
+Make a table of observed and expected frequencies, saving as a data frame.
+
+``` {r}
+extinctFreq <- data.frame(nExtinct = 0:20, obsFreq = as.vector(extinctTable2), 
+	expFreq = expectedFrequency)
+extinctFreq
+```
+
+
+The low expected frequencies will violate the assumptions of the χ2 test, so we will need to group categories. Create a new variable that groups the extinctions into fewer categories.
+
+```{r}
+extinctFreq$groups <- cut(extinctFreq$nExtinct, 
+	breaks = c(0, 2:8, 21), right = FALSE,
+	labels = c("0 or 1","2","3","4","5","6","7","8 or more"))
+extinctFreq
+```
+
+Then sum up the observed and expected frequencies within the new categories.
+
+``` {r}
+obsFreqGroup <- tapply(extinctFreq$obsFreq, extinctFreq$groups, sum)
+expFreqGroup <- tapply(extinctFreq$expFreq, extinctFreq$groups, sum)
+data.frame(obs = obsFreqGroup, exp = expFreqGroup)
+```
+
+The expected frequency for the last category, "8 or more", doesn't yet include the expected frequencies for the categories 21, 22, 23, and so on. However, the expected frequencies must sum to 76. In the following, we recalculate the expected frequency for the last group, expFreqGroup[length(expFreqGroup)], as 76 minus the sum of the expected frequencies for all the other groups.
+
+```{r}
+expFreqGroup[length(expFreqGroup)] = 76 - sum(expFreqGroup[1:(length(expFreqGroup)-1)])
+data.frame(obs = obsFreqGroup, exp = expFreqGroup)
+```
+
+Finally, we are ready to carry out the χ2 goodness-of-fit test. R gives us a warning here because one of the expected frequencies is less than 5. However, we have been careful to meet the assumptions of the χ2 test, so let's persevere. Once again, R doesn't know that we've estimated a parameter from the data (the mean), so it won't use the correct degrees of freedom when calculating the P-value. As before, we need to grab the χ2 value calculated by chisq.test and recalculate P using the correct degrees of freedom. Since the number of categories is now 8, the correct degrees of freedom is 8 - 1 - 1 = 6.
+
+```{r}
+saveChiTest <- chisq.test(obsFreqGroup, p = expFreqGroup/76)
+saveChiTest # Wrong degrees of freedom, so wrong P-value!
+pValue <- 1 - pchisq(saveChiTest$statistic, df = 6)
+unname(pValue) # correct P-value!
+```
+
+## t-test
+
+### One-sample t-test
+We use a one-sample t-test to compare body temperature in a random sample of people with the "expected" temperature 98.6 °F.
+
+Read and inspect the data:
+
+````{r}
+heat <- read.csv(url("http://www.zoology.ubc.ca/~schluter/WhitlockSchluter/wp-content/data/chapter11/chap11e3Temperature.csv"))
+head(heat)
+
+
+hist(heat$temperature, right = FALSE, breaks = seq(97, 100.5, by = 0.5),
+	col = "firebrick", las = 1, xlab = "Body temperature (degrees F)", 
+	ylab = "Frequency", main = "")
+
+```
+
+One-sample t-test can be calculate using the fucntion t.test. The mu argument gives the value stated in the null hypothesis.
+
+```{r}
+t.test(heat$temperature, mu = 98.6)
+```
+
+
+### Two-sample t-test
+
+WE calcaulte a confidence interval for the difference between two means, and the two-sample t-test, comparing horn length of live and dead (spiked) horned lizards.
+
+```{r}
+lizard <- read.csv(url("http://www.zoology.ubc.ca/~schluter/WhitlockSchluter/wp-content/data/chapter12/chap12e3HornedLizards.csv"))
+head(lizard)
+```
+
+Note that there is one missing value for the variable "squamosalHornLength". Everything is easier if we eliminate the row with missing data.
+
+```{r}
+lizard2 <- na.omit(lizard)
+head(lizard2)
+
+ggplot(data = lizard2) +
+  geom_histogram(mapping = aes(x = squamosalHornLength )) + 
+  facet_wrap( ~Survival,nrow=2) + 
+  theme_classic() 
+
+
+```
+
+
+A two-sample t-test of the difference between two means can be carried out with t.test by using a formula, asking if squamosalHornLength is predicted by Survival, and specifying that the variables are in the data frame lizard.
+
+```{r}
+t.test(squamosalHornLength ~ Survival, data = lizard)
+```
+
+The same reuslt could be achieved with 
+```{r}
+t.test(lizard$squamosalHornLength[lizard$Survival=="killed"], lizard$squamosalHornLength[lizard$Survival=="living"])
+```
+
+
+The output of t.test includes the 95% confidence interval for the difference between means. Add $confint after calling the function to get R to report only the confidence interval. The formula in the following command tells R to compare squamosalHornLength between the two groups indicated by Survival.
+
+```{r}
+t.test(squamosalHornLength ~ Survival, data = lizard)$conf.int
+```
+
+*Note: R has used the Welch two sample t-test here. If we want to force R to use the standrad t.test we set a parameter specifiying this:
+
+```{r}
+t.test(squamosalHornLength ~ Survival, data = lizard,var.equal = TRUE)
+```
+
 
 # Deviations from Normailty
 
-## QQ Plots
+## QQ Plots and Transformations
+We investigate the ratio of biomass between marine reserves and non-reserve control areas.
 
-## Transformations
+```{r}
+marine <- read.csv(url("http://www.zoology.ubc.ca/~schluter/WhitlockSchluter/wp-content/data/chapter13/chap13e1MarineReserve.csv"))
+head(marine)
+
+ggplot(data = marine) +
+  geom_histogram(mapping = aes(x = biomassRatio))
+
+```
+Normal quantile plot of biomass ratio data.
+
+```{r}
+library(car)
+qqPlot(marine$biomassRatio, distribution = "norm")
+```
+
+
+
+The function log() takes the natural logarithm of all the elements of a vector or variable. The following command puts the results into a new variable in the same data frame, marine.
+
+```{r}
+marine = mutate(marine,logBiomassRatio =  log(biomassRatio))
+```
+
+Histogram and QQ-Plot of the log-transformed marine biomass ratio.
+
+```{r}
+ggplot(data = marine) +
+  geom_histogram(mapping = aes(x = logBiomassRatio))
+
+qqPlot(marine$logBiomassRatio, distribution = "norm")
+```
+
+
+95% confidence interval of the mean using the log-transformed data.
+
+```{r}
+t.test(marine$logBiomassRatio)$conf.int
+```
+Back-transform lower and upper limits of confidence interval (exp is the inverse of the log function).
+
+```{r}
+exp(t.test(marine$logBiomassRatio)$conf.int )
+```
+
 
 ## Non-Parametric Alterantives
 
+The Wilcoxon rank-sum test (equivalent to the Mann-Whitney U-test) comparing times to mating (in hours) of starved and fed female sagebrush crickets. We also apply the permutation test to the same data.
+
+Read and inspect data.
+```{r}
+cannibalism <- read.csv(url("http://www.zoology.ubc.ca/~schluter/WhitlockSchluter/wp-content/data/chapter13/chap13e5SagebrushCrickets.csv"))
+head(cannibalism)
+
+```
+
+
+```{r}
+ggplot(data = cannibalism) +
+  geom_histogram(mapping = aes(x = timeToMating ),bins=12) + 
+  facet_wrap( ~feedingStatus,nrow=2) + 
+  theme_classic() 
+```
+
+
+
+Wilcoxon rank-sum test (equivalent to Mann-Whitney U-test)
+
+```{r}
+wilcox.test(timeToMating ~ feedingStatus, data = cannibalism)
+```
 ## Permutation Test
+
+Permutation test of the difference between mean time to mating of starved and fed crickets. Begin by calculating the observed difference between means (starved minus fed). The difference is -18.25734 in this data set.
+
+```{r}
+
+# tapply is another way to calcualte the means of time to mating
+# for each feeding status seperatly
+
+cricketMeans <- tapply(cannibalism$timeToMating, cannibalism$feedingStatus, mean)
+
+cricketMeans
+diffMeans <- cricketMeans[2] - cricketMeans[1]
+diffMeans
+```
+
+Decide on the number of permutations.
+
+```{r}
+nPerm <- 10000
+```
+Create a loop to permute the data many times (determined by nperm). In the loop, i is just a counter that goes from 1 to nPerm by 1; each permuted difference is saved in the permResult.
+
+```{r}
+permResult <- vector() # initializes
+for(i in 1:nPerm){
+	# step 1: permute the times to mating
+	permSample <- sample(cannibalism$timeToMating, replace = FALSE)
+	# step 2: calculate difference betweeen means
+	permMeans <- tapply(permSample, cannibalism$feedingStatus, mean)
+	permResult[i] <- permMeans[2] - permMeans[1]
+}
+
+```
+
+Plot null distribution based on the permuted differences.
+
+```{r}
+hist(permResult, right = FALSE, breaks = 100)
+```
+
+Use the null distribution to calculate an approximate P-value. This is the twice the proportion of the permuted means that fall below the observed difference in means, diffMeans (-18.25734 in this example). The following code calculates the number of permuted means falling below diffMeans.
+
+```{r}
+sum(as.numeric(permResult <= diffMeans))
+```
+
+These commands obtain the fraction of permuted means falling below diffMeans.
+
+```{r}
+sum(as.numeric(permResult <= diffMeans)) / nPerm
+```
+
+Finally, multiply by 2 to get the P-value for a two-sided test.
+```{r}
+2 * ( sum(as.numeric(permResult <= diffMeans)) / nPerm )
+```
+
+
 
 
 
 # ANOVA
+
+## One way ANOVA
+
+## Two way ANOVA
 
 # Linear Regression
 
