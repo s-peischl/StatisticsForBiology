@@ -28,6 +28,14 @@ library(tidyverse)
 library(Rmisc)
 library(tibble)
 library(dplyr)
+
+cbp2 <- c("#000000", "#E69F00", "#56B4E9", "#009E73",
+          "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
+
+scale_colour_discrete <- function(...) {
+  scale_colour_manual(..., values = cbp2)
+}
+
 ```
 
 
@@ -38,10 +46,10 @@ We start with some examples of how to visulaize data quickly and easily. This sh
 
 R has several systems for making graphs, and I have chosen to start with ggplot2 beacuse it is elegant, versatile and is easy to leanr if you have no prior knowledge about programming. For those of you who are already familiar wiht programming langauges, doing graphics in "base R" may seem more intuitive initially but I hope I can convince you that the grammar of plotting used by ggplot has lots of advantages and is very readable once you get the hang of it. 
 
-If you’d like to learn more about the theoretical underpinnings of ggplot2 before you start, I’d recommend reading “The Layered Grammar of Graphics”, http://vita.had.co.nz/papers/layered-grammar.pdf.
+If you???d like to learn more about the theoretical underpinnings of ggplot2 before you start, I???d recommend reading ???The Layered Grammar of Graphics???, http://vita.had.co.nz/papers/layered-grammar.pdf.
 
 ### The MPG dataset
-Let’s use our first graph to answer a question: Do cars with big engines use more fuel than cars with small engines? What does the relationship between engine size and fuel efficiency look like? Is it positive? Negative? Linear? Nonlinear?
+Let???s use our first graph to answer a question: Do cars with big engines use more fuel than cars with small engines? What does the relationship between engine size and fuel efficiency look like? Is it positive? Negative? Linear? Nonlinear?
 
 We can find an answer with the mpg data set found in ggplot2 (aka ggplot2::mpg). A data frame is the R data format to store data in the format of a spreadsheet: rectangular collection of variables (in the columns) and observations (in the rows). mpg contains observations collected by the US Environmental Protection Agency on 38 models of car.
 
@@ -53,9 +61,9 @@ Among the variables in mpg are:
 
 
 
-**displ**, a car’s engine size, in litres.
+**displ**, a car???s engine size, in litres.
 
-**hwy**, a car’s fuel efficiency on the highway, in miles per gallon (mpg). A car with a low fuel efficiency consumes more fuel than a car with a high fuel efficiency when they travel the same distance.
+**hwy**, a car???s fuel efficiency on the highway, in miles per gallon (mpg). A car with a low fuel efficiency consumes more fuel than a car with a high fuel efficiency when they travel the same distance.
 
 
 
@@ -73,7 +81,7 @@ ggplot(data = mpg) +
   geom_point(mapping = aes(x = displ, y = hwy)) 
 ```
 
-There are many other such *geometric functions* withing the ggplot2 universe and you can combine them in a single plot.  You’ll learn a whole bunch of them throughout this course, but be aware that we will only scratch the surface of what is available. After this course, you should be equipped with everthing you need to equip your self with new tools for data analysis whenever you need them.
+There are many other such *geometric functions* withing the ggplot2 universe and you can combine them in a single plot.  You???ll learn a whole bunch of them throughout this course, but be aware that we will only scratch the surface of what is available. After this course, you should be equipped with everthing you need to equip your self with new tools for data analysis whenever you need them.
 
 Each geom function in ggplot2 takes a mapping argument. This defines how variables in your dataset are mapped to visual properties. The mapping argument is always paired with aes(), and the x and y arguments of aes() specify which variables to map to the x and y axes. ggplot2 looks for the mapped variables in the data argument, in this case, mpg.
 
@@ -85,6 +93,7 @@ ggplot(data = mpg) +
   theme_classic()
 ```
 
+
 The general grammar of ggplot is
 
 ggplot(data = \<DATA\>) + 
@@ -95,7 +104,7 @@ We will explain each part step by step in examples. The DATA argument should be 
 
 The second part, GEOM_FUNCTION, specifies what kind of plot you want. As mentioned above *geom_point* gives you a classic scatter plot. Many other such funtions exist and we will encounter some of them. 
 
-Finally, MAPPING specifies which variables hould be plotted. We ussually specify this with an aesthetics mapping of the form mapping = aes(x = ..., y =...) to deterimne the variables that give us the x- and y-coordinates. We can however also change the aesthetics of our plot in various way, for instance by giving data points different colors that indicate the value of a third variable:  
+Finally, MAPPING specifies which variables hould be plotted. We ussually specify this with an aesthetics mapping of the form *mapping = aes(x = ..., y =...)* to deterimne the variables that give us the x- and y-coordinates. We can however also change the aesthetics of our plot in various way, for instance by giving data points different colors that indicate the value of a third variable:  
 ```{r mileage_aes}
 ggplot(data = mpg) + 
   geom_point(mapping = aes(x = displ, y = hwy,color = class)) +
@@ -120,6 +129,11 @@ p+theme_dark()
 ```
 
 
+We now set our prefered them globally, so we do not need to specifiy it all the time:
+```{r}
+theme_set(theme_classic())
+```
+
 ## Base R graphics
 
 Base R refers to the standard R functions. While ggplot allows us to make sophisticated graphs very quickly, I find that in some situations base R is just as good or even better. Let us recreate the same plot as before:
@@ -142,7 +156,7 @@ When working with data frames, ggplot may seem more attractive and easy to use t
 
 ```{r}
 x=seq(0,7,by=0.1)   
-# x = (0,0.1,0.2,0.3, … ,6.9,7)
+# x = (0,0.1,0.2,0.3, ??? ,6.9,7)
 y=sin(x)
 
 
@@ -155,8 +169,8 @@ axis(2)
 text(2.8,0.85,"y = sin(x)",col="deepskyblue4")   
 # add some text at coordinates x = 2.8, y = 0.85
 
-lines(x,cos(x),lwd=2,col="green4")  # add a cosine plot …
-text(1.5,-0.5,"y=cos(x)",col="green4")   # … and label it
+lines(x,cos(x),lwd=2,col="green4")  # add a cosine plot ???
+text(1.5,-0.5,"y=cos(x)",col="green4")   # ??? and label it
 
 legend(3.5,0.8,legend=c("y=sin(x)","y=cos(x)"),
 col=c("deepskyblue4","green4"),lwd=2)   
@@ -255,19 +269,19 @@ library(nycflights13)
 ```
 Find all flights that
 
-** Had an arrival delay of two or more hours
+* Had an arrival delay of two or more hours
 
-** Flew to Houston (IAH or HOU)
+* Flew to Houston (IAH or HOU)
 
-** Were operated by United, American, or Delta
+* Were operated by United, American, or Delta
 
-** Departed in summer (July, August, and September)
+* Departed in summer (July, August, and September)
 
-** Arrived more than two hours late, but didn’t leave late
+* Arrived more than two hours late, but didn???t leave late
 
-** Were delayed by at least an hour, but made up over 30 minutes in flight
+* Were delayed by at least an hour, but made up over 30 minutes in flight
 
-** Departed between midnight and 6am 
+* Departed between midnight and 6am 
 
 Hint: look up logical operators!
 
@@ -313,11 +327,17 @@ In the exercises you will learn a few more useful functions to rearrange, filter
 
 *Question: Can you come up with anotehr way to do this whithout using filter? *
 
-*An answer (there are many ways to do this):*
+*Two possible answers (there are many ways to do this):*
+Straightforward "indexing":
 ```{r}
 mean.mm = mean(stickleback$plates[stickleback$genotype=="mm"])
 mean.mM = mean(stickleback$plates[stickleback$genotype=="mM"])
 mean.MM = mean(stickleback$plates[stickleback$genotype=="MM"])
+```
+
+or by using the function *tapply* (look up the help page for this function by typing "?tapply"):
+```{R}
+mean.plates = tapply(stickleback$plates,stickleback$genotyp,mean)
 ```
 
 ## Plots
@@ -519,7 +539,7 @@ help(Distributions)
 ```
 if you want to know more. Let us focus on the normal distirbution. It's density is given by
 $$f(x|\mu,\sigma) = \frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{(x-\mu)^2}{2\sigma^2}}$$
-The function *dnorm* returns the value of the probability density function for the normal distribution given parameters for x, μ, and σ. Some examples of using dnorm are below:
+The function *dnorm* returns the value of the probability density function for the normal distribution given parameters for x, ??, and ??. Some examples of using dnorm are below:
 
 ```{r}
 # We use the pdf of the normal with x = 0, 
@@ -822,7 +842,7 @@ extinctFreq
 ```
 
 
-The low expected frequencies will violate the assumptions of the χ2 test, so we will need to group categories. Create a new variable that groups the extinctions into fewer categories.
+The low expected frequencies will violate the assumptions of the ??2 test, so we will need to group categories. Create a new variable that groups the extinctions into fewer categories.
 
 ```{r}
 extinctFreq$groups <- cut(extinctFreq$nExtinct, 
@@ -846,7 +866,7 @@ expFreqGroup[length(expFreqGroup)] = 76 - sum(expFreqGroup[1:(length(expFreqGrou
 data.frame(obs = obsFreqGroup, exp = expFreqGroup)
 ```
 
-Finally, we are ready to carry out the χ2 goodness-of-fit test. R gives us a warning here because one of the expected frequencies is less than 5. However, we have been careful to meet the assumptions of the χ2 test, so let's persevere. Once again, R doesn't know that we've estimated a parameter from the data (the mean), so it won't use the correct degrees of freedom when calculating the P-value. As before, we need to grab the χ2 value calculated by chisq.test and recalculate P using the correct degrees of freedom. Since the number of categories is now 8, the correct degrees of freedom is 8 - 1 - 1 = 6.
+Finally, we are ready to carry out the ??2 goodness-of-fit test. R gives us a warning here because one of the expected frequencies is less than 5. However, we have been careful to meet the assumptions of the ??2 test, so let's persevere. Once again, R doesn't know that we've estimated a parameter from the data (the mean), so it won't use the correct degrees of freedom when calculating the P-value. As before, we need to grab the ??2 value calculated by chisq.test and recalculate P using the correct degrees of freedom. Since the number of categories is now 8, the correct degrees of freedom is 8 - 1 - 1 = 6.
 
 ```{r}
 saveChiTest <- chisq.test(obsFreqGroup, p = expFreqGroup/76)
@@ -858,7 +878,7 @@ unname(pValue) # correct P-value!
 ## t-test
 
 ### One-sample t-test
-We use a one-sample t-test to compare body temperature in a random sample of people with the "expected" temperature 98.6 °F.
+We use a one-sample t-test to compare body temperature in a random sample of people with the "expected" temperature 98.6 ??F.
 
 Read and inspect the data:
 
@@ -1068,33 +1088,298 @@ Finally, multiply by 2 to get the P-value for a two-sided test.
 
 
 # ANOVA
-
 ## One way ANOVA
 
+Analysis of variance, comparing phase shift in the circadian rhythm of melatonin production in participants given alternative light treatments. Also, the nonparametric Kruskal-Wallis test. Finally, we use the same data to demonstrate planned comparisons and unplanned comparisons (Tukey-Kramer tests).
+
+Read and inspect the data.
+
+```{r}
+circadian <- read.csv(url("http://www.zoology.ubc.ca/~schluter/WhitlockSchluter/wp-content/data/chapter15/chap15e1KneesWhoSayNight.csv"))
+```
+
+Set the preferred ordering of groups in tables and graphs.
+
+```{r}
+circadian$treatment <- factor(circadian$treatment, 
+	levels = c("control", "knee", "eyes")) 
+
+
+
+meanShift <- tapply(circadian$shift, circadian$treatment, mean)
+sdevShift <- tapply(circadian$shift, circadian$treatment, sd)
+n         <- tapply(circadian$shift, circadian$treatment, length)
+mean_SD =data.frame(mean = meanShift, std.dev = sdevShift, n = n,treatment = c("control", "knee", "eyes"))
+
+```
+
+Strip chart of circadian rhythm shift by treatment.
+
+
+Add standard error bars to previous strip chart. This makes use of the descriptive statistics calculated in an earlier step. The error bars are added as line segments, offset along the x-axis by the amount adjustAmount. The means are added using points.
+
+```{r}
+
+ggplot(data = circadian) +
+  geom_jitter(mapping = aes(x = treatment,y=shift),width=0.1) + 
+  geom_errorbar(data = mean_SD,mapping = aes(x = treatment,ymin=meanShift-sdevShift/sqrt(n), ymax=meanShift+sdevShift/sqrt(n)), width=.1,color="red") + 
+  geom_point(data = mean_SD,mapping = aes(x = treatment,y=meanShift),color="red")
+
+
+```
+
+
+
+Fixed effects ANOVA table (Table 15.1-2). This is done in two steps. The first step involves fitting the ANOVA model to the data using lm ("lm" stands for "linear model", of which ANOVA is one type). Then we use the command anova to assemble the ANOVA table.
+
+```{r}
+circadianAnova <- lm(shift ~ treatment, data = circadian)
+anova(circadianAnova)
+```
+
+R2 indicating the fraction of variation in the response variable "explained" by treatment. This is again done in two steps. The first step calculates a bunch of useful quantities from the ANOVA model object previously created with a lm command. The second step shows the R2 value.
+
+```{r}
+circadianAnovaSummary <- summary(circadianAnova)
+circadianAnovaSummary$r.squared
+```
+
 ## Two way ANOVA
+Analyze data from a factorial experiment investigating the effects of herbivore presence, height above low tide, and the interaction between these factors, on abundance of a red intertidal alga using two-factor ANOVA.
+
+Read and inspect the data.
+
+```{r}
+algae <- read.csv(url("http://www.zoology.ubc.ca/~schluter/WhitlockSchluter/wp-content/data/chapter18/chap18e3IntertidalAlgae.csv"))
+head(algae)
+```
+
+We first take a look at the data:
+```{r}
+ggplot(data = algae,  aes(x = height, color = herbivores, group = herbivores, y = sqrtArea)) +
+  geom_point()
+```
+
+This is  a mess so we next add some summary statistics of the data: the mean Area for each combination of explanatory variables.
+```{r}
+ggplot(data = algae) +
+  aes(x = height, color = herbivores, group = herbivores, y = sqrtArea) +
+    geom_point()+
+  stat_summary(fun.y = mean, geom = "point") +
+  stat_summary(fun.y = mean, geom = "line")+ 
+  labs(title="Hopp YB! ;-)",
+        x ="height", y = "Aread")
+```
+
+It looks like there is some interaction between *height* and *herbivores*, but there is also quite some noise so it is difficult to tell.
+
+Let us first fit a null model having both main effects but no interaction term. We can do this again with *lm* (*note:* conceptually a t-test, an ANOVA and linear regression are all pretty much the same thing and hence the function lm can be used in all these cases):
+
+```{r}
+algaeNoInteractModel <- lm(sqrtArea ~ height + herbivores, data = algae)
+
+summary(algaeNoInteractModel)
+```
+
+Now fit the full model, with interaction term included.
+```{r}
+algaeFullModel <- lm(sqrtArea ~ height * herbivores, data = algae)
+```
+
+Finally we cretea na ANOVA table that compares the two models:
+```{r}
+anova(algaeNoInteractModel, algaeFullModel)
+```
+
 
 # Linear Regression
 
- whereas geom_smooth would give you a smooth line theat best resembles the cloud of points (more on  that later):
+ Test the null hypothesis of zero regression slope. The data are from an experiment investigating the effect of plant species diversity on the stability of plant biomass production.
 
-```{r mileage3}
-ggplot(data = mpg) + 
-  geom_smooth(mapping = aes(x = displ, y = hwy)) +
-  theme_classic()
+Read and inspect the data.
+```{r}
+prairie <- read.csv(url("http://www.zoology.ubc.ca/~schluter/WhitlockSchluter/wp-content/data/chapter17/chap17e3PlantDiversityAndStability.csv"))
+head(prairie)
 ```
 
-Of course, we can put points and a smooth line on the same plot: 
-```{r mileage4}
-ggplot(data = mpg) + 
-  geom_smooth(mapping = aes(x = displ, y = hwy)) +
-  geom_point(mapping = aes(x = displ, y = hwy)) +
-  theme_classic()
+Log-transform stability and include the new variable in the data frame. Inspect the data frame once again to make sure the function worked as intended.
+
+```{r}
+prairie = mutate(prairie,logStability = log(biomassStability))
+head(prairie)
+```
+Scatter plot with regression line in base R:
+```{r}
+plot(logStability ~ nSpecies, data = prairie) 
+prairieRegression <- lm(logStability ~ nSpecies, data = prairie)
+abline(prairieRegression)
 ```
 
-You may wonder how the smooth line is determined. We will come back to this later in the chapter on linear regression. For now, we just mention that we can modify the method used for the plot, e.g., to get a linear regression line:
-```{r mileage_lm}
-ggplot(data = mpg) + 
-  geom_smooth(mapping = aes(x = displ, y = hwy),method='lm') +
-  geom_point(mapping = aes(x = displ, y = hwy)) +
-  theme_classic()
+Scatter plot with regression line in ggplot:
+```{r}
+ggplot(data = prairie,aes(y=logStability,x=nSpecies)) +
+  geom_point()+
+  geom_smooth(method = "lm")
+
 ```
+
+
+
+```{r}
+prairieRegression <- lm(logStability ~ nSpecies, data = prairie)
+summary(prairieRegression)
+confint(prairieRegression)
+```
+
+
+# Exercises
+
+## Week 1 (26.02.2020)
+
+#### Exercise 1
+
+The peppered moth (Biston betularia) occurs in two types: peppered (speckled black and white) and melanic (black). A researcher wished to measure the proportion of melanic individuals in the peppered moth population in England, to examine how this proportion changed from year to year in the past. To accomplish this, she photographed all the peppered moth specimens available in museums and large private collections and grouped them by the year in which they had been collected. Based on this sample, she calculated the proportion of melanic individuals in every year. The people who collected the specimens, she knew, would prefer to collect whichever type was rarest in any given year, since those would be the most valuable.
+
+ a)	Can the specimens from any given year be considered a random sample from the moth population?
+
+ b)	If not a random sample, what type of sample is it?
+
+ c)	What type of error might be introduced by the sampling method when estimating the proportion of melanic moths?
+
+#### Exercise 2	
+Which of the following numerical variables are continuous? Which are discrete? (Note: Discrete variables are those that have a finite set of predefined values, whereas continuous variables can take any value within a given interval.)
+ a)	Number of injuries sustained in a fall
+ b)	Fraction of birds in a large sample infected with avian flu virus
+ c)	Number of crimes committed by a randomly sampled individual
+ d)	Logarithm of body mass
+
+#### Exercise 3	
+For each of the following studies, say which is the explanatory variable and which is the response variable. Also, say whether the study is observational or experimental.
+ a)	Forestry researchers wanted to compare the growth rates of trees growing at high altitude to that of trees growing at low altitude. They measured growth rates using the space between tree rings in a set of trees harvested from a natural forest. 
+ b)	Researchers randomly assign diabetes patients to two groups. In the first group, the patients receive a new drug, tasploglutide, whereas patients in the other group receive standard treatment without the new drug. The researchers compared the rate of insulin release in the two groups.
+ c)	Psychologists tested whether the frequency of illegal drug use differs between people suffering from schizophrenia and those not having the disease. They measured drug use in a group of schizophrenia patients and compared it with that in a similar sized group of randomly chosen people.
+ d)	Spinner Hansen et al. (2008) studied a species of spider whose females often eat males that are trying to mate with them. The researchers removed a leg from each male spider in one group (to make them weaker and more vulnerable to being eaten) and left the males in another group undamaged. They studied whether survival of males in the two groups differed during courtship.
+ e)	Bowen et al. (2012) studied the effects of advanced communication therapy for patients whose communication skills had been affected by previous strokes. They randomly assigned two therapies to stroke patients. One group received advanced communication therapy and the other received only social visits without formal therapy. Both groups otherwise received normal, best-practice care. After six months, the communication ability (as measured by a standardized quantitative test score) was measured on all patients.
+
+#### Exercise 4
+During World War II, the British Royal Air Force estimated the density of bullet holes on different sections of planes returning to base from aerial sorties. Their goal was to use this information to determine which plane sections most needed additional protective shields. (It was not possible to reinforce the whole plane, because it would weigh too much.) They found that the density of holes was highest on the wings and lowest on the engines and near the cockpit, where the pilot sits (their initial conclusion, that therefore the wings should be reinforced, was later shown to be mistaken). What is the main problem with the sample: bias or large sampling error? What part of the plane should have been reinforced? 
+
+![Figure: Airplane bullet holes](AirplaneMissileHits.png)
+
+#### Exercise 5
+An important quantity in conservation biology is the number of plant and animal species inhabiting a given area. To survey the community of small mammals inhabiting Kruger National Park in South Africa, a large series of live traps were placed randomly throughout the park for one week in the main dry season of 2004. Traps were set each evening and checked the following morning. Individuals caught were identified, tagged (so that new captures could be distinguished from recaptures), and released. At the end of the survey, the total number of small mammal species in the park was estimated by the total number of species captured in the survey. 
+ a)	What is the parameter being estimated in the survey? 
+ b) Is the sample of individuals captured in the traps likely to be a random sample? Why or why not? In your answer, address the two criteria that define a sample as random.
+ c) Is the number of species in the sample likely to be an unbiased estimate of the total number of small mammal species in the park? 
+
+
+
+
+## Week 2 (04.03.2020)
+
+#### Exercise 6
+We use the MPG data set introduced in the lecture.  Answer the following questions. You can use base R or ggplot if not otherwise specified.
+
+ a)	Run ggplot(data = mpg). What do you see?
+
+ b)	How many rows are in mpg? How many columns?
+
+ c)	What does the drv variable describe? Read the help for ?mpg to find out.
+
+ d)	Make a scatterplot of hwy vs cyl.
+
+ e)	What happens if you make a scatterplot of class vs drv? Why is the plot not useful?
+
+ f)	What???s gone wrong with this code? Why are the points not blue?
+
+ggplot(data = mpg) + 
+
+  geom_point(mapping = aes(x = displ, y = hwy, color = "blue"))
+
+ g)	Map a continuous variable to color, size, and shape. How do these aesthetics behave differently for categorical vs. continuous variables?
+ h)	Fix the following code:
+
+ggplot(data = mpg) 
+
++ geom_point(mapping = aes(x = displ, y = hwy))
+
+
+
+## Week 3 (11.03.2020)
+
+
+#### Exercise 7
+Load the data set XXX (found on ilias) and answer the following questions and provide the R code you used for that. Put all of your analysis in a single R script. 
+
+ a)	How many individuals are in the sample (i.e., what is the sample size, n)? 
+ b)	What is the sum of all of the observations? 
+ c)	What is the mean of this sample? Here and forever after, provide units with your answer. 
+ d)	What is the sum of the squares of the measurements? 
+ e)	What is the variance of this sample? 
+ f)	What is the standard deviation of this sample? 
+ g)	What is the coefficient of variation for this  sample? 
+ h)	Display the data using different plotting techniques. Which one illustrates the data best?
+
+
+
+## Week 4 (18.03.2020)
+
+#### Exercise 8
+Write a short R script that simulates the sampling distribution of the mean. Plot the sampling distribution and add the theoretical expectation to the plot. Follow the following steps:
+
+ a)	Choose a distribution that represents your population.
+ b)	Draw a sample of n individuals from that population (hint: use rnorm, rbinom, etc.. to draw a random sample), and store it in a vector.
+ c)	Calculate the mean of the sample. Store the mean in a vector. 
+ d)	Do this 1000 times, so that you have calculated a 1000 means from a 1000 samples. Hint: use a for-loop to automate this
+ e)	Plot a histogram of the sample means.
+ f)	Add a line for the theoretical expectation of the sampling distribution. Hint: use the function dnorm to get the density of the normal distribution. 
+
+
+
+## Week 5 (25.03.2020)
+
+#### Exercise 9
+The pizza below, ordered from the Venn Pizzeria on Bayes Street,
+ is divided into eight slices.
+
+![Figure: Venn Pizza](Pizza.png) 
+
+Answer the following questions based on the drawing of the pizza:
+ a)	What is the probability that a randomly drawn slice has pepperoni on it?
+ b)	What is the probability that a randomly drawn slice has both pepperoni and anchovies on it?
+ c)	What is the probability that a randomly drawn slice has either pepperoni  or anchovies on it?
+ d)	Are pepperoni and anchovies mutually exclusive on this pizza?
+ e)	Are olives and mushrooms mutually exclusive on this pizza?
+ f)	Are getting mushrooms and getting anchovies independent when randomly picking a slice of pizza?
+ g)	If I pick a slice from this pizza and tell you that it has olives on it, what is the chance that it also has anchovies?
+ h)	If I pick a slice from this pizza and tell you that it has anchovies on it, what is the chance that it also has olives?
+ i)	Seven of your friends each choose a slice at random and eat them without telling you what toppings they had. What is the chance that the last slice has olives on it?
+ j)	You choose two slices at random. What is the chance that they have both olives on them? (Be careful ??? after removing the first slice, the probability of choosing one of the remaining slices changes.)
+ k)	What???s the probability that a randomly chosen slice does not have pepperoni on it?
+Draw a pizza for which mushrooms, olives, anchovies and pepperoni are all mutually exclusive
+
+#### Exercise 10
+After graduating from your university with a biology degree, you are interviewed for a lucrative job as a snake handler in a circus sideshow. As part of your audition, you must pick up two rattlesnakes from a pit. The pit contains eight snakes, three of 
+which have been defanged and are assumed to be harmless, but the other five are definitely still dangerous. Unfortunately budget cuts have eliminated the herpetology course from the curriculum and so you have no way of telling in advance which snakes are dangerous and which are not. You pick one snake with your left hand and one with your right.
+
+
+ a)	What is the probability that you picked up no dangerous snakes?
+ b)	Assume that any dangerous snake that you pick up has a probability of 0.8 of biting you. The defanged snakes do not bite. What is the chance that, in picking up your two snakes, you are bitten at least once?
+ c)	If you picked up one snake and it didn???t bite you, what is the probability that it is defanged.
+
+#### Exercise 11
+Five different researchers independently take a random sample from the same population and calculate a 95% confidence interval for the same parameter. 
+ a)	What is the probability that all five researchers have calculated an interval that includes the true  value of the parameter?
+ b)	What is the probability that at least one does not include the true parameter value. 
+
+#### Exercise 12
+Load the data set XXX. Calculate a confidence interval for the mean of the data. Make a plot that shows the mean and the confidence interval. 
+
+## Week 6 (01.04.2020)
+## Week 7 (08.04.2020)
+## Week 8 (21.04.2020)
+## Week 9 (28.04.2020)
+## Week 10 (06.05.2020)
+## Week 11 (13.05.2020)
+## Week 12 (20.05.2020)
+## Week 13 (27.05.2020)
