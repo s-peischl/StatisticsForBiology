@@ -40,7 +40,7 @@ scale_colour_discrete <- function(...) {
 
 
 
-# Visualizations with ggplot2
+# Visualizations with ggplot2 and base R
 
 We start with some examples of how to visulaize data quickly and easily. This should show you how to produce high quality visulaizations using R and motivate you to learn more about programming and data analysis with R. 
 
@@ -1275,6 +1275,8 @@ An important quantity in conservation biology is the number of plant and animal 
 
 
 
+
+
 ## Week 2 (04.03.2020)
 
 #### Exercise 6
@@ -1305,6 +1307,7 @@ ggplot(data = mpg)
 
 
 
+
 ## Week 3 (11.03.2020)
 
 
@@ -1313,7 +1316,7 @@ Load the data set XXX (found on ilias) and answer the following questions and pr
 
  a)	How many individuals are in the sample (i.e., what is the sample size, n)? 
  b)	What is the sum of all of the observations? 
- c)	What is the mean of this sample? Here and forever after, provide units with your answer. 
+ c)	What is the mean of this sample?  
  d)	What is the sum of the squares of the measurements? 
  e)	What is the variance of this sample? 
  f)	What is the standard deviation of this sample? 
@@ -1325,12 +1328,15 @@ Load the data set XXX (found on ilias) and answer the following questions and pr
 ## Week 4 (18.03.2020)
 
 #### Exercise 8
+Use the stickleback dataset and calcualte the median and mean for each genotpye. Make a histogramm and add vertical lines to the histogramm indicating the mean and median for each genotype. What do you see? How does the shape of the distribution affect differences between mean and median?
+
+#### Exercise 9
 Write a short R script that simulates the sampling distribution of the mean. Plot the sampling distribution and add the theoretical expectation to the plot. Follow the following steps:
 
- a)	Choose a distribution that represents your population.
- b)	Draw a sample of n individuals from that population (hint: use rnorm, rbinom, etc.. to draw a random sample), and store it in a vector.
- c)	Calculate the mean of the sample. Store the mean in a vector. 
- d)	Do this 1000 times, so that you have calculated a 1000 means from a 1000 samples. Hint: use a for-loop to automate this
+ a)	Choose a distribution that represents your population (e.g., Normal or Poisson).
+ b)	Draw a sample of n individuals from that population (hint: use rnorm, rpoiss, etc.. to draw a random sample), and store it in a vector.
+ c)	Calculate the mean of the sample. Store the mean of this sample in a vector. 
+ d)	Do this 1000 times, so that you have calculated a 1000 means from a 1000 samples. Hint: use a for-loop to automate this.
  e)	Plot a histogram of the sample means.
  f)	Add a line for the theoretical expectation of the sampling distribution. Hint: use the function dnorm to get the density of the normal distribution. 
 
@@ -1338,9 +1344,8 @@ Write a short R script that simulates the sampling distribution of the mean. Plo
 
 ## Week 5 (25.03.2020)
 
-#### Exercise 9
-The pizza below, ordered from the Venn Pizzeria on Bayes Street,
- is divided into eight slices.
+#### Exercise 10
+The pizza below, ordered from the Venn Pizzeria on Bayes Street, is divided into eight slices.
 
 ![Figure: Venn Pizza](Pizza.png) 
 
@@ -1358,24 +1363,25 @@ Answer the following questions based on the drawing of the pizza:
  k)	What???s the probability that a randomly chosen slice does not have pepperoni on it?
 Draw a pizza for which mushrooms, olives, anchovies and pepperoni are all mutually exclusive
 
-#### Exercise 10
-After graduating from your university with a biology degree, you are interviewed for a lucrative job as a snake handler in a circus sideshow. As part of your audition, you must pick up two rattlesnakes from a pit. The pit contains eight snakes, three of 
-which have been defanged and are assumed to be harmless, but the other five are definitely still dangerous. Unfortunately budget cuts have eliminated the herpetology course from the curriculum and so you have no way of telling in advance which snakes are dangerous and which are not. You pick one snake with your left hand and one with your right.
+#### Exercise 11
+After graduating from your university with a biology degree, you are interviewed for a lucrative job as a snake handler in a circus sideshow. As part of your audition, you must pick up two rattlesnakes from a pit. The pit contains eight snakes, three of which have been defanged and are assumed to be harmless, but the other five are definitely still dangerous. Unfortunately budget cuts have eliminated the herpetology course from the curriculum and so you have no way of telling in advance which snakes are dangerous and which are not. You pick one snake with your left hand and one with your right.
 
 
  a)	What is the probability that you picked up no dangerous snakes?
  b)	Assume that any dangerous snake that you pick up has a probability of 0.8 of biting you. The defanged snakes do not bite. What is the chance that, in picking up your two snakes, you are bitten at least once?
  c)	If you picked up one snake and it didn???t bite you, what is the probability that it is defanged.
 
-#### Exercise 11
+#### Exercise 12
 Five different researchers independently take a random sample from the same population and calculate a 95% confidence interval for the same parameter. 
  a)	What is the probability that all five researchers have calculated an interval that includes the true  value of the parameter?
  b)	What is the probability that at least one does not include the true parameter value. 
 
-#### Exercise 12
-Load the data set XXX. Calculate a confidence interval for the mean of the data. Make a plot that shows the mean and the confidence interval. 
+#### Exercise 13
+Use the stickleback data set. Calculate a confidence interval for the mean plate numbers for each genotype. Make a plot that shows the mean and the confidence interval of each genotype. 
 
 ## Week 6 (01.04.2020)
+
+
 ## Week 7 (08.04.2020)
 ## Week 8 (21.04.2020)
 ## Week 9 (28.04.2020)
