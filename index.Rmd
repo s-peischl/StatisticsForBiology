@@ -3,10 +3,12 @@ title: "Lecture Notes for Statistics for Biology FS2020"
 author: "Stephan Peischl"
 date: "1/10/2020"
 output:
+  pdf_document:
+    toc: yes
   html_document:
     toc: yes
     toc_float: yes
-  pdf_document:
+  word_document:
     toc: yes
 ---
 
@@ -46,6 +48,7 @@ scale_colour_discrete <- function(...) {
 
 # Visualizations with ggplot2 and base R
 
+## GGplot 2
 We start with some examples of how to visulaize data quickly and easily. This should show you how to produce high quality visulaizations using R and motivate you to learn more about programming and data analysis with R. 
 
 R has several systems for making graphs, and I have chosen to start with ggplot2 beacuse it is elegant, versatile and is easy to leanr if you have no prior knowledge about programming. For those of you who are already familiar wiht programming langauges, doing graphics in "base R" may seem more intuitive initially but I hope I can convince you that the grammar of plotting used by ggplot has lots of advantages and is very readable once you get the hang of it. 
@@ -189,7 +192,9 @@ Instead of using a data frame, we have created vectors of variables and used the
 
 By now you should see that R is very versatile and can be used for much more than simply doing statistics. This course will teach you the basics of R so that you can start using it for your research projects. An essential part is that  you should also learn how to find and use additional resources, such as the help function in R, books, the internet, etc. Nobody knows all of R - it is an ever growing community endevaour and looking up how things work, which functions or packages are available, or how other people solved a problem is an essential part of learning to be proficient in R.
 
-# Loading datasets
+# Working with data frames
+
+## Loading datasets
 How to we feed R our data? Of course, we can just type it into the console, a bit like in the previous base R graphics example. For large data sets (or rather anythign that is not an eytremely small data set)  this is not practical. We want to load our data from a file, which makes our analysis easily reproducible if we share data and R scripts with someone. First we need to make sure R knows where our working directory is, using the function *setwd* (set working directory):
 ```{r}
 setwd("/Users/stephan/Dropbox/Teaching/StatisticsForBiology/")
@@ -266,7 +271,7 @@ stickleback2 = mutate(stickleback,difference = diff.to.mean)
 head(stickleback2)
 ```
 
-### Subsetting a data frame
+## Subsetting a data frame
 
 We have alreaddy seen how to look at a subset of your data frame using indexing. Here is another slightly more elegant way of doing this, especially when many conditions are combined over multiple variables.  For instance, what if we want to consider only stickleback with more than 20 plates:
 
@@ -311,27 +316,28 @@ We can also use the symbols < (smaller), > (larger), <= (smaller or equal), >= (
 
 ### *Practice Questions:*
 
-*Add a new varaible to the stickleback data frame that contains the difference between plate number and the mean plate number for that individuals genotype.
++ Add a new varaible to the stickleback data frame that contains the difference between plate number and the mean plate number for that individuals genotype.
 
-*Load the flights dataset:
+ + Load the flights dataset:
 ```{r}
 library(nycflights13)
 ```
 Find all flights that
 
-* Had an arrival delay of two or more hours
++ Had an arrival delay of two or more hours
 
-* Flew to Houston (IAH or HOU)
++ Flew to Houston (IAH or HOU)
 
-* Were operated by United, American, or Delta
++ Were operated by United, American, or Delta
 
-* Departed in summer (July, August, and September)
++ Departed in summer (July, August, and September)
 
-* Arrived more than two hours late, but didn???t leave late
++ Arrived more than two hours late, but didn???t leave late
 
-* Were delayed by at least an hour, but made up over 30 minutes in flight
++ Were delayed by at least an hour, but made up over 30 minutes in flight
 
-* Departed between midnight and 6am 
++ Departed between midnight and 6am 
+
 
 
 
@@ -375,7 +381,7 @@ This is very readable: you take the dataframe stickleback, group it by genotye a
 
 In the exercises you will learn a few more useful functions to rearrange, filter, extend and edit data frames.
 
-*Question: Can you come up with anotehr way to do this whithout using filter? *
+*Practice Question:* Can you come up with anotehr way to do this whithout using filter? 
 
 *Two possible answers (there are many ways to do this):*
 Straightforward "indexing":
@@ -407,7 +413,7 @@ names = c("MM","Mm","mm")
 )
 ```
 
-*Question: Can you plot a histogram of plate numbers of individuals with genotpye mm using base R plotting functions? Hint: Use what you have learned here and look up the function hist(). Alternaticel, use ggplot and the geom_function *
+*Practice Question:* Can you plot a histogram of plate numbers of individuals with genotpye mm using base R plotting functions? Hint: Use what you have learned here and look up the function hist(). Alternatively, use ggplot and  geom_histogram.
 
 *Answer:*
 ```{r}
@@ -416,6 +422,7 @@ hist(stickleback$plates[stickleback$genotype=="mm"],col="darkred",xlab="plates",
 ggplot(data=filter(stickleback,genotype == "mm")) + 
   geom_histogram(mapping = aes(x = plates))
 ```
+
 
 
 # A bit of workflow
@@ -577,6 +584,7 @@ stickleback3= mutate(stickleback2,diff.per.genotype = diff.to.mean)
 
 head(stickleback3)
 ```
+
 
 
 
@@ -807,6 +815,7 @@ y = dnorm(x,mu,SE)
 
 lines(x,y)
 ```
+
 
 
 
@@ -1057,6 +1066,7 @@ t.test(squamosalHornLength ~ Survival, data = lizard,var.equal = TRUE)
 ```
 
 
+
 # Deviations from Normailty
 
 ## QQ Plots and Transformations
@@ -1208,7 +1218,9 @@ abline(v = diffMeans,col="red",lwd=2)
 
 
 
+
 # ANOVA
+
 ## One way ANOVA
 
 We compare the phase shift in the circadian rhythm of melatonin production in participants given alternative light treatments. 
@@ -1262,6 +1274,7 @@ circadianAnovaSummary <- summary(circadianAnova)
 circadianAnovaSummary$r.squared
 ```
 
+
 ## Two way ANOVA
 Analyze data from a factorial experiment investigating the effects of herbivore presence, height above low tide, and the interaction between these factors, on abundance of a red intertidal alga using two-factor ANOVA.
 
@@ -1310,6 +1323,7 @@ anova(algaeNoInteractModel, algaeFullModel)
 ```
 
 
+
 # Linear Regression
 
 We test the null hypothesis of zero regression slope. The data are from an experiment investigating the effect of plant species diversity on the stability of plant biomass production.
@@ -1355,6 +1369,7 @@ qqPlot(prairieRegression$residuals,dist="norm")
 plot(prairieRegression$fitted.values,prairieRegression$residuals,xlab="fitted",ylab="Residuals")
 
 ```
+
 
 # Exercises
 
