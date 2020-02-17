@@ -3,11 +3,11 @@ title: "Lecture Notes for Statistics for Biology FS2020"
 author: "Stephan Peischl"
 date: "1/10/2020"
 output:
-  pdf_document:
-    toc: yes
   html_document:
     toc: yes
     toc_float: yes
+  pdf_document:
+    toc: yes
   word_document:
     toc: yes
 ---
@@ -53,7 +53,7 @@ We start with some examples of how to visulaize data quickly and easily. This sh
 
 R has several systems for making graphs, and I have chosen to start with ggplot2 beacuse it is elegant, versatile and is easy to leanr if you have no prior knowledge about programming. For those of you who are already familiar wiht programming langauges, doing graphics in "base R" may seem more intuitive initially but I hope I can convince you that the grammar of plotting used by ggplot has lots of advantages and is very readable once you get the hang of it. 
 
-If you like to learn more about the theoretical underpinnings of ggplot2 before you start, I???d recommend reading "The Layered Grammar of Graphics", http://vita.had.co.nz/papers/layered-grammar.pdf.
+If you like to learn more about the theoretical underpinnings of ggplot2 before you start, I would recommend reading "The Layered Grammar of Graphics", http://vita.had.co.nz/papers/layered-grammar.pdf.
 
 ### The MPG dataset
 Let us use our first graph to answer a question: Do cars with big engines use more fuel than cars with small engines? What does the relationship between engine size and fuel efficiency look like? Is it positive? Negative? Linear? Nonlinear?
@@ -73,9 +73,9 @@ Among the variables in mpg are:
 
 
 
-**displ**, a car???s engine size, in litres.
+**displ**, a car's engine size, in litres.
 
-**hwy**, a car???s fuel efficiency on the highway, in miles per gallon (mpg). A car with a low fuel efficiency consumes more fuel than a car with a high fuel efficiency when they travel the same distance.
+**hwy**, a car's fuel efficiency on the highway, in miles per gallon (mpg). A car with a low fuel efficiency consumes more fuel than a car with a high fuel efficiency when they travel the same distance.
 
 
 
@@ -168,7 +168,7 @@ When working with data frames, ggplot may seem more attractive and easy to use t
 
 ```{r}
 x=seq(0,7,by=0.1)   
-# x = (0,0.1,0.2,0.3, ??? ,6.9,7)
+# x = (0,0.1,0.2,0.3, ... ,6.9,7)
 y=sin(x)
 
 
@@ -181,8 +181,8 @@ axis(2)
 text(2.8,0.85,"y = sin(x)",col="deepskyblue4")   
 # add some text at coordinates x = 2.8, y = 0.85
 
-lines(x,cos(x),lwd=2,col="green4")  # add a cosine plot ???
-text(1.5,-0.5,"y=cos(x)",col="green4")   # ??? and label it
+lines(x,cos(x),lwd=2,col="green4")  # add a cosine plot 
+text(1.5,-0.5,"y=cos(x)",col="green4")   # and label it
 
 legend(3.5,0.8,legend=c("y=sin(x)","y=cos(x)"),
 col=c("deepskyblue4","green4"),lwd=2)   
@@ -332,7 +332,7 @@ Find all flights that
 
 + Departed in summer (July, August, and September)
 
-+ Arrived more than two hours late, but didn???t leave late
++ Arrived more than two hours late, but didn't leave late
 
 + Were delayed by at least an hour, but made up over 30 minutes in flight
 
@@ -597,7 +597,7 @@ help(Distributions)
 ```
 if you want to know more. Let us focus on the normal distirbution. It's density is given by
 $$f(x|\mu,\sigma) = \frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{(x-\mu)^2}{2\sigma^2}}$$
-The function *dnorm* returns the value of the probability density function for the normal distribution given parameters for x, ??, and ??. Some examples of using dnorm are below:
+The function *dnorm* returns the value of the probability density function for the normal distribution for x, given parameters  $\mu$ and $\sigma$. Some examples of using dnorm are below:
 
 ```{r}
 # We use the pdf of the normal with x = 0, 
@@ -988,6 +988,7 @@ We use a one-sample t-test to compare body temperature in a random sample of peo
 Read and inspect the data:
 
 ````{r}
+
 heat <- read.csv(url("http://www.zoology.ubc.ca/~schluter/WhitlockSchluter/wp-content/data/chapter11/chap11e3Temperature.csv"))
 head(heat)
 
@@ -999,7 +1000,7 @@ ggplot(data = heat) +
 ```
 
 A one-sample t-test can be calculate using the function t.test. The mu argument gives the value stated in the null hypothesis. Let us first transform the data into celsius using the formula to turn: 
-$$(X °F − 32) × 5/9 = Y °C$$
+$$(X ??F - 32) ?? 5/9 = Y ??C$$
 ```{r}
 mu0 = (98.6-32)*5/9
 
@@ -1165,10 +1166,11 @@ diffMeans <- cricketMeans[2] - cricketMeans[1]
 diffMeans
 ```
 
-We choose to perform 1000 permutations.
+We choose to perform 1000 permutations and set a seed to make the analysis reproducible:
 
 ```{r}
 nPerm <- 10000
+set.seed(2048)
 ```
 
 The following code implements aloop to permute the data many times (determined by nperm, investigate the function sample to see what it does). In the loop, i is just a counter that goes from 1 to nPerm by 1; each permuted difference is saved in the permResult.
@@ -1211,8 +1213,8 @@ Finally, multiply by 2 to get the P-value for a two-sided test.
 We can illustrate the permutaed differences and add the observed difference on to show the outcome of our test: the birght red colored bars indicate the proportion of permutation results that yielded a more exterme results as the on observed.
 
 ```{r}
-hist(permResult[permResult>diffMeans],breaks=seq(-40,40,by=1),col="darkred",main="")
-hist(permResult[permResult<=diffMeans],breaks=seq(-40,40,by=1),add=T,col="red")
+hist(permResult[permResult>diffMeans],breaks=seq(-50,50,by=1),col="darkred",main="")
+hist(permResult[permResult<=diffMeans],breaks=seq(-50,50,by=1),add=T,col="red")
 abline(v = diffMeans,col="red",lwd=2)
 ```
 
@@ -1408,7 +1410,7 @@ For each of the following studies, say which is the explanatory variable and whi
 #### Exercise 4
 During World War II, the British Royal Air Force estimated the density of bullet holes on different sections of planes returning to base from aerial sorties. Their goal was to use this information to determine which plane sections most needed additional protective shields. (It was not possible to reinforce the whole plane, because it would weigh too much.) They found that the density of holes was highest on the wings and lowest on the engines and near the cockpit, where the pilot sits (their initial conclusion, that therefore the wings should be reinforced, was later shown to be mistaken). What is the main problem with the sample: bias or large sampling error? What part of the plane should have been reinforced? 
 
-![Figure: Airplane bullet holes](AirplaneMissileHits.png)
+![Figure for exercise 4: Airplane bullet holes](AirplaneMissileHits.png)
 
 #### Exercise 5
 An important quantity in conservation biology is the number of plant and animal species inhabiting a given area. To survey the community of small mammals inhabiting Kruger National Park in South Africa, a large series of live traps were placed randomly throughout the park for one week in the main dry season of 2004. Traps were set each evening and checked the following morning. Individuals caught were identified, tagged (so that new captures could be distinguished from recaptures), and released. At the end of the survey, the total number of small mammal species in the park was estimated by the total number of species captured in the survey.
@@ -1439,18 +1441,24 @@ We use the MPG data set introduced in the lecture.  Answer the following questio
 
  e)	What happens if you make a scatterplot of class vs drv? Why is the plot not useful?
 
- f)	What???s gone wrong with this code? Why are the points not blue?
-
+ f)	What is wrong with this code? Why are the points not blue?
+ 
+```{r, echo = TRUE,results='hide', message=F, warning=F}
 ggplot(data = mpg) + 
 
   geom_point(mapping = aes(x = displ, y = hwy, color = "blue"))
+```
 
  g)	Map a continuous variable to color, size, and shape. How do these aesthetics behave differently for categorical vs. continuous variables?
  h)	Fix the following code:
-
+ 
+```
 ggplot(data = mpg) 
 
  + geom_point(mapping = aes(x = displ, y = hwy))
+```
+
+
 
 
 
@@ -1459,15 +1467,15 @@ ggplot(data = mpg)
 
 
 #### Exercise 7
-Load the data set XXX (found on ilias) and answer the following questions and provide the R code you used for that. Put all of your analysis in a single R script. 
+Load the data set "chap04e1HumanGeneLengths.csv" (the lengh of genes in the human genome, found on ilias) and answer the following questions and provide the R code you used for that. Put all of your analysis in a single R script. 
 
- a)	How many individuals are in the sample (i.e., what is the sample size, n)? 
+ a)	How many individuals are in the sample (i.e., what is the sample size, n)?
  b)	What is the sum of all of the observations? 
  c)	What is the mean of this sample?  
  d)	What is the sum of the squares of the measurements? 
  e)	What is the variance of this sample? 
  f)	What is the standard deviation of this sample? 
- g)	What is the coefficient of variation for this  sample? 
+ g)	What is the coefficient of variation for this sample? 
  h)	Display the data using different plotting techniques. Which one illustrates the data best?
 
 
@@ -1506,8 +1514,8 @@ Answer the following questions based on the drawing of the pizza:
  g)	If I pick a slice from this pizza and tell you that it has olives on it, what is the chance that it also has anchovies?
  h)	If I pick a slice from this pizza and tell you that it has anchovies on it, what is the chance that it also has olives?
  i)	Seven of your friends each choose a slice at random and eat them without telling you what toppings they had. What is the chance that the last slice has olives on it?
- j)	You choose two slices at random. What is the chance that they have both olives on them? (Be careful ??? after removing the first slice, the probability of choosing one of the remaining slices changes.)
- k)	What???s the probability that a randomly chosen slice does not have pepperoni on it?
+ j)	You choose two slices at random. What is the chance that they have both olives on them? (Be careful: after removing the first slice, the probability of choosing one of the remaining slices changes.)
+ k)	What is the probability that a randomly chosen slice does not have pepperoni on it?
 Draw a pizza for which mushrooms, olives, anchovies and pepperoni are all mutually exclusive
 
 #### Exercise 11
@@ -1516,7 +1524,7 @@ After graduating from your university with a biology degree, you are interviewed
 
  a)	What is the probability that you picked up no dangerous snakes?
  b)	Assume that any dangerous snake that you pick up has a probability of 0.8 of biting you. The defanged snakes do not bite. What is the chance that, in picking up your two snakes, you are bitten at least once?
- c)	If you picked up one snake and it didn???t bite you, what is the probability that it is defanged.
+ c)	If you picked up one snake and it didn't bite you, what is the probability that it is defanged.
 
 #### Exercise 12
 Five different researchers independently take a random sample from the same population and calculate a 95% confidence interval for the same parameter. 
