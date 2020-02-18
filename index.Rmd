@@ -1,7 +1,6 @@
 ---
-title: "Lecture Notes for Statistics for Biology FS2020"
+title: "Lecture Notes for Pracical Part - Statistics for Biology FS 2020"
 author: "Stephan Peischl"
-date: "1/10/2020"
 output:
   html_document:
     toc: yes
@@ -1531,10 +1530,12 @@ Five different researchers independently take a random sample from the same popu
  a)	What is the probability that all five researchers have calculated an interval that includes the true  value of the parameter?
  b)	What is the probability that at least one does not include the true parameter value. 
 
-#### Exercise 13
-Use the stickleback data set. Calculate a confidence interval for the mean plate numbers for each genotype. Make a plot that shows the mean and the confidence interval of each genotype. 
+
 
 ## Week 6 (01.04.2020)
+
+#### Exercise 13
+Use the stickleback data set. Calculate a confidence interval for the mean plate numbers for each genotype. Make a plot that shows the mean and the confidence interval of each genotype. 
 
 
 ## Week 7 (08.04.2020)

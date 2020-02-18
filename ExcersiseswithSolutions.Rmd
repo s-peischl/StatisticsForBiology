@@ -1,8 +1,9 @@
 ---
 title: "Exercises and Solutions - Statistics for Biology FS 2020"
 author: "Stephan Peischl"
-
 output:
+  pdf_document:
+    toc: yes
   html_document:
     toc: yes
 ---
@@ -459,15 +460,25 @@ The pizza below, ordered from the Venn Pizzeria on Bayes Street, is divided into
 
 Answer the following questions based on the drawing of the pizza:
   a)	What is the probability that a randomly drawn slice has pepperoni on it?
+  
 b)	What is the probability that a randomly drawn slice has both pepperoni and anchovies on it?
+
 c)	What is the probability that a randomly drawn slice has either pepperoni  or anchovies on it?
+
 d)	Are pepperoni and anchovies mutually exclusive on this pizza?
+
 e)	Are olives and mushrooms mutually exclusive on this pizza?
+
 f)	Are getting mushrooms and getting anchovies independent when randomly picking a slice of pizza?
+
 g)	If I pick a slice from this pizza and tell you that it has olives on it, what is the chance that it also has anchovies?
+
 h)	If I pick a slice from this pizza and tell you that it has anchovies on it, what is the chance that it also has olives?
+
 i)	Seven of your friends each choose a slice at random and eat them without telling you what toppings they had. What is the chance that the last slice has olives on it?
+
 j)	You choose two slices at random. What is the chance that they have both olives on them? (Be careful ??? after removing the first slice, the probability of choosing one of the remaining slices changes.)
+
 k)	What???s the probability that a randomly chosen slice does not have pepperoni on it?
 Draw a pizza for which mushrooms, olives, anchovies and pepperoni are all mutually exclusive
 
@@ -484,11 +495,11 @@ Five different researchers independently take a random sample from the same popu
 a)	What is the probability that all five researchers have calculated an interval that includes the true  value of the parameter?
 b)	What is the probability that at least one does not include the true parameter value. 
 
-#### Exercise 13
-Use the stickleback data set. Calculate a confidence interval for the mean plate numbers for each genotype. Make a plot that shows the mean and the confidence interval of each genotype. 
+
 
 ## Week 6 (01.04.2020)
-
+#### Exercise 13
+Use the stickleback data set. Calculate a confidence interval for the mean plate numbers for each genotype. Make a plot that shows the mean and the confidence interval of each genotype. 
 
 ## Week 7 (08.04.2020)
 ## Week 8 (21.04.2020)
