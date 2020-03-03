@@ -21,6 +21,7 @@ These notes should help you get started with the statistics software R, guide yo
 
 We start by loading some relevant packages for this course. An R package is a collection of functions, data, and documentation that extends the capabilities of base R. 
 
+
 ```{r libraries.eval,echo = TRUE,results='hide', message=F, warning=F}
 # make sure you have th packages installed using 
 # install.packages(packagename)
@@ -59,7 +60,7 @@ Let us use our first graph to answer a question: Do cars with big engines use mo
 
 We can find an answer with the mpg data set found in ggplot2 (aka ggplot2::mpg). A data frame is the R data format to store data in a spreadsheet: a rectangular collection of variables (in the columns) and observations (in the rows). The data frame mpg contains observations collected by the US Environmental Protection Agency on 38 models of car.
 
-```{r dataframe}
+```{r}
 # the command head() shos us the first few rows of the data set to 
 # get an overview of what is stored in our dataset
 
@@ -87,7 +88,7 @@ To learn more about mpg, open its help page by running ?mpg. in the next seciton
 In general you begin a plot with the function *ggplot()*. ggplot() creates a coordinate system that you can add layers to. The first argument of ggplot() is the dataset to use in the graph. For instance, typing ggplot(data = mpg)
 into the console creates an empty graph (which is boring so it is not shown here). You can now add layers to your plot. For example, the function geom_point() adds a layer of points to your plot, thus creating  a scatterplot.
 
-```{r mileage}
+```{r }
 ggplot(data = mpg) + 
   geom_point(mapping = aes(x = displ, y = hwy)) 
 ```
@@ -1411,6 +1412,7 @@ During World War II, the British Royal Air Force estimated the density of bullet
 
 ![Figure for exercise 4: Airplane bullet holes](AirplaneMissileHits.png)
 
+
 #### Exercise 5
 An important quantity in conservation biology is the number of plant and animal species inhabiting a given area. To survey the community of small mammals inhabiting Kruger National Park in South Africa, a large series of live traps were placed randomly throughout the park for one week in the main dry season of 2004. Traps were set each evening and checked the following morning. Individuals caught were identified, tagged (so that new captures could be distinguished from recaptures), and released. At the end of the survey, the total number of small mammal species in the park was estimated by the total number of species captured in the survey.
 
@@ -1539,9 +1541,74 @@ Use the stickleback data set. Calculate a confidence interval for the mean plate
 
 
 ## Week 7 (08.04.2020)
-## Week 8 (21.04.2020)
-## Week 9 (28.04.2020)
+
+
+## Week 8 (22.04.2020)
+## Week 9 (29.04.2020)
+Q & A and repetitorium
+
 ## Week 10 (06.05.2020)
 ## Week 11 (13.05.2020)
 ## Week 12 (20.05.2020)
 ## Week 13 (27.05.2020)
+
+# Solutions
+
+## Week 1 (26.02.2020)
+
+#### Exercise 1
+
+a)   No. Collectors did not choose randomly, but prefered rarer types over more common ones. 
+
+b)   It is a sample of convenience.
+
+c)   Thus, there is bias in every year's sample because rare types are over represerented. Further this bias might change across years as the frequencies of the two morphs have changed over time.
+
+#### Exercise 2	
+
+a)   Discrete.
+
+b)   Technically it is a discrete variable (because fractions can be enumerated / are retricted to fintely many values in a fintie sample) but it makes sense to treat it as a continous variable if the sample is very large. 
+
+c)   Discrete. There are no half crimes.
+
+d)   Continous. Body mass is continous and hence the log as well.
+
+#### Exercise 3	
+
+a) E(xplanatory): Altitude (categorical: high vs low)
+   R(esponse): Growth rate
+   S(tudy type): Observational
+   
+b) E: Treatment (standard vs. tasploglutide)
+   R: Rate of insulin release
+   S: Experimental
+   
+c) E: Health status (schizophrenia vs. healthy)
+   R: Frequency of illegal drug use
+   S: Observational
+   
+d) E:Number of legs
+   R: Survival propability
+   S: Experimental
+   
+e) E: Treatment (advanced communication therapy vs. social visits without formal therapy)
+   R: Communication ability
+   S: Experimental
+
+#### Exercise 4
+
+The main problem is a strong bias in the sample. To see this, consider the sample of planes that were used in this study. Only planes that were *not* hit in critical areas were available to estimate the distribution of bullet holes. Planes that were hit in a critical area, i.e., one that leads to a crash, were not available because they did not return to base. With this knowledge, it becomes clear that it would have been better to reinforce the areas were no, or very little, bullet holes were found, namely the cockpit and engine. 
+
+
+
+
+#### Exercise 5
+
+a) The population parameter being estimated is all the small mammals of Kruger National Park. 
+
+b) No, the sample is not likely to be random. In a random sample, every individual has the same chance of being selected. But some small mammals might be easier to trap than others (for example, trapping only at night might miss all the mammals active only in the day time). In a random sample individuals are selected independently. Multiple animals caught in the same trap might not be independent if they are related or live near one another (this is harder to judge). 
+
+c) The number of species in the sample might underestimate the number in the Park if sampling was not random (e.g., if daytime mammals were missed), or if rare species happened to avoid capture. Even if the sample is perfectly random, the estimator will underestimated the true number in most cases. You can sample fewer species just by chance, but not more species as there actually are. Thus -  on average – you will underestimate the true number.
+
+
