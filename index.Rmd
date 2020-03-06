@@ -1377,6 +1377,7 @@ plot(prairieRegression$fitted.values,prairieRegression$residuals,xlab="fitted",y
 
 ## Week 1 (26.02.2020)
 
+
 #### Exercise 1
 
 The peppered moth (Biston betularia) occurs in two types: peppered (speckled black and white) and melanic (black). A researcher wished to measure the proportion of melanic individuals in the peppered moth population in England, to examine how this proportion changed from year to year in the past. To accomplish this, she photographed all the peppered moth specimens available in museums and large private collections and grouped them by the year in which they had been collected. Based on this sample, she calculated the proportion of melanic individuals in every year. The people who collected the specimens, she knew, would prefer to collect whichever type was rarest in any given year, since those would be the most valuable.
@@ -1428,7 +1429,6 @@ An important quantity in conservation biology is the number of plant and animal 
 
 
 ## Week 2 (04.03.2020)
-
 #### Exercise 6
 We use the MPG data set introduced in the lecture.  Answer the following questions. You can use base R or ggplot if not otherwise specified.
 
@@ -1482,7 +1482,6 @@ Load the data set "chap04e1HumanGeneLengths.csv" (the lengh of genes in the huma
 
 
 ## Week 4 (18.03.2020)
-
 #### Exercise 8
 Use the stickleback dataset and calcualte the median and mean for each genotpye. Make a histogramm and add vertical lines to the histogramm indicating the mean and median for each genotype. What do you see? How does the shape of the distribution affect differences between mean and median?
 
@@ -1541,8 +1540,6 @@ Use the stickleback data set. Calculate a confidence interval for the mean plate
 
 
 ## Week 7 (08.04.2020)
-
-
 ## Week 8 (22.04.2020)
 ## Week 9 (29.04.2020)
 Q & A and repetitorium
@@ -1610,5 +1607,79 @@ a) The population parameter being estimated is all the small mammals of Kruger N
 b) No, the sample is not likely to be random. In a random sample, every individual has the same chance of being selected. But some small mammals might be easier to trap than others (for example, trapping only at night might miss all the mammals active only in the day time). In a random sample individuals are selected independently. Multiple animals caught in the same trap might not be independent if they are related or live near one another (this is harder to judge). 
 
 c) The number of species in the sample might underestimate the number in the Park if sampling was not random (e.g., if daytime mammals were missed), or if rare species happened to avoid capture. Even if the sample is perfectly random, the estimator will underestimated the true number in most cases. You can sample fewer species just by chance, but not more species as there actually are. Thus -  on average – you will underestimate the true number.
+
+
+## Week 2 (04.03.2020)
+
+#### Exercise 6 
+
+a)	You should see a blank plot. This is what ggplot does, it simply creates a "canvas" to which you can add "layers".
+
+b)	How many rows are in mpg? How many columns?
+
+```{r}
+str(mpg)
+```
+
+There are 234 obsservations of  11 variables. thus, there are 11 cloumns and 234 rows. we can confirm this by looking at the dimension of the underlying data matrix:
+  
+  ```{r}
+dim(mpg)
+```
+
+
+
+c)	
+
+```{r}
+?mpg
+```
+drv is a categorical vaiable indicating the drive type:
+  f = front-wheel drive, r = rear wheel drive, 4 = 4wd
+
+
+d)	
+
+```{r}
+ggplot(data  = mpg) + 
+  geom_point(mapping = aes(y = hwy,x = cyl)) + 
+  theme_classic() + 
+  labs(title = "A scatterplot", y = "miles per gallon on highways",x="cylinders")
+```
+
+e)	
+
+```{r}
+ggplot(data  = mpg) + 
+  geom_point(mapping = aes(x = class,y = drv)) + 
+  theme_classic() + 
+  labs(title = "A useless plot", x = "class",y="drive type")
+```
+both drv and class are categorical variable and it does not make sense to visualize them this way. What would be a better way to show these data? 
+
+
+f)	Color is used wihtin the aesthetics function, where we specifiy which varibales should be used. "blue" is however not a variable in our data frame. Thus it is ignored. The follwoing code creates the correct plot:
+
+```{r, echo = TRUE,results='hide', message=F, warning=F}
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy), color = "blue")
+```
+
+
+g)	
+
+A continous variable will lead ot a continous color gradient rather than a discrete set of colors.
+```{r, echo = TRUE,results='hide', message=F, warning=F}
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = cty, y = hwy, color = displ))
+```
+
+h)	The "+" symbol always has to be in the top row:
+  
+``` {r}
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy))
+```
+
 
 
