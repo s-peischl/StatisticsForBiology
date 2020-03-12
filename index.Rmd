@@ -279,7 +279,7 @@ We have alreaddy seen how to look at a subset of your data frame using indexing.
 head(subset(stickleback, plates>20))
 
 ```
-We could now compare how the disitrbution of genotpyes changes if we condition on more than 10 plates:
+We could now compare how the disitrbution of genotypes changes if we condition on more than 10 plates:
 ```{r}
 ggplot(data = subset(stickleback, plates>20)) + 
   geom_bar(mapping= aes(x = genotype)) +
@@ -512,7 +512,7 @@ Here is a simple for loop that calcualtes the mean number of plates for each gen
 
 ```{r}
 
-# first we create a vector that contains all genotpyes in our dataset
+# first we create a vector that contains all genotypes in our dataset
 # we can do this manually: 
 # genotypes = c("mm","mM","MM")
 # or by using the function levels()
@@ -761,7 +761,7 @@ ggplot(data = CIs, aes(x = genotype,y=plates)) +
 *Note:* The function *t.test()* can also be used to calcualte confidence intervalls assuming a normal distribution.  
 
 ```{r}
-genotpyes = c("MM","Mm","mm") 
+genotypes = c("MM","Mm","mm") 
 CI.upper = vector("numeric",3)
 CI.lower = vector("numeric",3)
 means = vector("numeric",3)
@@ -779,7 +779,7 @@ for(g in genotypes)
   i = i + 1
 }
 
-CI.data = data.frame(genotype = genotpyes,mean = means,CI.lower = CI.lower,CI.upper = CI.upper)
+CI.data = data.frame(genotype = genotypes,mean = means,CI.lower = CI.lower,CI.upper = CI.upper)
 
 ggplot(data = CI.data, aes(x = genotype,y=means)) +
   geom_point() +
@@ -1606,7 +1606,7 @@ a) The population parameter being estimated is all the small mammals of Kruger N
 
 b) No, the sample is not likely to be random. In a random sample, every individual has the same chance of being selected. But some small mammals might be easier to trap than others (for example, trapping only at night might miss all the mammals active only in the day time). In a random sample individuals are selected independently. Multiple animals caught in the same trap might not be independent if they are related or live near one another (this is harder to judge). 
 
-c) The number of species in the sample might underestimate the number in the Park if sampling was not random (e.g., if daytime mammals were missed), or if rare species happened to avoid capture. Even if the sample is perfectly random, the estimator will underestimated the true number in most cases. You can sample fewer species just by chance, but not more species as there actually are. Thus -  on average – you will underestimate the true number.
+c) The number of species in the sample might underestimate the number in the Park if sampling was not random (e.g., if daytime mammals were missed), or if rare species happened to avoid capture. Even if the sample is perfectly random, the estimator will underestimated the true number in most cases. You can sample fewer species just by chance, but not more species as there actually are. Thus -  on average ??? you will underestimate the true number.
 
 
 ## Week 2 (04.03.2020)
@@ -1683,3 +1683,67 @@ ggplot(data = mpg) +
 
 
 
+
+## Week 3 (11.03.2020)
+
+#### Exercise 7 
+
+We first calcualte the mean for each genotype:
+
+```{r}
+
+stickleback = read.csv("~/Dropbox/Teaching/StatisticsForBiology/chap03e3SticklebackPlates.csv")
+
+mean.mm = mean(stickleback$plates[stickleback$genotype=="mm"])
+mean.Mm = mean(stickleback$plates[stickleback$genotype=="Mm"])
+mean.MM = mean(stickleback$plates[stickleback$genotype=="MM"])
+```
+
+Next the upper and lower limit of the 95% CI using a t-test:
+
+```{r}
+t.t.mm = t.test(stickleback$plates[stickleback$genotype=="mm"])
+t.t.Mm = t.test(stickleback$plates[stickleback$genotype=="Mm"])
+t.t.MM = t.test(stickleback$plates[stickleback$genotype=="MM"])
+
+CI.mm = t.t.mm$conf.int
+CI.Mm = t.t.Mm$conf.int
+CI.MM = t.t.MM$conf.int
+```
+
+We put it all in a dataframe:
+```{r}
+
+df = data.frame(means = c(mean.mm,mean.Mm,mean.MM),
+                lower = c(CI.mm[1],CI.Mm[1],CI.MM[1]),
+                upper = c(CI.mm[2],CI.Mm[2],CI.MM[2]),
+                genotypes = c("mm","Mm","MM"))
+                
+
+```
+
+Now we can plot everything:
+```{r}
+ggplot(data = df) +
+  geom_errorbar(mapping = aes(x = genotypes,ymin=lower, ymax=upper), width=.1) +
+  geom_point(mapping = aes(x = genotypes,y=means)) 
+```
+
+If you prefer (I don't) ou can also do a bar plot
+
+```{r}
+ggplot(data = df) +
+  geom_col(mapping = aes(x = genotypes,y=means,fill=genotypes)) +
+  geom_errorbar(mapping = aes(x = genotypes,ymin=lower, ymax=upper), width=.1) +
+  geom_point(mapping = aes(x = genotypes,y=means))
+```
+
+Either way, it is advised to also add the raw data:
+
+```{r}
+ggplot(data = df)  + 
+  geom_jitter(data = stickleback,mapping = aes(x = genotype,y = plates,color=genotype),size=0.8,width=0.05)+
+  geom_errorbar(mapping = aes(x = genotypes,ymin=lower, ymax=upper), width=.2) +
+  geom_point(mapping = aes(x = genotypes,y=means))
+
+```
