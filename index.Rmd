@@ -1,5 +1,5 @@
 ---
-title: "Lecture Notes for Pracical Part - Statistics for Biology FS 2020"
+title: "Lecture Notes for Practical Part - Statistics for Biology FS 2020"
 author: "Stephan Peischl"
 output:
   html_document:
