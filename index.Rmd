@@ -1497,6 +1497,7 @@ Write a short R script that simulates the sampling distribution of the mean. Plo
 
 
 
+
 ## Week 5 (25.03.2020)
 
 #### Exercise 10
@@ -1747,3 +1748,122 @@ ggplot(data = df)  +
   geom_point(mapping = aes(x = genotypes,y=means))
 
 ```
+
+## Week 4 (18.03.2020)
+#### Exercise 8
+Use the stickleback dataset and calcualte the median and mean for each genotpye. Make a histogramm and add vertical lines to the histogramm indicating the mean and median for each genotype. What do you see? How does the shape of the distribution affect differences between mean and median?
+
+
+##### Solutions
+
+````{r}
+# load the data file:
+stickleback <- read.csv(url("http://www.zoology.ubc.ca/~schluter/WhitlockSchluter/wp-content/data/chapter03/chap03e3SticklebackPlates.csv"))
+
+# one possible solution:
+
+mean.mm = mean(stickleback$plates[stickleback$genotype=="mm"])
+mean.mM = mean(stickleback$plates[stickleback$genotype=="Mm"])
+mean.MM = mean(stickleback$plates[stickleback$genotype=="MM"])
+
+median.mm = median(stickleback$plates[stickleback$genotype=="mm"])
+median.mM = median(stickleback$plates[stickleback$genotype=="Mm"])
+median.MM = median(stickleback$plates[stickleback$genotype=="MM"])
+
+par(mfrow = c(1,3))
+
+hist(stickleback$plates[stickleback$genotype=="MM"],
+     main = "MM",xlab = "number of plates",
+     col="darkred")
+
+abline(v = mean.MM,col="black")
+abline(v = median.MM,col="blue")
+
+hist(stickleback$plates[stickleback$genotype=="Mm"],
+     main = "Mm",xlab = "number of plates",
+     col="darkred")
+abline(v = mean.mM,col="black")
+abline(v = median.mM,col="blue")
+
+hist(stickleback$plates[stickleback$genotype=="mm"],
+     main = "mm",xlab = "number of plates",
+     col="darkred")
+abline(v = mean.mm,col="black")
+abline(v = median.mm,col="blue")
+
+
+# alternatively, we can first create a data frame 
+# with the means per genotype
+# check out the help function of ddply
+# (this is only one way to do this, you can also do it by 
+# "hand" or using other functions such as tapply) :
+
+library(dplyr)
+df.mean = ddply(stickleback, "genotype", summarize, m.number = mean(plates))
+df.median = ddply(stickleback, "genotype", summarize, m.number = median(plates))
+
+# then we plot it with a single ggplot
+ggplot() +
+  geom_bar(data = stickleback, mapping = aes(x=plates),binwidth=5,color="black",fill="darkred") +
+  geom_vline(data = df.mean, aes(xintercept=m.number),col="black",size=1) +
+  geom_vline(data = df.median, aes(xintercept=m.number),col="blue",size = 1) +
+  facet_wrap(~ genotype) +
+  ylab("frequency") +
+  theme_classic()
+
+`````
+
+
+#### Exercise 9
+Write a short R script that simulates the sampling distribution of the mean. Plot the sampling distribution and add the theoretical expectation to the plot. Follow the following steps:
+  
+  a)	Choose a distribution that represents your population (e.g., Normal or Poisson).
+b)	Draw a sample of n individuals from that population (hint: use rnorm, rpoiss, etc.. to draw a random sample), and store it in a vector.
+c)	Calculate the mean of the sample. Store the mean of this sample in a vector. 
+d)	Do this 1000 times, so that you have calculated a 1000 means from a 1000 samples. Hint: use a for-loop to automate this.
+e)	Plot a histogram of the sample means.
+f)	Add a line for the theoretical expectation of the sampling distribution. Hint: use the function dnorm to get the density of the normal distribution. 
+
+##### Solutions
+
+```{r}
+# We choose the Poisson distribution with mean lambda = 50
+lambda = 50
+
+# We do 1000 replicates
+reps = 1000
+
+# We choose the sample size n to be 10
+sample_size = 10
+
+# the means of each sample will be stroed in this vector
+means = vector("numeric",reps)
+
+# in this loop, we will calcualte the means of the sample
+for (i in 1:reps)
+{
+  # take a sample of the poisson distribution
+  sample = rpois(sample_size,lambda)
+  
+  # store the mean in our vector
+  means[i] = mean(sample)
+}
+
+# a histogram - note that we set freq = FALSE to 
+# show realtive frequencies 
+hist(means,freq=F,main="The sampling distribution of a Poisson distribution")
+
+# we specify the x values for the theoretical poisson
+x = seq(0,3*lambda,by=0.1)
+
+#we calcualte the standard error:
+SE = sqrt(lambda)/sqrt(sample_size)
+
+# caclualte the corresponding PDF of the poisson
+y = dnorm(x,lambda,SE)
+
+lines(x,y)
+```
+
+
+
