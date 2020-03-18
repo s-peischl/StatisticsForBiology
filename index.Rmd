@@ -1689,65 +1689,78 @@ ggplot(data = mpg) +
 
 #### Exercise 7 
 
-We first calcualte the mean for each genotype:
 
-```{r}
+````{r}
+genes <- read.csv(url("http://www.zoology.ubc.ca/~schluter/WhitlockSchluter/wp-content/data/chapter04/chap04e1HumanGeneLengths.csv"))
 
-stickleback = read.csv("~/Dropbox/Teaching/StatisticsForBiology/chap03e3SticklebackPlates.csv")
+# a) How many individuals are in the sample (i.e., what is the sample size, n)?
 
-mean.mm = mean(stickleback$plates[stickleback$genotype=="mm"])
-mean.Mm = mean(stickleback$plates[stickleback$genotype=="Mm"])
-mean.MM = mean(stickleback$plates[stickleback$genotype=="MM"])
-```
+n = dim(genes)[1]
+print(n)
 
-Next the upper and lower limit of the 95% CI using a t-test:
+# b)	What is the sum of all of the observations? 
 
-```{r}
-t.t.mm = t.test(stickleback$plates[stickleback$genotype=="mm"])
-t.t.Mm = t.test(stickleback$plates[stickleback$genotype=="Mm"])
-t.t.MM = t.test(stickleback$plates[stickleback$genotype=="MM"])
 
-CI.mm = t.t.mm$conf.int
-CI.Mm = t.t.Mm$conf.int
-CI.MM = t.t.MM$conf.int
-```
+sum.gene.lengths = sum(genes$geneLength)
 
-We put it all in a dataframe:
-```{r}
+# c)	What is the mean of this sample?  
 
-df = data.frame(means = c(mean.mm,mean.Mm,mean.MM),
-                lower = c(CI.mm[1],CI.Mm[1],CI.MM[1]),
-                upper = c(CI.mm[2],CI.Mm[2],CI.MM[2]),
-                genotypes = c("mm","Mm","MM"))
-                
 
-```
+mean.gene.length1 = sum.gene.lengths/n
+mean.gene.length2 = mean(genes$geneLength)
 
-Now we can plot everything:
-```{r}
-ggplot(data = df) +
-  geom_errorbar(mapping = aes(x = genotypes,ymin=lower, ymax=upper), width=.1) +
-  geom_point(mapping = aes(x = genotypes,y=means)) 
-```
+print(mean.gene.length1)
+print(mean.gene.length2)
 
-If you prefer (I don't) ou can also do a bar plot
+# d)	What is the sum of the squares of the measurements? 
 
-```{r}
-ggplot(data = df) +
-  geom_col(mapping = aes(x = genotypes,y=means,fill=genotypes)) +
-  geom_errorbar(mapping = aes(x = genotypes,ymin=lower, ymax=upper), width=.1) +
-  geom_point(mapping = aes(x = genotypes,y=means))
-```
+square.sum.gene.lengths = sum(genes$geneLength^2)
+print(square.sum.gene.lengths)
 
-Either way, it is advised to also add the raw data:
+# e)	What is the variance of this sample? 
 
-```{r}
-ggplot(data = df)  + 
-  geom_jitter(data = stickleback,mapping = aes(x = genotype,y = plates,color=genotype),size=0.8,width=0.05)+
-  geom_errorbar(mapping = aes(x = genotypes,ymin=lower, ymax=upper), width=.2) +
-  geom_point(mapping = aes(x = genotypes,y=means))
+# by hand:
+variance.gene.length = sum((genes$geneLength - mean.gene.length1)^2)/(n-1)
 
-```
+print(variance.gene.length)
+
+# for comparison:
+var(genes$geneLength)
+
+# f)	What is the standard deviation of this sample? 
+
+sd(genes$geneLength)
+
+# or 
+
+sd.gene.length = sqrt(variance.gene.length)
+
+# g)	What is the coefficient of variation for this sample? 
+
+cv.gene.length = sd.gene.length/mean.gene.length1
+print(cv.gene.length)
+
+# h)	Display the data using different plotting techniques. Which one illustrates the data best? 
+
+# Which one do you like best?
+
+ggplot(data = genes) + 
+  geom_histogram(mapping = aes(x = geneLength),color="black",fill="darkred") + 
+  theme_classic()
+
+ggplot(data = genes) + 
+  geom_density(mapping = aes(x = geneLength),color="black",fill="darkred") + 
+  theme_classic()
+
+ggplot(data = genes) + 
+  geom_boxplot(mapping = aes(y = geneLength),color="black",fill="darkred") + 
+  theme_classic() + 
+  coord_flip()
+
+
+````
+
+
 
 ## Week 4 (18.03.2020)
 #### Exercise 8
