@@ -297,12 +297,12 @@ There are a few *mm* genotypes with more than 20 plates. But how many?
 subset(stickleback,plates > 20 & genotype == "mm")
 
 ```
-It turns out there are exactly two: one with 37 plates and one with 22. We have used logical operators here: "&" means that both conditions need to be satisfied. In contrast, try to see what the symbol "|" means:
+It turns out there are exactly two: one with 37 plates and one with 22. We have used logical operators here: "&" means that both conditions need to be satisfied. In contrast, try to see what the symbol " | " means:
 ```{r}
-head(subset(stickleback,plates > 20 | genotype == "mm"))
+head(subset(stickleback,plates > 20  |  genotype == "mm"))
 ```
 
-You may have guessed it already, the "|" represetns the logical "or" command, indicating that either of the two conditions needs to be satisfied. Note that for logical comparions we use the "==" and not the "=" symbol, which is reserved for assignments. What is the difference? Try it:
+You may have guessed it already, the " | " represetns the logical "or" command, indicating that either of the two conditions needs to be satisfied. Note that for logical comparions we use the "==" and not the "=" symbol, which is reserved for assignments. What is the difference? Try it:
 ```{r}
 a = 5
 
@@ -596,7 +596,7 @@ R has a set of functions to work with distirbutions and random numbres. Have a l
 help(Distributions)
 ```
 if you want to know more. Let us focus on the normal distirbution. It's density is given by
-$$f(x|\mu,\sigma) = \frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{(x-\mu)^2}{2\sigma^2}}$$
+$$f(x \mid \mu,\sigma) = \frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{(x-\mu)^2}{2\sigma^2}}$$
 The function *dnorm* returns the value of the probability density function for the normal distribution for x, given parameters  $\mu$ and $\sigma$. Some examples of using dnorm are below:
 
 ```{r}
@@ -1375,9 +1375,66 @@ plot(prairieRegression$fitted.values,prairieRegression$residuals,xlab="fitted",y
 
 
 
-# Additional notes to the course sides
-
+# Additional notes to the course slides
 ## Law of total probability
+
+Assume that ${B_{i}, i=1,2,3,\ldots }$ is a set of pairwise disjoint events whose union is the entire sample space (that is, every possible event that can happen is covered by exactly one of the $B_i$s). 
+
+As an example: consider rolling a six-sided die. Then the event $B_i (i = 1, ..., 6)$ is the event that you roll the number $i$. All events are disjoint and together they cover everything that can happen. 
+
+For any event $A$ we can then write
+
+$$P(A) = \sum _{i}P(A \cap B_{i})$$
+
+or, equivalently,
+
+$$P(A) = \sum_{i} P(A \mid B_{i})P(B_{i}).$$
+
+This figure is helpful for understanding what is going on here:
+
+![Illustration of the law of total probability](totalProb.png)
+
+Example:
+
+We roll two dice. We want to know the probaility that the first roll has a smaller outcome than the second roll. 
+
+We call the events $B_i, i = 1, ..., 6$ the event that the frist roll shows $i$ dots. So $B_2$ is the event that you roll a 2 with the first roll. (Think about why this satisfies the conditons for the events $B_i$ stated in the law of total probaility.) 
+
+Let us clall $X_1$ the outcome of the first roll and $X_2$ the outcome of the second roll: $P(B_2)$ is then $P(X_1 = 2)$. The event $A$ is the event that $X_1 > X_2$. We use the formula
+
+$$P(A) = \sum_{i} P(A \mid B_{i})P(B_{i}).$$
+
+If you roll a $i$ with the first die, there are 6-$i$ possible outcomes for the second roll that are larger than $i$. This means:
+$P(A \mid B_{1}) = 5/6$
+$P(A \mid B_{2}) = 4/6$
+$P(A \mid B_{3}) = 3/6$
+$P(A \mid B_{4}) = 2/6$
+$P(A \mid B_{5}) = 1/6$
+$P(A \mid B_{6}) = 0$
+
+and furthermore
+
+$P(B_i) = 1/6$ for each $i$.
+
+
+Then 
+
+$P(A) =  5/6 * 1/6 + 4/6 * 1/6$ 
+$+3/6 * 1/6 + 2/6*1/6 + 1/6 *1/6 + 0 *1/6$ 
+
+$= 0.417.$
+
+Let us test this with a small R simulation:
+
+```{r}
+# We do 10000 die rolls for each die:
+die.1 = sample.int(6, size = 10000,replace=T)
+die.2 = sample.int(6, size = 10000,replace=T)
+
+# calcualte the proportion of times die 2 is larger than die 1
+sum(die.2>die.1)/10000
+
+```
 
 # Exercises
 
