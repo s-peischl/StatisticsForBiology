@@ -1073,6 +1073,7 @@ t.test(squamosalHornLength ~ Survival, data = lizard,var.equal = TRUE)
 ## QQ Plots and Transformations
 We investigate the ratio of biomass between marine reserves and non-reserve control areas.
 
+
 ```{r}
 marine <- read.csv(url("http://www.zoology.ubc.ca/~schluter/WhitlockSchluter/wp-content/data/chapter13/chap13e1MarineReserve.csv"))
 head(marine)
@@ -1373,6 +1374,11 @@ plot(prairieRegression$fitted.values,prairieRegression$residuals,xlab="fitted",y
 ```
 
 
+
+# Additional notes to the course sides
+
+## Law of total probability
+
 # Exercises
 
 ## Week 1 (26.02.2020)
@@ -1540,8 +1546,10 @@ After graduating from your university with a biology degree, you are interviewed
 
 #### Exercise 12
 Five different researchers independently take a random sample from the same population and calculate a 95% confidence interval for the same parameter. 
- a)	What is the probability that all five researchers have calculated an interval that includes the true  value of the parameter?
- b)	What is the probability that at least one does not include the true parameter value. 
+
+a)	What is the probability that all five researchers have calculated an interval that includes the true  value of the parameter?
+
+b)	What is the probability that at least one does not include the true parameter value. 
 
 
 ## Week 6 (02.04.2020)
