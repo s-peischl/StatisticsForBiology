@@ -2112,19 +2112,8 @@ $$P(bite  \mid 1  \, dangerous  \, snake) = 0.8$$
 $$P(bite  \mid 2  \, dangerous  \, snakes) = 1- P(no  \, bite  \mid 2  \, dangerous  \, snakes) = 1-(1- 0.8)^2 = 0.96$$
 
 Putting al this together: 
-$$P(bite) = (0*0.107)+(0.8*0.536)+(0.96*0.357) =  0.772$$$$P(bite) = P(bite  \mid 0 \, dangerous \, snakes) P(0 \,  dangerous \,  snakes)$$
-$$+ P(bite  \mid 1 \,  dangerous snakes) P(1 dangerous  \, snakes) $$ 
-$$+P(bite  \mid 2 \,  dangerous snakes) P(2 \,  dangerous  \, snakes)$$ 
-
-$$P(0 \,  dangerous  \, snakes) = 0.107$$ (from (a))
-$$P(1 \,  dangerous  \, snake) = (5/8  3/7) + (3/8  5/7) = 0.536$$
-$$P(2 \,  dangerous  \, snakes) = 5/8 * 4/7 = 0.357$$
-$$P(bite  \mid 0 \,  dangerous \,  snakes) = 0$$
-$$P(bite  \mid 1  \, dangerous  \, snake) = 0.8$$
-$$P(bite  \mid 2  \, dangerous  \, snakes) = 1- P(no  \, bite  \mid 2  \, dangerous  \, snakes) = 1-(1- 0.8)^2 = 0.96$$
-
-Putting al this together: 
 $$P(bite) = (0*0.107)+(0.8*0.536)+(0.96*0.357) =  0.772$$
+
 
 c)	If you picked up one snake and it didn't bite you, what is the probability that it is defanged?
 
