@@ -1562,8 +1562,7 @@ Write a short R script that simulates the sampling distribution of the mean. Plo
 
 
 ## Week 5 (25.03.2020)
-
-#### Exercise 10
+### Exercise 10
 The pizza below, ordered from the Venn Pizzeria on Bayes Street, is divided into eight slices.
 
 ![Figure: Venn Pizza](Pizza.png) 
@@ -1571,7 +1570,7 @@ The pizza below, ordered from the Venn Pizzeria on Bayes Street, is divided into
 Answer the following questions based on the drawing of the pizza:
 
 a)	What is the probability that a randomly drawn slice has pepperoni on it?
-
+  
 b)	What is the probability that a randomly drawn slice has both pepperoni and anchovies on it?
 
 c)	What is the probability that a randomly drawn slice has either pepperoni  or anchovies on it?
@@ -1591,22 +1590,27 @@ i)	Seven of your friends each choose a slice at random and eat them without tell
 j)	You choose two slices at random. What is the chance that they have both olives on them? (Be careful: after removing the first slice, the probability of choosing one of the remaining slices changes.)
 
 k)	What is the probability that a randomly chosen slice does not have pepperoni on it?
-Draw a pizza for which mushrooms, olives, anchovies and pepperoni are all mutually exclusive
 
-#### Exercise 11
+l) Draw a pizza for which mushrooms, olives, anchovies and pepperoni are all mutually exclusive
+
+ 
+
+### Exercise 11
 After graduating from your university with a biology degree, you are interviewed for a lucrative job as a snake handler in a circus sideshow. As part of your audition, you must pick up two rattlesnakes from a pit. The pit contains eight snakes, three of which have been defanged and are assumed to be harmless, but the other five are definitely still dangerous. Unfortunately budget cuts have eliminated the herpetology course from the curriculum and so you have no way of telling in advance which snakes are dangerous and which are not. You pick one snake with your left hand and one with your right.
 
 
- a)	What is the probability that you picked up no dangerous snakes?
- b)	Assume that any dangerous snake that you pick up has a probability of 0.8 of biting you. The defanged snakes do not bite. What is the chance that, in picking up your two snakes, you are bitten at least once?
- c)	If you picked up one snake and it didn't bite you, what is the probability that it is defanged.
+a)	What is the probability that you picked up no dangerous snakes?
+b)	Assume that any dangerous snake that you pick up has a probability of 0.8 of biting you. The defanged snakes do not bite. What is the chance that, in picking up your two snakes, you are bitten at least once?
+c)	If you picked up one snake and it didn???t bite you, what is the probability that it is defanged.
 
-#### Exercise 12
+### Exercise 12
 Five different researchers independently take a random sample from the same population and calculate a 95% confidence interval for the same parameter. 
 
 a)	What is the probability that all five researchers have calculated an interval that includes the true  value of the parameter?
 
 b)	What is the probability that at least one does not include the true parameter value. 
+
+
 
 
 ## Week 6 (02.04.2020)
@@ -1983,3 +1987,164 @@ lines(x,y)
 
 
 
+
+## Week 5 (25.03.2020)
+
+### Exercise 10
+The pizza below, ordered from the Venn Pizzeria on Bayes Street, is divided into eight slices.
+
+![Figure: Venn Pizza](Pizza.png) 
+
+Answer the following questions based on the drawing of the pizza:
+
+a)	What is the probability that a randomly drawn slice has pepperoni on it?
+
+$$P(pepperoni) = 5/8 = 0.625 = 62.5 \%$$
+  
+b)	What is the probability that a randomly drawn slice has both pepperoni and anchovies on it?
+
+$$P(pepperoni \quad and \quad anchovies) =   2/8 = 25  \%$$
+
+c)	What is the probability that a randomly drawn slice has either pepperoni  or anchovies on it?
+
+
+
+$$P(pepperoni \quad or \quad anchovies) = 7/8 = 0.875 = 87.5\%$$
+
+
+
+d)	Are pepperoni and anchovies mutually exclusive on this pizza?
+
+No. There are two slices with both pepperoni and anchovies.
+
+
+
+e)	Are olives and mushrooms mutually exclusive on this pizza?
+
+Yes. There is no slice that has both olives and mushrooms on it.
+
+
+f)	Are getting mushrooms and getting anchovies independent when randomly picking a slice of pizza?
+
+
+No, because 
+
+$$P(anchovy) = 4/8 = 0.5$$
+
+$$P(mushroom) = 3/8 = 0.375$$
+
+and 
+
+$$P(mushroom \quad and \quad anchovy) = 1/8$$
+
+but 
+
+$$P(mushroom)*P(anchovy) = 3/8 * 4/8 = 3/16 = 0.1875 = 18.75 \% .$$
+
+
+
+g)	If I pick a slice from this pizza and tell you that it has olives on it, what is the chance that it also has anchovies?
+
+$$P(anchovy  \mid olive) =$$
+$$P(anchovy \quad and \quad olive)/P(olive) = (1/8) / (2/8) = 1/2  = 0.5 = 50\%$$
+
+
+h)	If I pick a slice from this pizza and tell you that it has anchovies on it, what is the chance that it also has olives?
+
+
+ $$P(olive  \mid anchovy) =$$
+$$P(olive \quad and \quad anchovy)/P(anchovy) = (1/8) / (4/8) = 1/4  = 0.25 = 25\%$$
+
+
+
+i)	Seven of your friends each choose a slice at random and eat them without telling you what toppings they had. What is the chance that the last slice has olives on it?
+
+ $$P(last \quad slice \quad has \quad olives) = 2/8 = 0.25 = 25\%$$. 
+
+This can be seen directly because each slice has the same probability to be the last slice.
+
+
+
+j)	You choose two slices at random. What is the chance that they have both olives on them? (Be careful: after removing the first slice, the probability of choosing one of the remaining slices changes.)
+
+
+
+$$P(first \, slice \,has \, olives) = 2/8$$
+
+$$P(second \, slice \, also \, has \, olives) = 1/7$$
+
+$$P(both \, slices \, have \, olives) = 2/8 * 1/7 = 1/28 \approx 3.6\% $$
+
+
+
+k)	What is the probability that a randomly chosen slice does not have pepperoni on it?
+
+$$P(no \, pepperoni) = 1 – P(pepperoni) = 3/8 = 37.5\%$$ 
+
+
+
+l) Draw a pizza for which mushrooms, olives, anchovies and pepperoni are all mutually exclusive
+
+ ![A pizza for which mushrooms, olives, anchovies and pepperoni are all mutually exclusive](PizzaSolution.png)
+
+
+
+
+### Exercise 11
+a)	What is the probability that you picked up no dangerous snakes?
+
+$$P(no \, dangerous \, snakes) = $$
+$$ P(no  \, dangerous  \, snake \, in  \, left \,  hand)  P(no  \, dangerous  \, snake  \, in \,  right  \, hand)$$
+$$= 3/8 * 2/7 = 6/56 = 0.107 = 10.7 \%$$
+
+
+b)	Assume that any dangerous snake that you pick up has a probability of 0.8 of biting you. The defanged snakes do not bite. What is the chance that, in picking up your two snakes, you are bitten at least once?
+
+$$P(bite) = P(bite  \mid 0 \, dangerous \, snakes) P(0 \,  dangerous \,  snakes)$$
+$$+ P(bite  \mid 1 \,  dangerous snakes) P(1 dangerous  \, snakes) $$ 
+$$+P(bite  \mid 2 \,  dangerous snakes) P(2 \,  dangerous  \, snakes)$$ 
+
+$$P(0 \,  dangerous  \, snakes) = 0.107$$ (from (a))
+$$P(1 \,  dangerous  \, snake) = (5/8  3/7) + (3/8  5/7) = 0.536$$
+$$P(2 \,  dangerous  \, snakes) = 5/8 * 4/7 = 0.357$$
+$$P(bite  \mid 0 \,  dangerous \,  snakes) = 0$$
+$$P(bite  \mid 1  \, dangerous  \, snake) = 0.8$$
+$$P(bite  \mid 2  \, dangerous  \, snakes) = 1- P(no  \, bite  \mid 2  \, dangerous  \, snakes) = 1-(1- 0.8)^2 = 0.96$$
+
+Putting al this together: 
+$$P(bite) = (0*0.107)+(0.8*0.536)+(0.96*0.357) =  0.772$$$$P(bite) = P(bite  \mid 0 \, dangerous \, snakes) P(0 \,  dangerous \,  snakes)$$
+$$+ P(bite  \mid 1 \,  dangerous snakes) P(1 dangerous  \, snakes) $$ 
+$$+P(bite  \mid 2 \,  dangerous snakes) P(2 \,  dangerous  \, snakes)$$ 
+
+$$P(0 \,  dangerous  \, snakes) = 0.107$$ (from (a))
+$$P(1 \,  dangerous  \, snake) = (5/8  3/7) + (3/8  5/7) = 0.536$$
+$$P(2 \,  dangerous  \, snakes) = 5/8 * 4/7 = 0.357$$
+$$P(bite  \mid 0 \,  dangerous \,  snakes) = 0$$
+$$P(bite  \mid 1  \, dangerous  \, snake) = 0.8$$
+$$P(bite  \mid 2  \, dangerous  \, snakes) = 1- P(no  \, bite  \mid 2  \, dangerous  \, snakes) = 1-(1- 0.8)^2 = 0.96$$
+
+Putting al this together: 
+$$P(bite) = (0*0.107)+(0.8*0.536)+(0.96*0.357) =  0.772$$
+
+c)	If you picked up one snake and it didn't bite you, what is the probability that it is defanged?
+
+$$P(defanged \mid no \,  bite)= \left[P(no \, bite \mid defanged)P(defanged)\right]/P(no \, bite)$$
+$$P(no  \,  bite  \mid defanged)=1$$
+$$P(defanged) = 3/8$$
+
+$$P(no  \,  bite) = P(defanged)P(no bite  \mid defanged) $$
+$$+ P(dangerous)P(no  \,  bite  \mid dangerous) = (3/8 *1) + (5/8  (1-0.8)) = 0.5$$
+
+Therefore 
+$$P(defanged  \mid no  \,  bite) = (1*3/8 )/ (0.5) = 0.75 = 75\%.$$
+
+
+### Exercise 12
+
+a)	What is the probability that all five researchers have calculated an interval that includes the true  value of the parameter?
+
+$0.95^5 =  0.774$
+
+b)	What is the probability that at least one does not include the true parameter value. 
+
+$1- 0.95^5  = 0.226$
