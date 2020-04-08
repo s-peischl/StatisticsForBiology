@@ -1613,7 +1613,7 @@ b)	What is the probability that at least one does not include the true parameter
 
 
 
-## Week 6 (02.04.2020)
+## Week 6 (01.04.2020)
 ### Exercise 13
 
 a) Make a plot of the probability density funciton of a Normal distribution. Choose values for the mean and variance. Next make a plot of the probability density function of the standard Normal distribution. What do you see? How are these plots different / similar?
@@ -1644,6 +1644,10 @@ b) Indicate the most extreme 5 percent of the distribution. In other words: For 
 a) Use the stickleback data set. Calculate a confidence interval for the mean plate numbers for each genotype. Make a plot that shows the mean and the confidence interval of each genotype. 
 
 b) Now perform a t.test for each comparison of plate numbers between genotypes. Compare the outcome of the t.tests with the results from the confidence intervals. What do you find?
+
+#### Exercise 17
+Use the data set "chap11e2Stalkies.csv" of using eye span measurements from a sample of stalk-eyed flies. Perform a one sample t-test by "hand", that is, clacualte the t statistic and the p-value in R, without using the function t.test (or a similar function). Test the null hypothesis that the mean eye span is equal to $9$. Use a significance threshold of 0.05 and a two-sided test. Then check your results with the function t.test. Make a plot to illustrate your analysis.
+
 
 
 
@@ -2283,3 +2287,159 @@ rug(random.sample[random.sample < c2[1] | random.sample > c2[2]],col="red")
 
 ```
 We see that roughly 5 eprcent fall into the exterme tails of the distirbution. this is snesible, becasue we have defined the extreme part here as the range $(-\infty,c_2] \cup [c_2,\infty]$, where $-c_2$ ($c_2$) is the 2.5 (97.5) percentile of the distribution. 
+
+## Week 7 (08.04.2020)
+### Exercise 16
+a) Use the stickleback data set. Calculate a confidence interval for the mean plate numbers for each genotype. Make a plot that shows the mean and the confidence interval of each genotype. 
+
+b) Now perform a t.test for each comparison of plate numbers between genotypes. Compare the outcome of the t.tests with the results from the confidence intervals. What do you find?
+
+
+### Solution 
+Part a)
+
+We first calcualte the mean for each genotype:
+
+```{r}
+
+stickleback = read.csv("~/Dropbox/Teaching/StatisticsForBiology/chap03e3SticklebackPlates.csv")
+
+mean.mm = mean(stickleback$plates[stickleback$genotype=="mm"])
+mean.Mm = mean(stickleback$plates[stickleback$genotype=="Mm"])
+mean.MM = mean(stickleback$plates[stickleback$genotype=="MM"])
+```
+
+Next the upper and lower limit of the 95% CI using a t-test:
+
+```{r}
+t.t.mm = t.test(stickleback$plates[stickleback$genotype=="mm"])
+t.t.Mm = t.test(stickleback$plates[stickleback$genotype=="Mm"])
+t.t.MM = t.test(stickleback$plates[stickleback$genotype=="MM"])
+
+CI.mm = t.t.mm$conf.int
+CI.Mm = t.t.Mm$conf.int
+CI.MM = t.t.MM$conf.int
+```
+
+We put it all in a dataframe:
+```{r}
+
+df = data.frame(means = c(mean.mm,mean.Mm,mean.MM),
+                lower = c(CI.mm[1],CI.Mm[1],CI.MM[1]),
+                upper = c(CI.mm[2],CI.Mm[2],CI.MM[2]),
+                genotypes = c("mm","Mm","MM"))
+                
+
+```
+
+Now we can plot everything:
+```{r}
+ggplot(data = df) +
+  geom_errorbar(mapping = aes(x = genotypes,ymin=lower, ymax=upper), width=.1) +
+  geom_point(mapping = aes(x = genotypes,y=means)) 
+```
+
+If you prefer (I don't) ou can also do a bar plot
+
+```{r}
+ggplot(data = df) +
+  geom_col(mapping = aes(x = genotypes,y=means,fill=genotypes)) +
+  geom_errorbar(mapping = aes(x = genotypes,ymin=lower, ymax=upper), width=.1) +
+  geom_point(mapping = aes(x = genotypes,y=means))
+```
+
+Either way, it is advised to also add the raw data:
+
+```{r}
+ggplot(data = df)  + 
+  geom_jitter(data = stickleback,mapping = aes(x = genotype,y = plates,color=genotype),size=0.8,width=0.05)+
+  geom_errorbar(mapping = aes(x = genotypes,ymin=lower, ymax=upper), width=.2) +
+  geom_point(mapping = aes(x = genotypes,y=means))
+
+```
+
+Part b)
+
+In part (a) we used a one sample t-test to calcualte the conficdence intervals. This test also tested the null hyptohesis that the means of each group are 0. If we want to comapre means between groups we need to do a two sample t-test:
+
+```{r}
+t.test(stickleback$plates[stickleback$genotype=="mm"],
+       stickleback$plates[stickleback$genotype=="Mm"])
+
+t.test(stickleback$plates[stickleback$genotype=="mm"],
+       stickleback$plates[stickleback$genotype=="MM"])
+
+t.test(stickleback$plates[stickleback$genotype=="Mm"],
+       stickleback$plates[stickleback$genotype=="MM"])
+
+```
+
+We find that all t-test yield a significant result (small p values). This means that the null hyptohesis of the mean of two groups being the same can be rejected for all comparisons. 
+
+A shorter way is by using the function pairwise.t.tests. The First argument is the variable on which the t-test should be performed. The second parameters is the grouping factor: the categorical variable that separates the first argument into different groups.
+
+```{r}
+ pairwise.t.test(stickleback$plates,stickleback$genotype)
+```
+
+How does this finding relate to the confidence intervals? The confidence intervals are not overlapping, strongly suggesting that the means between groups are indeed different (at the 95 percent level). Thus, the t-test and the confidence interval indicate the same result.
+
+
+### Exercise 17
+Use the data set "chap11e2Stalkies.csv" of using eye span measurements from a sample of stalk-eyed flies. Perform a one sample t-test by "hand", that is, clacualte the t statistic and the p-value in R, without using the function t.test (or a similar function). Test the null hypothesis that the mean eye span is equal to $9$. Use a significance threshold of 0.05 and a two-sided test. Then check your results with the function t.test. Make a plot to illustrate your analysis.
+
+### Solution
+```{r}
+stalkie <- read.csv(url("http://www.zoology.ubc.ca/~schluter/WhitlockSchluter/wp-content/data/chapter11/chap11e2Stalkies.csv"))
+
+
+m0 = 9
+M <- mean(stalkie$eyespan)
+n <- length(stalkie$eyespan)
+sigma <- sd(stalkie$eyespan)
+SE <- sigma / sqrt(n)
+test.statistic <- (M - m0) / SE
+
+p.value = 2 * pt(-abs(test.statistic),df=8)
+print(p.value)
+
+x=seq(-4,4,by=0.01)
+y = dt(x,df=8)
+plot(x,y,type="l")
+
+abline(v = test.statistic,col="dodgerblue")
+text(-3,0.2,"test statistic",col="dodgerblue")
+text(2,0.3,"t-distribution, 
+     with 8 degrees of freedom")
+
+x1 = seq(-4,test.statistic,by=0.01)
+y1 = dt(x1,df=8)
+
+x2 = rev(x1)
+y2 = y1*0
+
+polygon(c(x1,x2),c(y1,y2),col = "red")
+polygon(-c(x1,x2),c(y1,y2),col = "red")
+text(-3.5,0.05,"P value",col="red")
+
+```
+
+The p value of the t-test is
+```{r}
+test = t.test(stalkie$eyespan-9)
+
+print(test$p.value)
+```
+and the test statistic is
+````{r}
+print(test$statistic)
+````
+
+We can summarize this in a table:
+````{r}
+dat = data.frame(pValues = c(p.value,test$p.value),tStatistics = c(test.statistic,test$statistic))
+colnames(dat) = c("P Value","Test Statistic")
+rownames(dat) = c("by hand","using t.test()")
+kableExtra::kable(dat) 
+````
+
