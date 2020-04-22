@@ -590,7 +590,7 @@ head(stickleback3)
 
 # Working with Distributions and random variables
 
-## Functions to work with probaility distirbutions
+## Functions to work with probaility distributions
 R has a set of functions to work with distirbutions and random numbres. Have a look at 
 ```{r}
 help(Distributions)
@@ -1378,6 +1378,9 @@ plot(prairieRegression$fitted.values,prairieRegression$residuals,xlab="fitted",y
 # Additional notes to the course slides
 ## Law of total probability
 
+
+
+
 Assume that ${B_{i}, i=1,2,3,\ldots }$ is a set of pairwise disjoint events whose union is the entire sample space (that is, every possible event that can happen is covered by exactly one of the $B_i$s). 
 
 As an example: consider rolling a six-sided die. Then the event $B_i (i = 1, ..., 6)$ is the event that you roll the number $i$. All events are disjoint and together they cover everything that can happen. 
@@ -1652,9 +1655,105 @@ Use the data set "chap11e2Stalkies.csv" of using eye span measurements from a sa
 
 
 ## Week 8 (22.04.2020)
+Q & A and repetitorium
+
+### Student Question 1
+What are the $Z_{1 - alpha/2}$ in the formula for confidence intervalls ? What is the onfidence level? Why to you use  $1 - alpha/2$ and not $1 - alpha$?
+
+### Answer
+The formula can be found on page 159 of the lecture slides. In a nutshell, we use the width of the sampling distribution to tell us how wide our confidence intervall should be. For this we need to calcluate the quantiles of the sampling distribution. For large samples, this can be approximated by a normal distribution. This is where $Z_{1 - alpha/2}$ value comes into play: it is the $1-alpha/2$ percentile of the standard normal distribution. This means that it is the value that delimits the smallest $1-alpha/2$ of the distribution from the largest $alpha/2$. We call $ 1- alpha$ the confidence level. Note that $Z_{1 - alpha/2} = - Z_{alpha/2}$, thus we calcualte the range in which the $1-alpha$ most common observation lie. The quantiles cannot be calcualted straightforwardly by hand, but R can solve this for us.  The following plot illustrates the quantiles.
+
+
+```{r}
+mu = 0
+sigma = 1 
+x = seq(mu-4*sigma,mu+4*sigma,by=0.1)
+y = dnorm(x, mean = mu, sd = sigma)
+
+plot(x,y,type="l",col="slategray",lwd=2,axes=F)
+axis(1)
+axis(2)
+
+alpha = 0.05
+
+
+z1 = qnorm(alpha/2,mu,sigma)
+z2 = qnorm(1-alpha/2,mu,sigma)
+
+abline(v=c(z1,z2))
+
+
+```
+
+
+
+
+### Student Question 2 
+Why do we always set y as the dnorm() of our x values when we plot a normal distribution?
+
+### Answer
+Because the function dnorm gives us the density function of a noraml distribution. You can try using the hepl function to see what a function does:
+
+```{r}
+?dnorm
+```
+
+### Student Question 3 
+I want to define e.g. "N" as the number of numeric values that are in column 3 of my dataframe. So if my dataframe has 9 numeric values in column 3, how can I set N = 9 without typing N = 9, but rather N = "number of numeric values in column 3 of my data frame"? This might be useful if a column has 345 values and I don't want to count them or without using the str() function to actually show me the number. I could only find one solution and that is using the function "length()"...but is there another way?
+
+### Answer
+The function *length()* is a good option. For dataframes, you can alos use *dim()* to get the number of rows and columns of the dataframe.
+
+### Student Question 4 
+Exercise 14: Could you explain again what you did in Exercise 14. Why did you need to put a vector of probabilities into the qnorm function and what does this qnorm function then do with this vector of probabilities in detail? And maybe also explain again why pnorm is the inverse of qnorm; also how this is shown with mathematical reasoning? This was not clear in the exercise lecture/podcast!
+
+### Answer
+
+If I pass a vector of probailites to the function qnorm, eg, qnorm(c(0.1,0.2,0.3)), it will return a vector with the 0.1, 0.2 and 0.3 percentile.
+
+```{r}
+qnorm(c(0.1,0.2,0.3))
+```
+
+The quantile function and the cumulative distirbution function are by defnition inverse functions. $Q_p$ is the p-percentile. Then $Q_p$ gives you the value such that $P(X < Q_p) = p$. Conversly, the cumulative distirbution function is given by $F(x) = P(X < x)$. Alternatively, one can see that the $Q_{F(x)}$ percentile satisifies $P(X < Q_{F(x)}) = F(x)$.
+
+
+### Student Question 5 
+Exercise 17: Why did you calculate the p-value wit this "-abs"-part? And is it also fine to just type "2*pt(test.statistic, df = 8)"?
+
+### Student Question 6
+Exercise 17: Why did you add the "-9" in the command of the t-test (t.test(stalkie$eyespan-9))? I don't get this "-9"-part when looking at the help page on R.
+
+### Answer
+
+By default the one sample t.test() function test the null hypotehsis $mu_0  = 0$. If i substract 9 from each data point i test the nul hypotehsis $mu_0 = 9$. A better way would be to specify the null hypothesis in the t.test function via the parameter mu:
+
+t.test(x, mu = 9)
+
+### Student Question 7
+Exercise 17: In the description of the exercise you write that we should use a threshold value alpha of 0.05. How do we include this in our calculations? Or if it is already a standard setting in one of our functions we used, how would you proceed if we had to choose a threshold value alpha of 0.1?
+
+### Answer
+
+The threshold value is only used for the interpreation part here. If the P-value is smaller than the threshold, you reject the null hypothesis. Otherwise you don't. 
+
+### Student Question 8
+And last but not least a more general question: How do you proceed when you have an exercise like e.g. exercise 16a)? I mean I did not get that I would have to make a dataframe of the means, lower and upper confidence intervalls and genotypes at first...Do you e.g. first imagine yourself how the plot should look like, or how do you know what to do? 
+
+### Answer
+There are many ways to do such plots and I usually proceed like this:
+
+- make a sketch of your plot (on paper or in your mind)
+- think what information you need for such a plot
+- find a function that you want to use and look up how it works
+- organize your data so that you can "feed" it to the functions you want to use
+
+For ggplot functions, this means organizing yur data in a data frame. In base R this is often not necessary. 
+
+
 
 ## Week 9 (29.04.2020)
-Q & A and repetitorium
+
 
 ## Week 10 (06.05.2020)
 ## Week 11 (13.05.2020)
