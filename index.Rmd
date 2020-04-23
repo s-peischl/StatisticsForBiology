@@ -1753,7 +1753,6 @@ For ggplot functions, this means organizing yur data in a data frame. In base R 
 
 
 ## Week 9 (29.04.2020)
-# Exercise 18
 ### Exercise 18
 Perform a goodness-of-fit test for a data set with two categories. The data file is "chap08e4XGeneContent.csv" and can be found on ilias. Start by reading and inspecting the data. Each row is a different gene, with its occurrence on the X chromosome indicated.  Then test if the proportion of genes on the X chromsome (among all genes in the genome) is the same as the proportional length of the X chromosome measured in base pairs (among the whole genome). The relative size  of the X chromosome is given by $propX = 1055/20290$ and that of the other chromomoses is $propRest = 19235/20290$.
 
@@ -1763,8 +1762,9 @@ b) Perform a $\chi^2$ goodness-of-fit test to the proportional model.
 
 c) Draw a conclusion from your test.
 
-# Exercise 19
+### Exercise 19
 Load the dataset chap08e1DayOfBirth.csv. Each row represents a single birth, and shows the day of the week of birth. Test the null hypothesis that birthdays are randomly distributed in the sense that each day occurs with the same probability. Visualize your results and give an interpretation of the test results. Can you come a up with a potential explanation? 
+
 
 
 
