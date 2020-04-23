@@ -1752,6 +1752,7 @@ For ggplot functions, this means organizing yur data in a data frame. In base R 
 
 
 
+
 ## Week 9 (29.04.2020)
 ### Exercise 18
 Perform a goodness-of-fit test for a data set with two categories. The data file is "chap08e4XGeneContent.csv" and can be found on ilias. Start by reading and inspecting the data. Each row is a different gene, with its occurrence on the X chromosome indicated.  Then test if the proportion of genes on the X chromsome (among all genes in the genome) is the same as the proportional length of the X chromosome measured in base pairs (among the whole genome). The relative size  of the X chromosome is given by $propX = 1055/20290$ and that of the other chromomoses is $propRest = 19235/20290$.
@@ -1768,7 +1769,43 @@ Load the dataset chap08e1DayOfBirth.csv. Each row represents a single birth, and
 
 
 
+
 ## Week 10 (06.05.2020)
+### Exercise 20
+Assume that Z is a number randomly chosen from a standard normal distribution. Calculate each of the following probabilities :
+a) P(Z > 1.34)
+b) P(Z < 1.34)
+c) P(Z < 2.15)
+d) P(Z < 1.2)
+e) P(0.52 < Z < 2.34)
+f) P(-2.34 < Z < -0.52)
+g) P(Z < -0.93)
+h) P(-1.57 < Z < - 0.32)
+
+Make a sketch for each case and calculate the values using R functions.
+
+
+### Exercise 21
+As the world warms, the geographic ranges of species might shift toward cooler areas. Chen et al. (2011) studied recent changes  in the highest elevation of 31 taxa, in meters, over the late 1900s and early 2000s. Positive numbers indicate upward shifts in elevation, and negative numbers indicate shifts to lower elevations. The values are given by:
+```{r}
+data = c(58.9, 7.8, 108.6, 44.8, 11.1, 19.2, 61.9, 30.5, 12.7, 35.8, 7.4, 39.3, 24.0, 62.1, 24.3, 55.3, 32.7, 65.3, -19.3, 7.6, -5.2, -2.1, 31.0, 69.0, 88.6, 39.5, 20.7, 89.0, 69.0, 64.9, 64.8)
+```
+a) What is the sample size n?
+b) What is the mean of these data points? Remember to give the units.
+c) What is the standard deviation of elevational range shift? (Give the units as well.)
+d) What is the standard error of the mean for these data?
+e) How many degrees of freedom will be associated with a confidence interval and a one-sample t-test for the mean elevation shift?
+f) Calculate the 95 % confidence interval for the mean using these data.
+g) For the one-sample t-test, write down the appropriate null and alternative hypotheses.
+h) Calculate the test statistic t for this test.
+i) What assumptions are necessary to do a one-sample t-test?
+j) Calculate the P-value for this test as accurately as you can.
+k) Did species change their highest elevation on average?
+
+### Exercise 22
+A four-year review at the provincial Hospital in Alotau, Papua New Guinea (Barss 1984), found that 1/40 of their hospital admissons were injuries due to falling coconuts. If coconuts weigh on average 3.2 kg, and the upper bound of the 95% CI is 3.5 kg, what is the lower bound of this CI? Assume a normal distribution of coconut weights.
+
+
 ## Week 11 (13.05.2020)
 ## Week 12 (20.05.2020)
 ## Week 13 (27.05.2020)
