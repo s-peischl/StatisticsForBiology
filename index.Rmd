@@ -1792,16 +1792,28 @@ As the world warms, the geographic ranges of species might shift toward cooler 
 ```{r}
 data = c(58.9, 7.8, 108.6, 44.8, 11.1, 19.2, 61.9, 30.5, 12.7, 35.8, 7.4, 39.3, 24.0, 62.1, 24.3, 55.3, 32.7, 65.3, -19.3, 7.6, -5.2, -2.1, 31.0, 69.0, 88.6, 39.5, 20.7, 89.0, 69.0, 64.9, 64.8)
 ```
+
 a) What is the sample size n?
+
 b) What is the mean of these data points? Remember to give the units.
-c) What is the standard deviation of elevational range shift? (Give the units as well.)
+
+c) What is the standard deviation of elevational range shift? (Give the units 
+as well.)
+
 d) What is the standard error of the mean for these data?
+
 e) How many degrees of freedom will be associated with a confidence interval and a one-sample t-test for the mean elevation shift?
+
 f) Calculate the 95 % confidence interval for the mean using these data.
+
 g) For the one-sample t-test, write down the appropriate null and alternative hypotheses.
+
 h) Calculate the test statistic t for this test.
+
 i) What assumptions are necessary to do a one-sample t-test?
+
 j) Calculate the P-value for this test as accurately as you can.
+
 k) Did species change their highest elevation on average?
 
 ### Exercise 22
