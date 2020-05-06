@@ -2696,3 +2696,275 @@ $H_A: $ birthdays are not uniformly distributed across weekdays.
 From inspecting tha data, it appears as if births are less common on Sundays. It could be that scheduled caesarean deliveries are not scheduled on weekends. Another reason could be that hospitals may sometimes be understaffed on weekends and hence there might be a tendency to wait a bit longer with inducing labor in some non-critical cases.
 
 Note, however, that the p-value is not extremely small. We would reject the null hypothesis if we choose $\alpha = 0.05$ but not if we chosse $\alpha = 0.01$. This illustrates that your choice of rejecting or not rejecting a null hypothesis is strongly influenced by the degree of certainity you want to have in oyur decision. 
+
+
+## Week 10 (06.05.2020)
+
+### Exercise 20
+Assume that Z is a number randomly chosen from a standard normal distribution. Calculate each of the following probabilities :
+
+a) P(Z > 1.34)
+
+b) P(Z < 1.34)
+
+c) P(Z < 2.15)
+
+d) P(Z < 1.2)
+
+e) P(0.52 < Z < 2.34)
+
+f) P(-2.34 < Z < -0.52)
+
+g) P(Z < -0.93)
+
+h) P(-1.57 < Z < - 0.32)
+
+Make a sketch for each case and calculate the values using R functions.
+
+### Solution
+
+Remember that pnorm(x) = P(Z < x) and that 1 - pnorm(x) = P(Z > x).
+
+a) P(Z > 1.34)
+
+```{r}
+x = seq(-4,4,by=0.01)
+y = dnorm(x,0,1)
+plot(x,y,type="l",xlab="Z",ylab="density")
+abline(v = 1.34,col = "red")
+text(2.3,0.05,"P(Z > 1.34)")
+prob = 1 - pnorm(1.34,0,1)
+prob
+```
+
+b) P(Z < 1.34)
+
+```{r}
+plot(x,y,type="l",xlab="Z",ylab="density")
+abline(v = 1.34,col = "red")
+text(0,0.05,"P(Z < 1.34)")
+prob = pnorm(1.34,0,1)
+prob
+```
+
+c) P(Z < 2.15)
+
+```{r}
+plot(x,y,type="l",xlab="Z",ylab="density")
+abline(v = 2.15,col = "red")
+text(0,0.05,"P(Z < 2.15)")
+prob = pnorm(2.15,0,1)
+prob
+```
+
+d) P(Z < 1.2)
+
+```{r}
+plot(x,y,type="l",xlab="Z",ylab="density")
+abline(v = 1.2,col = "red")
+text(0,0.05,"P(Z < 1.2)")
+prob = pnorm(1.2,0,1)
+prob
+```
+
+e) P(0.52 < Z < 2.34)
+
+```{r}
+plot(x,y,type="l",xlab="Z",ylab="density")
+abline(v = 2.34,col = "red")
+abline(v = 0.52,col = "red")
+
+text(1.5,0.3,"P(0.52 < 
+Z < 
+2.34)")
+prob = pnorm(2.34,0,1) - pnorm(0.52,0,1)
+prob
+```
+
+f) P(-2.34 < Z < -0.52)
+
+```{r}
+plot(x,y,type="l",xlab="Z",ylab="density")
+abline(v = -2.34,col = "red")
+abline(v = -0.52,col = "red")
+
+text(-1.5,0.3,"P(0.52 < 
+Z < 
+2.34)")
+prob = pnorm(-0.52,0,1) - pnorm(-2.34,0,1) 
+prob
+```
+
+g) P(Z < -0.93)
+
+```{r}
+plot(x,y,type="l",xlab="Z",ylab="density")
+abline(v = -0.93,col = "red")
+
+text(-2,0.3,"P(Z < -0.93)")
+prob = pnorm(-0.93,0,1) 
+prob
+```
+
+h) P(-1.57 < Z < - 0.32)
+
+```{r}
+plot(x,y,type="l",xlab="Z",ylab="density")
+abline(v = -1.57,col = "red")
+abline(v = - 0.32,col = "red")
+
+text(-1.5,0.3,"P(-1.57 < 
+Z < 
+- 0.32)")
+prob = pnorm(-0.32,0,1) - pnorm(-1.57,0,1) 
+prob
+```
+
+
+### Exercise 21
+As the world warms, the geographic ranges of species might shift toward cooler areas. Chen et al. (2011) studied recent changes  in the highest elevation of 31 taxa, in meters, over the late 1900s and early 2000s. Positive numbers indicate upward shifts in elevation, and negative numbers indicate shifts to lower elevations. The values are given by:
+```{r}
+data = c(58.9, 7.8, 108.6, 44.8, 11.1, 19.2, 61.9, 30.5, 12.7, 35.8, 7.4, 39.3, 24.0, 62.1, 24.3, 55.3, 32.7, 65.3, -19.3, 7.6, -5.2, -2.1, 31.0, 69.0, 88.6, 39.5, 20.7, 89.0, 69.0, 64.9, 64.8)
+```
+
+a) What is the sample size n?
+
+```{r}
+n = length(data)
+
+print(paste("The sample size is ",n))
+```
+
+b) What is the mean of these data points? Remember to give the units.
+
+```{r}
+m = mean(data)
+
+print(paste("The mean shift is ",m, "meters."))
+```
+
+c) What is the standard deviation of elevational range shift? (Give the units 
+as well.)
+
+```{r}
+sd = sd(data)
+
+print(paste("The staandard deviation of the shift is ",round(sd,digits=2)," meters."))
+```
+
+
+d) What is the standard error of the mean for these data?
+
+```{r}
+SE = sd/sqrt(n)
+
+print(paste("The standard error of the mean is ",round(SE,digits=2),"."))
+```
+
+e) How many degrees of freedom will be associated with a confidence interval and a one-sample t-test for the mean elevation shift?
+
+There are 30 (= $n-1$) degrees of freedom.
+
+We can check with the t.test() function:
+```{r}
+tt = t.test(data)
+tt
+```
+
+f) Calculate the 95 % confidence interval for the mean using these data.
+
+We can either use our results from the t-test before:
+
+```{r}
+tt$conf.int
+```
+
+or 
+```{r}
+upper = m + 2*SE
+lower = m - 2*SE
+
+c(lower,upper)
+```
+
+A more precise version:
+```{r}
+upper = m + qt(0.975,df = n - 1)*SE
+lower = m + qt(0.025,df = n - 1)*SE
+c(lower,upper)
+```
+
+
+g) For the one-sample t-test, write down the appropriate null and alternative hypotheses.
+
+$H_0:$ The mean elevational shift is 0 meters.
+$H_A:$ The mean elevational shift is not 0 meters. 
+
+h) Calculate the test statistic t for this test.
+
+We canu again just use t.test():
+```{r}
+tt$statistic
+```
+
+
+or do it by hand:
+
+```{r}
+mu.0 = 0 # as specified in the null hypothesis
+t.stat = (m - mu.0)/SE
+t.stat 
+```
+i) What assumptions are necessary to do a one-sample t-test?
+
+The data should be approximately normally distributed. We can check this with a histogram
+
+```{r}
+hist(data)
+```
+
+A slightly more precise way would be to do a QQ plot
+```{r}
+library(car)
+qqPlot(data)
+```
+
+As long as the points are within the dashed lines, you can safely do a t-test. 
+
+
+j) Calculate the P-value for this test as accurately as you can.
+
+The most accurate way is either to use t-test again
+```{r}
+tt$p.value
+```
+
+We can also do it by hand. For this it is good to make a sketch first:
+```{r}
+# we first calcualte the null distirbution of our t statisitc
+x = seq(-8,8,by=0.01)
+y = dt(x,df = n-1)
+
+# and plot it
+plot(x,y,type="l",xlab="t",ylab="density")
+
+# we add the observed t statistic
+abline(v = t.stat,col="slategray")
+```
+We see in the figure that the observed t statistic is far away from the mode of the t distribution. The p value shoul dtherfroe be very small. To calcualte it, we calcualte the area under the curve to the right of the statistic, and double this value to account for extreme events on the left end of the distirbution (we perform a two-sided test). The function pt would give us the area to the left of the test statistic, so we use 2*(1-pt(t.stat,df = n-1)) to get the p-value:
+
+```{r}
+2*(1-pt(t.stat,df = n-1))
+```
+
+k) Did species change their highest elevation on average?
+
+We choose a signifcance threshold of 5 percent, i.e., we want to be 95 percent certain that we do not have a false positive. Th p-value is clearly smaller than that. Thus, the t-test  shows that there is a statistically significant change in the highest elevation. Because the p-value is so small, we can be very certain of this result as it would alos hold at much lower signifcance thresholds. 
+
+
+### Exercise 22
+A four-year review at the provincial Hospital in Alotau, Papua New Guinea (Barss 1984), found that 1/40 of their hospital admissons were injuries due to falling coconuts. If coconuts weigh on average 3.2 kg, and the upper bound of the 95% CI is 3.5 kg, what is the lower bound of this CI? Assume a normal distribution of coconut weights.
+
+
+### Solution
+Under a normal distirbution, confidence intervalls are perfectly symmetric. Thus the lower bound must be 2.9 kg.
