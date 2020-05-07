@@ -1821,6 +1821,61 @@ A four-year review at the provincial Hospital in Alotau, Papua New Guinea (Barss
 
 
 ## Week 11 (13.05.2020)
+
+### Exercise 23
+A forensic pathologist wants to know whether
+there is a difference between the rate of
+cooling of freshly killed bodies and those which
+were reheated, to determine whether you can
+detect an attempt to mislead a coroner about
+time of death. He tested several mice for their
+"cooling constant" both when the mouse was
+originally killed and then after the mouse was
+re-heated. The data can be found in the file "mouse_cooling.csv" on ilias.
+Test whether there is any difference in the cooling constants between freshly killed and reheated corpses. Check whether you can use a t-test and justify your decision to use it. 
+If a t-test is notjsutified, try to use an alternative strategy (e.g., non-parametric test). 
+
+### Exercise 24
+For each of the following scenarios, identify the best statistical test to use and state the null hypothesis. (Please note, do not give the answer to the specific question, but simply state the best test to use and the null hypothesis for the scenario.)
+
+a. Asking whether stickleback fish occur with equal probability through all areas of a pond. We have raken random samples at various locations of the pond (all the same size) and have recorded the number of fish in each sampled location.
+
+b. We want to know which of two tumor treatments showed better results. We recorded the change in tumor size during the treatment in two groups of patients, group 1 was treated with drug A and group 2 with drug B.
+
+c. We want to know whether a new tumor treatment showed good results. We recorded the change in tumor size before and after the treatment in each patient.
+
+d. Asking whether the number of smokers in a list of cities is proportional to the population size of those cities.
+
+e. Testing whether patients change in body mass during a hospital stay.
+
+### Exercise 25
+Health spending per person from a randomsample of 20 countries is given in the file "healt_expenditure.csv" on ilias. We will use this sample to estimate the mean of log health expenditure, including a confidence interval.
+
+a) Visualize the frequency distribtuion using a
+histogram. Does the data deviate from a normal distribution? If yes, how?
+
+b) Why is a log transformation a good choice
+for these data?
+
+c) What is the sample size?
+
+d) Calcualte the natural logarithm of each
+data point.
+
+e) What is the mean log health expenditure?
+
+f) What is the standard deviation of the log
+health expenditure?
+
+g) Calculate the standard error of the mean
+log health expenditure?
+
+h) Calculate the 95% confidence interval of the
+mean log health expenditure.
+
+i) What are the limits of this confidence interval expressed on
+original (non-log) scale?
+
 ## Week 12 (20.05.2020)
 ## Week 13 (27.05.2020)
 
