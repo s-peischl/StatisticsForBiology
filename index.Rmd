@@ -1877,6 +1877,28 @@ i) What are the limits of this confidence interval expressed on
 original (non-log) scale?
 
 ## Week 12 (20.05.2020)
+
+### Exercise 26
+
+Recycling paper has some obvious benefits, but it may have unintended
+consequences. For example, perhaps people are less careful about how much paper they use if they know their waste will be recycled. Catlin and Wang (2013) tested this idea by measuring paper use in two groups of experimental participants. Each person was placed in a room alone with scissors, paper and a trash can, and was told that he or she was testing the scissors. In the “recycling” group only, there was
+also a recycling bin in the room. The amount of paper used by each participants was measured in grams.
+
+No recycling bin: 4,4,4,4,4,4,4,5,8,9,9,9,9,12,12,13,14,14,14,14,15,23
+With recycling bin: 4,5,8,8,8,9,9,9,12,14,14,15,16,19,23,28,40,43,129,130
+
+a) Make and examine a histogram of these data. Are the frequency distributions of the two groups similar in shape and spread?
+
+b) Based on (a), discuss your options for testing a difference between the groups.
+
+c) Apply a Mann-Whitney U-test (R function _wilcox.test_). State the null and alternative hypotheses.
+
+d) Calculate the P-value as accurately as you can and interpret the result.
+
+### Exercise 27
+
+Use the data from exercise 26 and perform permutation test on the data. Visulaize the empirical sampling distribution and calcualte a P-value. Compare it to the results fromthe exercise 26. Hint: Use a for loop for the permutations. Alternatively, take a look at the package: _perm_ and the function _permTS_.
+
 ## Week 13 (27.05.2020)
 
 # Solutions
