@@ -1901,6 +1901,57 @@ Use the data from exercise 26 and perform permutation test on the data. Visulaiz
 
 ## Week 13 (27.05.2020)
 
+### Exercise 28
+
+A plant ecologist wishes to test the hypothesis that the height of species X depends on the type of soil it grows in. She measures the height of 3 plants in each of 4 plots representing 4 different soil types. The results are tabulated below. (Height in centimeters.) Do the results support her hypothesis, assuming normality and equality of
+variances?
+
+The data is
+```{r}
+height = c(15,25,17,10,9,21,23,13,4,19,20,16)
+plots = rep(c(1,2,3,4),each=3)
+
+data = data.frame(height = height,plots = as.factor(plots))
+
+ggplot(data,aes(x=plots, y=height,col=plots)) + 
+    geom_jitter(position=position_jitter(0.1))
+```
+
+
+
+### Exercise 29
+Test a linear correlation between inbreeding coefficients of litters of mated wolf pairs and the number of pups surviving their first winter.
+
+
+```{r}
+wolf <- read.csv(url("http://www.zoology.ubc.ca/~schluter/WhitlockSchluter/wp-content/data/chapter16/chap16e2InbreedingWolves.csv"))
+head(wolf)
+```
+
+a) Calculate the correlation coefficient.
+
+b) Perform a test of the null hyptohesis that $\rho = 0$. Do all calcualtions "by hand".
+
+c) Perform the test with the function _cor_test_.
+
+### Exercise 30
+Test the null hypothesis of zero regression slope. The data are from an experiment investigating the effect of plant species diversity on the stability of plant biomass production.
+
+Data: 
+```{r}
+prairie <- read.csv(url("http://www.zoology.ubc.ca/~schluter/WhitlockSchluter/wp-content/data/chapter17/chap17e3PlantDiversityAndStability.csv"))
+head(prairie)
+```
+
+a) Inspect the data. Would a log trandform make sense? 
+
+b) Make a scatter plot of the data. Add a regression line.
+
+c) Test if the null hypothesis of a slop of zero can be rejected. 
+
+d) Write down the model with the estimated parameters.
+
+
 # Solutions
 
 ## Week 1 (26.02.2020)
