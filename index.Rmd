@@ -1932,7 +1932,7 @@ a) Calculate the correlation coefficient.
 
 b) Perform a test of the null hyptohesis that $\rho = 0$. Do all calcualtions "by hand".
 
-c) Perform the test with the function _cor_test_.
+c) Perform the test with the function _cor.test_.
 
 ### Exercise 30
 Test the null hypothesis of zero regression slope. The data are from an experiment investigating the effect of plant species diversity on the stability of plant biomass production.
@@ -3317,3 +3317,154 @@ abline(v = CI.nonlog,lty=2)
 abline(v = M.nonlog,lwd=2)
 ```
 Note how asymmetric the back transformed CI is - this reflects the asymmetry of the data. Be careful however, as this is an approximation! (Note: mean of logarithm transformed data is not the same as the logarithm of the mean of the data).
+
+
+
+## Week 12 (20.05.2020)
+### Exercise 26
+
+Recycling paper has some obvious benefits, but it may have unintended
+consequences. For example, perhaps people are less careful about how much paper they use if they know their waste will be recycled. Catlin and Wang (2013) tested this idea by measuring paper use in two groups of experimental participants. Each person was placed in a room alone with scissors, paper and a trash can, and was told that he or she was testing the scissors. In the “recycling” group only, there was
+also a recycling bin in the room. The amount of paper used by each participants was measured in grams.
+
+No recycling bin: 4,4,4,4,4,4,4,5,8,9,9,9,9,12,12,13,14,14,14,14,15,23
+With recycling bin: 4,5,8,8,8,9,9,9,12,14,14,15,16,19,23,28,40,43,129,130
+
+a) Make and examine a histogram of these data. Are the frequency distributions of the two groups similar in shape and spread?
+
+b) Based on (a), discuss your options for testing a difference between the groups.
+
+c) Apply a Mann-Whitney U-test (R function _wilcox.test_). State the null and alternative hypotheses.
+
+d) Calculate the P-value as accurately as you can and interpret the result.
+
+### Solution
+a) 
+```{r}
+no.recycling = c(4,4,4,4,4,4,4,5,8,9,9,9,9,12,12,13,14,14,14,14,15,23)
+recycling = c(4,5,8,8,8,9,9,9,12,14,14,15,16,19,23,28,40,43,129,130)
+
+n.rec = length(recycling)
+n.no.rec = length(no.recycling)
+
+group = rep(c("Recycling","No.Recycling"),times=c(n.rec,n.no.rec))
+
+dat = data.frame(var = c(recycling,no.recycling),group = group)
+
+ggplot(dat) + 
+  geom_histogram(aes(x = var,fill=group))
+
+ggplot(dat) + 
+  geom_histogram(aes(x = var,fill = group),bins=12) + 
+  facet_wrap(~group,nrow=2) 
+```
+Both shape and spread seem to be different here, altough it is diffcult to tell based on the small sample sice. A Normal Distribution can however be ruled out, especially fro the _recycling group_.
+```{r}
+ggplot(dat) + 
+  geom_qq(aes(sample = var,col=group)) + 
+  geom_qq_line(aes(sample = var,col=group))+ 
+  facet_wrap(~group,nrow=2) 
+
+qqPlot(recycling)
+qqPlot(no.recycling)
+```
+b) A t-test should not be used. Based on the small sample size, a permutation test will not work well (see exercise 27). We opt for a Man-Whitney U test.
+
+c and d) 
+
+$H_0:$ It is equally likely that a randomly selected value from one group will be less than or greater than a randomly selected value from a second population.
+$H_A:$ It is not equally likely that a randomly selected value from one group will be less than or greater than a randomly selected value from a second population.
+
+
+```{r}
+wilcox.test(var~group,data=dat)
+
+# alternative without dataframes
+wilcox.test(recycling,no.recycling)
+```
+
+For comparison, a t-test in this case would yield (not taht the t-test uses a different null hypothesis ):
+```{r}
+t.test(var~group,data=dat)
+```
+Both test actually give similar results, which is a good sign. We therefore reject the null hypotesis. A randomly selected bin from the no recycling group is more likely to contain more paper as compared to a randomly selected bin from the other group.
+
+
+
+### Exercise 27
+
+Use the data from exercise 26 and perform permutation test on the data. Visulaize the empirical sampling distribution and calcualte a P-value. Compare it to the results fromthe exercise 26. Hint: Use a for loop for the permutations. Alternatively, take a look at the package: _perm_ and the function _permTS_.
+
+### Solution
+We first calculate the actual difference of the means:
+
+```{r}
+no.recycling = c(4,4,4,4,4,4,4,5,8,9,9,9,9,12,12,13,14,14,14,14,15,23)
+recycling = c(4,5,8,8,8,9,9,9,12,14,14,15,16,19,23,28,40,43,129,130)
+
+n.rec = length(recycling)
+n.no.rec = length(no.recycling)
+
+group = rep(c("Recycling","No.Recycling"),times=c(n.rec,n.no.rec))
+
+dat = data.frame(var = c(recycling,no.recycling),group = group)
+MeanR = mean(no.recycling)
+MeanNR = mean(recycling)
+diffMeans =  MeanNR - MeanR
+```
+
+
+```{r}
+nPerm = 1000
+permResult <- vector() # initializes
+for(i in 1:nPerm){
+	# step 1: permute the group labels
+	permSample <- sample(dat$group, replace = FALSE)
+	
+	# step 2: calculate difference betweeen means
+	permMeanR <-mean(dat$var[permSample=="Recycling"])
+	permMeanNR <-mean(dat$var[permSample=="No.Recycling"])
+	permResult[i] <- permMeanNR - permMeanR
+}
+
+```
+
+Plot null distribution based on the permuted differences.
+
+```{r}
+hist(permResult, right = FALSE, breaks = 100,col="darkred")
+```
+Note how the distirbuion looks odd. This is due to the small sample size: $n_1 = 20, n_2 =22$. More precily, this is problematic because there are few extreme values in the data set (129 and 130 in the recycling dataset). These exterem points will ahve a strong impact on the empirical null distirbution: if both are in the same resampled group, they will shift the whole distirbution strongly to the left or right. This causes the bimodal distribution. This is a sign that the sample size might be too small for a permutation test. However, usually this leads to small power and large p-values. So we cannevertheless use the null distribution to calculate an approximate P-value, we just need to be aware that our results will be very conservative. The p value is twice the proportion of the permuted means that fall below the observed difference in means, diffMeans. The following code calculates the number of permuted means falling below diffMeans.
+
+```{r}
+sum(as.numeric(permResult >= diffMeans))
+```
+
+These commands obtain the fraction of permuted means falling below diffMeans.
+
+```{r}
+sum(as.numeric(permResult >= diffMeans)) / nPerm
+```
+
+Finally, multiply by 2 to get the P-value for a two-sided test.
+```{r}
+2 * ( sum(as.numeric(permResult > diffMeans)) / nPerm )
+```
+
+We can illustrate the permutaed differences and add the observed difference on to show the outcome of our test: the birght red colored bars indicate the proportion of permutation results that yielded a more exterme results as the one observed.
+
+```{r}
+hist(permResult[permResult<=diffMeans],breaks=seq(-20,20,by=1),col="darkred",main="")
+hist(permResult[permResult>diffMeans],breaks=seq(-20,20,by=1),add=T,col="red")
+abline(v = diffMeans,col="red",lwd=2)
+```
+
+An alternative approach is
+```{r}
+library(perm)
+permTS(dat$var[dat$group=="Recycling"],dat$var[dat$group=="No.Recycling"],exact = T)
+```
+We again find that we can reject the Null Hypothesis. 
+
+
+
