@@ -1901,7 +1901,7 @@ Use the data from exercise 26 and perform permutation test on the data. Visulaiz
 
 ## Week 13 (27.05.2020)
 
-### Exercise 28
+### Exercise 28
 
 A plant ecologist wishes to test the hypothesis that the height of species X depends on the type of soil it grows in. She measures the height of 3 plants in each of 4 plots representing 4 different soil types. The results are tabulated below. (Height in centimeters.) Do the results support her hypothesis, assuming normality and equality of
 variances?
@@ -1917,7 +1917,12 @@ ggplot(data,aes(x=plots, y=height,col=plots)) +
     geom_jitter(position=position_jitter(0.1))
 ```
 
-
+#### Solution
+```{r}
+model = lm(height ~ plots, data = data)
+anova(model)
+```
+We cannot conclude that the different soild types affect the height. 
 
 ### Exercise 29
 Test a linear correlation between inbreeding coefficients of litters of mated wolf pairs and the number of pups surviving their first winter.
@@ -1934,22 +1939,109 @@ b) Perform a test of the null hyptohesis that $\rho = 0$. Do all calcualtions "b
 
 c) Perform the test with the function _cor.test_.
 
+#### Solution
+a) 
+```{r}
+ggplot(data= wolf, aes(x = nPups,y=inbreedCoef))+
+  geom_point()
+
+cor(wolf$inbreedCoef,wolf$nPups)
+```
+
+b)  and c)
+```{r}
+r = cor(wolf$inbreedCoef,wolf$nPups)
+n = length(wolf$inbreedCoef)
+SE = sqrt((1-r^2)/(n-2))
+t =  r/SE
+t
+p.value = 2*pt(t,df=n-2)
+
+cor.test(wolf$inbreedCoef,wolf$nPups)
+```
+
 ### Exercise 30
 Test the null hypothesis of zero regression slope. The data are from an experiment investigating the effect of plant species diversity on the stability of plant biomass production.
 
 Data: 
 ```{r}
-prairie <- read.csv(url("http://www.zoology.ubc.ca/~schluter/WhitlockSchluter/wp-content/data/chapter17/chap17e3PlantDiversityAndStability.csv"))
-head(prairie)
+plant <- read.csv(url("http://www.zoology.ubc.ca/~schluter/WhitlockSchluter/wp-content/data/chapter17/chap17e3PlantDiversityAndStability.csv"))
+head(plant)
 ```
 
 a) Inspect the data. Would a log trandform make sense? 
+
 
 b) Make a scatter plot of the data. Add a regression line.
 
 c) Test if the null hypothesis of a slop of zero can be rejected. 
 
 d) Write down the model with the estimated parameters.
+
+
+#### Solution
+
+a) Inspect the data. Would a log trandform make sense? 
+```{r}
+ggplot(data= plant,aes(x = nSpecies,y= biomassStability))+
+  geom_point()
+```
+We see that the variance is increasing with increasing number of species. A log transform seems appropriate. 
+```{r}
+ggplot(data= plant,aes(x = nSpecies,y= log(biomassStability)))+
+  geom_point()
+```
+Note the change in the y axis scale. The varaince is now much more similar across values for nSpecies. 
+
+```{r}
+plant$logBiomass = log(plant$biomassStability)
+```
+
+b) Make a scatter plot of the data. Add a regression line.
+
+```{r}
+ggplot(data= plant,aes(x = nSpecies,y= logBiomass))+
+  geom_point() + 
+  geom_smooth(method = "lm")
+
+```
+
+c) Test if the null hypothesis of a slop of zero can be rejected. 
+
+```{r}
+model =lm(logBiomass~nSpecies,data=plant)
+summary(model)
+```
+We find that the p value is extremely small, we therefore can reject the null hypothesis of $\beta_1 = 0$.
+
+
+
+d) Write down the model with the estimated parameters.
+
+```{r}
+beta0 = model$coefficients[1]
+beta1 = model$coefficients[2]
+sigma = sd(model$residuals)
+sigma
+```
+
+our model is thus
+
+$Y_i = \beta_0 + \beta_1 x_i + \epsilon_i$
+
+with 
+```{r}
+beta0
+beta1
+````
+and
+
+$\epsilon$ is drawn from a normal distribution with mean 0 and standard deviation
+```{r}
+sigma
+````
+
+
 
 
 # Solutions
@@ -3221,6 +3313,7 @@ mean log health expenditure.
 
 i) What are the limits of this confidence interval expressed on
 original (non-log) scale?
+
 
 
 ### Solution
