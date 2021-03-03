@@ -1558,6 +1558,7 @@ b) No, the sample is not likely to be random. In a random sample, every individu
 
 c) The number of species in the sample might underestimate the number in the Park if sampling was not random (e.g., if daytime mammals were missed), or if rare species happened to avoid capture. Even if the sample is perfectly random, the estimator will underestimated the true number in most cases. You can sample fewer species just by chance, but not more species as there actually are. Thus -  on average ??? you will underestimate the true number.
 
+
 ## Week 2 (03.03.2021)
 #### Exercise 6
 We use the MPG data set introduced in the lecture.  Answer the following questions. You can use base R or ggplot if not otherwise specified.
@@ -1593,6 +1594,80 @@ ggplot(data = mpg)
 
 
 
+
+
+
+
+
+### Solutions
+
+
+a)	You should see a blank plot. This is what ggplot does, it simply creates a "canvas" to which you can add "layers".
+
+b)	How many rows are in mpg? How many columns?
+
+```{r}
+str(mpg)
+```
+
+There are 234 observations of  11 variables. thus, there are 11 columns and 234 rows. we can confirm this by looking at the dimension of the underlying data matrix:
+  
+  ```{r}
+dim(mpg)
+```
+
+
+
+c)	
+
+```{r}
+?mpg
+```
+*drv* is a categorical variable indicating the drive type:  f = front-wheel drive, r = rear wheel drive, 4 = 4wd
+
+
+d)	
+
+```{r}
+ggplot(data  = mpg) + 
+  geom_point(mapping = aes(y = hwy,x = cyl)) + 
+  theme_classic() + 
+  labs(title = "A scatterplot", y = "miles per gallon on highways",x="cylinders")
+```
+
+e)	
+
+```{r}
+ggplot(data  = mpg) + 
+  geom_point(mapping = aes(x = class,y = drv)) + 
+  theme_classic() + 
+  labs(title = "A useless plot", x = "class",y="drive type")
+```
+both *drv* and *class* are categorical variable and it does not make sense to visualize them this way. What would be a better way to show these data? 
+
+
+f)	Color is used within the aesthetics function, where we specify which variables should be used. "blue" is however not a variable in our data frame. Thus it is ignored. The following code creates the correct plot:
+
+```{r, echo = TRUE,results='hide', message=F, warning=F}
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy), color = "blue")
+```
+
+
+g)	
+
+A continous variable will lead ot a continous color gradient rather than a discrete set of colors.
+```{r, echo = TRUE,results='hide', message=F, warning=F}
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = cty, y = hwy, color = displ))
+```
+
+h)	The "+" symbol always has to be in the top row:
+  
+``` {r}
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy))
+```
 
 
 
