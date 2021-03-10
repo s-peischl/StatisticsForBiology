@@ -1688,6 +1688,90 @@ Load the data set "chap04e1HumanGeneLengths.csv" (the lengh of genes in the huma
  h)	Display the data using different plotting techniques. Which one illustrates the data best?
 
 
+#### Solution
+Load the data
+````{r}
+genes <- read.csv(url("http://www.zoology.ubc.ca/~schluter/WhitlockSchluter/wp-content/data/chapter04/chap04e1HumanGeneLengths.csv"))
+````
+a) How many individuals are in the sample (i.e., what is the sample size, n)?
+````{r}
+n = dim(genes)[1]
+print(n)
+````
+b)	What is the sum of all of the observations? 
+
+````{r}
+sum.gene.lengths = sum(genes$geneLength)
+````
+c)	What is the mean of this sample?  
+````{r}
+
+mean.gene.length1 = sum.gene.lengths/n
+mean.gene.length2 = mean(genes$geneLength)
+
+print(mean.gene.length1)
+print(mean.gene.length2)
+````
+d)	What is the sum of the squares of the measurements? 
+````{r}
+square.sum.gene.lengths = sum(genes$geneLength^2)
+print(square.sum.gene.lengths)
+````
+e)	What is the variance of this sample? 
+````{r}
+# by hand:
+variance.gene.length = sum((genes$geneLength - mean.gene.length1)^2)/(n-1)
+
+print(variance.gene.length)
+
+# for comparison:
+var(genes$geneLength)
+````
+
+f)	What is the standard deviation of this sample? 
+````{r}
+sd(genes$geneLength)
+
+# or 
+
+sd.gene.length = sqrt(variance.gene.length)
+
+````
+
+g)	What is the coefficient of variation for this sample? 
+````{r}
+cv.gene.length = sd.gene.length/mean.gene.length1
+print(cv.gene.length)
+````
+h)	Display the data using different plotting techniques. Which one illustrates the data best? 
+````{r}
+# Which one do you like best?
+
+ggplot(data = genes) + 
+  geom_histogram(mapping = aes(x = geneLength),color="black",fill="darkred") + 
+  theme_classic()
+
+ggplot(data = genes) + 
+  geom_density(mapping = aes(x = geneLength),color="black",fill="darkred") + 
+  theme_classic()
+
+ggplot(data = genes) + 
+  geom_density(mapping = aes(x = geneLength),color="black",fill="darkred") + 
+  xlab("Länge der Gene") +
+  ylab("Häufigkeit") +
+  scale_x_log10() +
+  theme_classic()
+
+ggplot(data = genes) + 
+  geom_boxplot(mapping = aes(y = geneLength),color="black",fill="darkred") + 
+  theme_classic() + 
+  coord_flip()
+
+````
+
+
+
+
 
 
 
