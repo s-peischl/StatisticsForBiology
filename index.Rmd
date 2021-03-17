@@ -1779,7 +1779,47 @@ ggplot(data = genes) +
 #### Exercise 8
 Use the stickleback dataset and calcualte the median and mean for each genotpye. Make a histogramm and add vertical lines to the histogramm indicating the mean and median for each genotype. What do you see? How does the shape of the distribution affect differences between mean and median?
 
-#### Exercise 9
+
+#### Exercise 9 (standard)
+Copy and paste this R code into a script. Before you run it, try to figure out what it does. Modify the output so that it looks nicer, i.e., add labels, change theme, change colors, ...
+
+Tip 1: Use the help function or the internet to figure out what the different commands and functions are doing. 
+
+Tip 2: This might also be helpful: https://s-peischl.github.io/StatisticsForBiology/#Working_with_Distributions_and_random_variables
+
+Tip 3: Look at the next exercise, it may give you an idea what is happening in this R code ...
+
+```{r fig.show='hide'}
+reps = 1000
+sample_size = 10
+mu = 10
+sigma = 5
+means = vector("numeric",reps)
+
+for (i in 1:reps)
+{
+  sample = rnorm(sample_size,mu,sigma)
+  means[i] = mean(sample)
+}
+
+
+
+x = seq(mu-2*sigma,mu+2*sigma,by=0.01)
+
+SE = sigma/sqrt(sample_size)
+
+y = dnorm(x,mu,SE)
+
+df2 = data.frame(x = x,y = y)
+
+df = data.frame(means = means)
+ggplot(data = df) + 
+  geom_histogram(aes(x = means),binwidth=1) +
+  geom_line(data = df2,aes(x = x,y = y*reps))
+
+```
+
+#### Exercise 9 (challenging)
 Write a short R script that simulates the sampling distribution of the mean. Plot the sampling distribution and add the theoretical expectation to the plot. Follow the following steps:
 
  a)	Choose a distribution that represents your population (e.g., Normal or Poisson).
@@ -1788,6 +1828,9 @@ Write a short R script that simulates the sampling distribution of the mean. Plo
  d)	Do this 1000 times, so that you have calculated a 1000 means from a 1000 samples. Hint: use a for-loop to automate this.
  e)	Plot a histogram of the sample means.
  f)	Add a line for the theoretical expectation of the sampling distribution. Hint: use the function dnorm to get the density of the normal distribution. 
+ 
+ Tip if you get stuck: Have a look at the previous exercise for inspiration ...
+
 
 
 
