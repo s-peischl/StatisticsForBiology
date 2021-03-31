@@ -2147,6 +2147,68 @@ $1- 0.95^5  = 0.226$
 ### Exercsie 13
 Use the stickleback data set. Calculate a confidence interval for the mean plate numbers for each genotype. Make a plot that shows the mean and the confidence interval of each genotype. Discuss which groups are different and which are not based on your analysis.  
 
+#### Solution 
+We first calculate the mean for each genotype:
+
+```{r}
+
+stickleback = read.csv("~/Dropbox/Teaching/StatisticsForBiology/chap03e3SticklebackPlates.csv")
+
+mean.mm = mean(stickleback$plates[stickleback$genotype=="mm"])
+mean.Mm = mean(stickleback$plates[stickleback$genotype=="Mm"])
+mean.MM = mean(stickleback$plates[stickleback$genotype=="MM"])
+```
+
+Next the upper and lower limit of the 95% CI using a t-test:
+  
+```{r}
+t.t.mm = t.test(stickleback$plates[stickleback$genotype=="mm"])
+t.t.Mm = t.test(stickleback$plates[stickleback$genotype=="Mm"])
+t.t.MM = t.test(stickleback$plates[stickleback$genotype=="MM"])
+
+CI.mm = t.t.mm$conf.int
+CI.Mm = t.t.Mm$conf.int
+CI.MM = t.t.MM$conf.int
+```
+
+We put it all in a dataframe:
+
+```{r}
+
+df = data.frame(means = c(mean.mm,mean.Mm,mean.MM),
+                lower = c(CI.mm[1],CI.Mm[1],CI.MM[1]),
+                upper = c(CI.mm[2],CI.Mm[2],CI.MM[2]),
+                genotypes = c("mm","Mm","MM"))
+
+
+```
+
+Now we can plot everything:
+```{r}
+ggplot(data = df) +
+  geom_errorbar(mapping = aes(x = genotypes,ymin=lower, ymax=upper), width=.1) +
+  geom_point(mapping = aes(x = genotypes,y=means)) 
+```
+
+If you prefer (I don't) ou can also do a bar plot
+
+```{r}
+ggplot(data = df) +
+  geom_col(mapping = aes(x = genotypes,y=means,fill=genotypes)) +
+  geom_errorbar(mapping = aes(x = genotypes,ymin=lower, ymax=upper), width=.1) +
+  geom_point(mapping = aes(x = genotypes,y=means))
+```
+
+Either way, it is advised to also add the raw data:
+
+```{r}
+ggplot(data = df)  + 
+  geom_jitter(data = stickleback,mapping = aes(x = genotype,y = plates,color=genotype),size=0.8,width=0.05)+
+  geom_errorbar(mapping = aes(x = genotypes,ymin=lower, ymax=upper), width=.2) +
+  geom_point(mapping = aes(x = genotypes,y=means))
+
+```
+
 ### Exercise 14
 
 a) Make a plot of the probability density function of a Normal distribution. Choose values for the mean and variance. Next make a plot of the probability density function of the standard Normal distribution. What do you see? How are these plots different / similar?
@@ -2158,7 +2220,56 @@ c) Combine the two plots in a single plot, i.e., superimpose the probability den
 d) Calculate the 10 percent quantile of the distribution. Store the value in a variable $Q10$. Then calculate the proportion of numbers in your random sample from (b) that are smaller or equal to $Q10$. What do you find?
 
 
+  
+#### Solution
+  
+a)  We first choose values for $\mu$ and $\sigma$ (you can chose any values you want)
+```{r}
+mu = 10
+sigma = 2
+```
 
+Next we choose the values for the x axis. A good choice is to cover the range from  $\mu - 4 \sigma$ to $\mu + \sigma$. We chose a stepsize of 0.1:
+  ```{r}
+x = seq(mu-4*sigma,mu+4*sigma,by=0.1)
+```
+
+Now we compute the corresponding $y$ values for our plot using the function dnorm:
+  ```{r}
+y = dnorm(x, mean = mu, sd = sigma)
+```
+
+I now do the same thing for the standard normal distribution:
+  ```{r}
+mu.std = 0
+sigma.std = 1
+x.std = seq(mu.std-4*sigma.std,mu.std+4*sigma.std,by=0.1)
+y.std = dnorm(x.std, mean = 0, sd = 1)
+```
+And finally we plot both density functions next to each other:
+  
+  ```{r}
+
+par(mfrow = c(1,2))
+plot(x,y,type="l",xlab="x",ylab="density")
+plot(x.std,y.std,type="l",xlab="x",ylab="density")
+```
+
+We see that both curves look exactly the same. The only difference is the scale of the x and y axes.
+
+b and c) 
+```{r}
+random.sample = rnorm(1000,mu,sigma)
+hist(random.sample,freq=F,ylim=c(0,0.2),breaks=30)
+lines(x,y)
+```
+
+d)   
+```{r}
+Q10 = qnorm(0.1,mean=mu,sd=sigma)
+sum(random.sample<=Q10)/1000
+```
+We find that approximately 10 percent of our random sample is smaller than $Q10$. This is exactly the definition of a quantile!
 
 ### Exercise 15
 a) Let $X$ be a random variable that follows the standard normal distribution. Calculate the $p = 0.05,0.1,0.15, ..., 0.95$ percentiles of the standard Normal distribution. Store the values in a vector $Q$. Next calculate the cumulative distribution function for the values in $Q$. Store this in a variable $C$. Finally, plot $p$ against $Q$. What do you see? Can you explain?
@@ -2169,7 +2280,69 @@ c) Indicate the most extreme 5 percent of the distribution. In other words: For 
 
 [Hint: you can use the quantile function of $R$ and the symmetry of the Normal distribution to simplify things]
 
+#### Solutions
+a)  
+```{r}
+    
+  p = seq(0.05,0.95,by=0.05)
+  Q = qnorm(p,mean=0,sd=1)
+  C = pnorm(Q,mean=0,sd=1)
+  plot(p,C)
+```
+  We find that $p = C$. This means that the cummulative distribution function is the inverse of the quantile function.
 
+A mathematical explanation of this relationship:
+
+  
+The p-quantile $q_p$ is defined as the number such that  
+$$P(X < q_p) = p.$$
+  We define a quantile function $Q(p) = q_p$.
+The cumulative distribution function $F(x)$ gives us the value
+$$F(x) = P(X<x)$$
+  Then 
+$F(q_p) = P(X < q_p) = p$
+  
+  and because
+
+$$Q(p) = q_p$$ if follows
+
+that 
+
+$$F(Q(p)) = F(q_p) = p$$
+  Here is a graphical represetantion of this relationship
+
+```{r}
+cdf.std = pnorm(x.std,mean=0,sd=1)
+plot(x.std,cdf.std,type="l",xlab="x",ylab = "P(X<x) ")
+abline(v=qnorm(0.1,mean=0,sd=1),lwd=2,col="dodgerblue")
+abline(h = 0.1,col="slategray",lwd=2)
+text(-1.8,0.3,expression(Q[10]),col="dodgerblue")
+text(-3.3,0.2,expression(P(X < Q[10])==0.1),col="slategray")
+````
+
+
+b) 
+
+```{r}
+mu.std = 0
+sigma.std = 1
+x.std = seq(mu.std-4*sigma.std,mu.std+4*sigma.std,by=0.1)
+y.std = dnorm(x.std, mean = 0, sd = 1)
+plot(x.std,y.std,type="l")
+c1 = qnorm(0.05,0,1)
+abline(v = c1)
+```
+
+c) 
+```{r}
+mu.std = 0
+sigma.std = 1
+x.std = seq(mu.std-4*sigma.std,mu.std+4*sigma.std,by=0.1)
+y.std = dnorm(x.std, mean = 0, sd = 1)
+plot(x.std,y.std,type="l")
+c2 = qnorm(c(0.025,0.975),0,1)
+abline(v=c2)
+```
 
 ## Week 7 (13.04.2021)
 #### Exercise 16
