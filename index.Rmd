@@ -2143,45 +2143,40 @@ $1- 0.95^5  = 0.226$
 
 
 ## Week 6 (31.03.2021)
-### Exercise 13
 
-a) Make a plot of the probability density funciton of a Normal distribution. Choose values for the mean and variance. Next make a plot of the probability density function of the standard Normal distribution. What do you see? How are these plots different / similar?
+### Exercsie 13
+Use the stickleback data set. Calculate a confidence interval for the mean plate numbers for each genotype. Make a plot that shows the mean and the confidence interval of each genotype. Discuss which groups are different and which are not based on your analysis.  
+
+### Exercise 14
+
+a) Make a plot of the probability density function of a Normal distribution. Choose values for the mean and variance. Next make a plot of the probability density function of the standard Normal distribution. What do you see? How are these plots different / similar?
 
 b) Draw a random sample (sample size $n = 1000$) from the  Normal distribution that you chose in (a). Plot a histogram of that sample. 
 
-c) Combine the two plots in a single plot, i.e., superimpose the probaility density function on the histogram. 
+c) Combine the two plots in a single plot, i.e., superimpose the probability density function on the histogram. 
 
-d) Calculate the 10 percent quantile of the distribution. Store the value in a variable $Q10$. Then calcualte the proportion of numbers in your random sample from (b) that are smaller or equal to $Q10$. What do you find?
+d) Calculate the 10 percent quantile of the distribution. Store the value in a variable $Q10$. Then calculate the proportion of numbers in your random sample from (b) that are smaller or equal to $Q10$. What do you find?
 
-### Exercise 14
-a) Let $X$ be a random variable that follows the standrad normal distribution. Calculate the $p = 0.05,0.1,0.15, ..., 0.95$ percentiles of the standard Normal distribution. Store the values in a vector $Q$. Next calculate the cummulative distribution function for the values in $Q$. Store this in a variable $C$. Finally, plot $p$ against $Q$. What do you see? Can you explain?
 
-b) [advanced] Try to describe the finding from (a) using mathematical reasoning.   
+
 
 ### Exercise 15
+a) Let $X$ be a random variable that follows the standard normal distribution. Calculate the $p = 0.05,0.1,0.15, ..., 0.95$ percentiles of the standard Normal distribution. Store the values in a vector $Q$. Next calculate the cumulative distribution function for the values in $Q$. Store this in a variable $C$. Finally, plot $p$ against $Q$. What do you see? Can you explain?
 
-Plot the probability density function of a Normal distribution. 
+b) Plot the probability density function of a Normal distribution. Indicate the smallest 5 percent of the distribution. In other words: Let $X$ be  a normally distributed random variable. For which range $(-\infty,c_1]$ to we get $P(X \leq c_1) = 0.05$?
 
-a) Indicate the smallest 5 percent of the distribution. In other words: Let $X$ be  a normally distributed random variable. For which range $(-\infty,c_1]$ to we get $P(X \leq c_1) = 0.05$?
+c) Indicate the most extreme 5 percent of the distribution. In other words: For which range $(-\infty,c_2] \cup [c_2,\infty]$ to we get $P(X \leq c_2 \text{ or } X \ > c_2 ) = 0.05$?
 
-b) Indicate the most extreme 5 percent of the distribution. In other words: For which range $(-\infty,c_2] \cup [c_2,\infty]$ to we get $P(X \leq c_2 \text{ or } X \ > c_2 ) = 0.05$? [Hint: you can use the quantile function of $R$ and the symmetry of the Normal distribution to simplify things]
-
-
-
+[Hint: you can use the quantile function of $R$ and the symmetry of the Normal distribution to simplify things]
 
 
-## Week 7 (07.04.2021)
+
+## Week 7 (13.04.2021)
 #### Exercise 16
-a) Use the stickleback data set. Calculate a confidence interval for the mean plate numbers for each genotype. Make a plot that shows the mean and the confidence interval of each genotype. 
-
-b) Now perform a t.test for each comparison of plate numbers between genotypes. Compare the outcome of the t.tests with the results from the confidence intervals. What do you find?
+Use the stickleback data set. Perform a t.test for each comparison of plate numbers between genotypes. Compare the outcome of the t.tests with the results from the confidence intervals. What do you find?
 
 #### Exercise 17
 Use the data set "chap11e2Stalkies.csv" of using eye span measurements from a sample of stalk-eyed flies. Perform a one sample t-test by "hand", that is, clacualte the t statistic and the p-value in R, without using the function t.test (or a similar function). Test the null hypothesis that the mean eye span is equal to $9$. Use a significance threshold of 0.05 and a two-sided test. Then check your results with the function t.test. Make a plot to illustrate your analysis.
-
-
-
-
 
 
 ## Week 8 (21.04.2021)
