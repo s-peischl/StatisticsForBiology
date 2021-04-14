@@ -2347,7 +2347,7 @@ abline(v=c2)
 
 ## Week 7 (14.04.2021)
 
-#### Exercise 16
+### Exercise 16
 Use the stickleback data set. 
 
 a) Compare the distribution of plate numbers to a normal distribution with the same mean and variance. Do this for each genotpye separately. Is it justified do assume a normal distribution? 
@@ -2355,7 +2355,7 @@ a) Compare the distribution of plate numbers to a normal distribution with the s
 b) Use the function t.test for each genotype to obtain confidence intervals of the mean plate number for each genotype. Compare this with confidence intervals calculated by hand. Are the results different? If so, can you explain why? 
 
 
-#### Exercise 17
+### Exercise 17
 Assume that Z is a number randomly chosen from a standard normal distribution. Calculate each of the following probabilities :
 
 a) P(Z > 1.34)
