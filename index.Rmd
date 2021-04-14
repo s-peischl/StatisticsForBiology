@@ -2350,9 +2350,53 @@ abline(v=c2)
 ### Exercise 16
 Use the stickleback data set. 
 
-a) Compare the distribution of plate numbers to a normal distribution with the same mean and variance. Do this for each genotpye separately. Is it justified do assume a normal distribution? 
+a) Compare the distribution of plate numbers to a normal distribution with the same mean and variance. Do this for each genotype separately. Is it justified do assume a normal distribution? 
 
-b) Use the function t.test for each genotype to obtain confidence intervals of the mean plate number for each genotype. Compare this with confidence intervals calculated by hand. Are the results different? If so, can you explain why? 
+#### Solution
+```{r}
+stickleback <- read.csv(url("http://www.zoology.ubc.ca/~schluter/WhitlockSchluter/wp-content/data/chapter03/chap03e3SticklebackPlates.csv"))
+```
+
+I show the calcualtions for one example using base R functions:
+```{r}
+plates.mm = stickleback$plates[stickleback$genotype=="mm"]
+mean.mm = mean(plates.mm)
+sd.mm = sd(plates.mm)
+
+z.mm = (plates.mm - mean.mm)/(sd.mm) 
+
+hist(z.mm,xlim=c(-10,10),freq=F)
+x.vals = seq(-10,10,by=0.01)
+y.vals  =dnorm(x.vals,0,1)
+lines(x.vals,y.vals)
+```
+
+
+
+b) Use the function t.test for each genotype to obtain confidence intervals of the mean plate number for each genotype. Compare this with confidence intervals calculated by hand using the 2 SE approxiamtion. Are the results different? If so, can you explain why? 
+
+
+#### Solution
+
+t-test confidence interval:
+```{r}
+t.test(plates.mm)
+```
+
+2 SE approximation:
+
+```{r}
+n = length(plates.mm)
+CI = c(mean.mm-2*sd.mm/(sqrt(n)),mean.mm+2*sd.mm/(sqrt(n)))
+print(CI)
+```
+We find very little differences between the two CIs. The CI using the t-test function is a bit narrower, reflecting that for the given sample size the percentiles of the t-distribution are smaller than the value of 2 used in the approximation:
+
+```{r}
+qt(0.975,df = n-1)
+```
+
+
 
 
 ### Exercise 17
@@ -2376,23 +2420,161 @@ h) P(-1.57 < Z < - 0.32)
 
 Make a sketch for each case and calculate the values using R functions.
 
+### Solution
+
+Remember that pnorm(x) = P(Z < x) and that 1 - pnorm(x) = P(Z > x).
+
+a) P(Z > 1.34)
+
+```{r}
+x = seq(-4,4,by=0.01)
+y = dnorm(x,0,1)
+plot(x,y,type="l",xlab="Z",ylab="density")
+abline(v = 1.34,col = "red")
+text(2.3,0.05,"P(Z > 1.34)")
+prob = 1 - pnorm(1.34,0,1)
+prob
+```
+
+b) P(Z < 1.34)
+
+```{r}
+plot(x,y,type="l",xlab="Z",ylab="density")
+abline(v = 1.34,col = "red")
+text(0,0.05,"P(Z < 1.34)")
+prob = pnorm(1.34,0,1)
+prob
+```
+
+c) P(Z < 2.15)
+
+```{r}
+plot(x,y,type="l",xlab="Z",ylab="density")
+abline(v = 2.15,col = "red")
+text(0,0.05,"P(Z < 2.15)")
+prob = pnorm(2.15,0,1)
+prob
+```
+
+d) P(Z < 1.2)
+
+```{r}
+plot(x,y,type="l",xlab="Z",ylab="density")
+abline(v = 1.2,col = "red")
+text(0,0.05,"P(Z < 1.2)")
+prob = pnorm(1.2,0,1)
+prob
+```
+
+e) P(0.52 < Z < 2.34)
+
+```{r}
+plot(x,y,type="l",xlab="Z",ylab="density")
+abline(v = 2.34,col = "red")
+abline(v = 0.52,col = "red")
+
+text(1.5,0.3,"P(0.52 < 
+Z < 
+2.34)")
+prob = pnorm(2.34,0,1) - pnorm(0.52,0,1)
+prob
+```
+
+f) P(-2.34 < Z < -0.52)
+
+```{r}
+plot(x,y,type="l",xlab="Z",ylab="density")
+abline(v = -2.34,col = "red")
+abline(v = -0.52,col = "red")
+
+text(-1.5,0.3,"P(0.52 < 
+Z < 
+2.34)")
+prob = pnorm(-0.52,0,1) - pnorm(-2.34,0,1) 
+prob
+```
+
+g) P(Z < -0.93)
+
+```{r}
+plot(x,y,type="l",xlab="Z",ylab="density")
+abline(v = -0.93,col = "red")
+
+text(-2,0.3,"P(Z < -0.93)")
+prob = pnorm(-0.93,0,1) 
+prob
+```
+
+h) P(-1.57 < Z < - 0.32)
+
+```{r}
+plot(x,y,type="l",xlab="Z",ylab="density")
+abline(v = -1.57,col = "red")
+abline(v = - 0.32,col = "red")
+
+text(-1.5,0.3,"P(-1.57 < 
+Z < 
+- 0.32)")
+prob = pnorm(-0.32,0,1) - pnorm(-1.57,0,1) 
+prob
+```
+
+
+
 
 ### Exercise 18 
 Use the data set "chap11e2Stalkies.csv" of  eye span measurements from a sample of stalk-eyed flies: 
 
 
 ```{r} 
- read.csv(url("http://www.zoology.ubc.ca/~schluter/WhitlockSchluter/wp-content/data/chapter11/chap11e2Stalkies.csv")) 
+stalkie  = read.csv(url("http://www.zoology.ubc.ca/~schluter/WhitlockSchluter/wp-content/data/chapter11/chap11e2Stalkies.csv")) 
 ```
 
 a) Assume that data is normally distributed.  Transform the data into a standard normally distributed data set. Compare the distribution to a standard normal distribution.
 
+### Solution
+```{r}
+mean.stalk = mean(stalkie$eyespan)
+sd.stalk = sd(stalkie$eyespan)
+
+z = (stalkie$eyespan - mean.stalk)/sd.stalk
+
+hist(z,freq = F,xlim=c(-3,3))
+x.val = seq(-3,3,by=0.01)
+y.val = dnorm(x.val,0,1)
+lines(x.val,y.val)
+```
+
 b) Assume that the true mean of the distribution of eye spans is 9 mm. Calculate the t-statistic from the lecture by hand. Check your results using the function t-test. 
+
+```{r}
+n = length(stalkie$eyespan)
+SE = sd.stalk/sqrt(n)
+mu = 9
+t = (mean.stalk-mu)/SE
+
+t.test(stalkie$eyespan-9)
+```
+
 
 c) Make a sketch showing the standard normal distribution (or better the student t-distribution) and your observed t-statistics. 
 
+```{r}
+y.val = dt(x.val,df = n-1)
+plot(x.val,y.val,type = "l")
+abline(v = t)
+```
+
+
 d) Can you calculate the probability that you observer a more extreme results than the t-statistic you observed. (That is, the probability P( T > abs(t)) ) + P (T < -abs(t)), where T is a standard normally distributed (or better: use the student t-distribution) random variable and abs(t) is the absolute value of the test statistic you calculated. 
 
+
+#### Solution 
+We use the function pt which gives us the cumulative distribution function of the t-distribution. The degrees of freed, are given by sample size - 1. The cumulative distribution function gives us the probability P(T<t), so we can calcualte:
+```{r}
+prob.t = pt(t,df=n-1)+(1-pt(-t,df=n-1))
+print(prob.t)
+```
 
 
 
