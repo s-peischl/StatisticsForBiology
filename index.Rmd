@@ -197,7 +197,7 @@ By now you should see that R is very versatile and can be used for much more tha
 ## Loading datasets
 How to we feed R our data? Of course, we can just type it into the console, a bit like in the previous base R graphics example. For large data sets (or rather anythign that is not an eytremely small data set)  this is not practical. We want to load our data from a file, which makes our analysis easily reproducible if we share data and R scripts with someone. First we need to make sure R knows where our working directory is, using the function *setwd* (set working directory):
 ```{r}
-setwd("/Users/stephan/Dropbox/Teaching/StatisticsForBiology/")
+setwd("/Users/stephan/Dropbox/Teaching/BlogdownPages/StatisticsForBiology")
 ```
 If you want to check your current working directory, you can do this with *getwd()*.
 
@@ -2344,406 +2344,454 @@ c2 = qnorm(c(0.025,0.975),0,1)
 abline(v=c2)
 ```
 
-## Week 7 (13.04.2021)
+
+## Week 7 (14.04.2021)
+
 #### Exercise 16
-Use the stickleback data set. Perform a t.test for each comparison of plate numbers between genotypes. Compare the outcome of the t.tests with the results from the confidence intervals. What do you find?
+Use the stickleback data set. 
+
+a) Compare the distribution of plate numbers to a normal distribution with the same mean and variance. Do this for each genotpye separately. Is it justified do assume a normal distribution? 
+
+b) Use the function t.test for each genotype to obtain confidence intervals of the mean plate number for each genotype. Compare this with confidence intervals calculated by hand. Are the results different? If so, can you explain why? 
+
 
 #### Exercise 17
-Use the data set "chap11e2Stalkies.csv" of using eye span measurements from a sample of stalk-eyed flies. Perform a one sample t-test by "hand", that is, clacualte the t statistic and the p-value in R, without using the function t.test (or a similar function). Test the null hypothesis that the mean eye span is equal to $9$. Use a significance threshold of 0.05 and a two-sided test. Then check your results with the function t.test. Make a plot to illustrate your analysis.
-
-
-## Week 8 (21.04.2021)
-Q & A and repetitorium
-
-### Student Question 1
-What are the $Z_{1 - alpha/2}$ in the formula for confidence intervalls ? What is the onfidence level? Why to you use  $1 - alpha/2$ and not $1 - alpha$?
-
-### Answer
-The formula can be found on page 159 of the lecture slides. In a nutshell, we use the width of the sampling distribution to tell us how wide our confidence intervall should be. For this we need to calcluate the quantiles of the sampling distribution. For large samples, this can be approximated by a normal distribution. This is where $Z_{1 - \alpha/2}$ value comes into play: it is the $1-\alpha/2$ percentile of the standard normal distribution. This means that it is the value that delimits the smallest $1-alpha/2$ of the distribution from the largest $\alpha/2$. We call $ 1- \alpha$ the confidence level. Note that $Z_{1 - \alpha/2} = - Z_{\alpha/2}$, thus we calcualte the range in which the $1-\alpha$ most common observation lie. The quantiles cannot be calcualted straightforwardly by hand, but R can solve this for us.  The following plot illustrates the quantiles.
-
-
-```{r}
-mu = 0
-sigma = 1 
-x = seq(mu-4*sigma,mu+4*sigma,by=0.1)
-y = dnorm(x, mean = mu, sd = sigma)
-
-plot(x,y,type="l",col="slategray",lwd=2,axes=F)
-axis(1)
-axis(2)
-
-alpha = 0.05
-
-
-z1 = qnorm(alpha/2,mu,sigma)
-z2 = qnorm(1-alpha/2,mu,sigma)
-
-abline(v=c(z1,z2))
-
-
-```
-
-
-
-
-### Student Question 2 
-Why do we always set y as the dnorm() of our x values when we plot a normal distribution?
-
-### Answer
-Because the function dnorm gives us the density function of a noraml distribution. You can try using the hepl function to see what a function does:
-
-```{r}
-?dnorm
-```
-
-### Student Question 3 
-I want to define e.g. "N" as the number of numeric values that are in column 3 of my dataframe. So if my dataframe has 9 numeric values in column 3, how can I set N = 9 without typing N = 9, but rather N = "number of numeric values in column 3 of my data frame"? This might be useful if a column has 345 values and I don't want to count them or without using the str() function to actually show me the number. I could only find one solution and that is using the function "length()"...but is there another way?
-
-### Answer
-The function *length()* is a good option. For dataframes, you can alos use *dim()* to get the number of rows and columns of the dataframe.
-
-### Student Question 4 
-Exercise 14: Could you explain again what you did in Exercise 14. Why did you need to put a vector of probabilities into the qnorm function and what does this qnorm function then do with this vector of probabilities in detail? And maybe also explain again why pnorm is the inverse of qnorm; also how this is shown with mathematical reasoning? This was not clear in the exercise lecture/podcast!
-
-### Answer
-
-If I pass a vector of probailites to the function qnorm, eg, qnorm(c(0.1,0.2,0.3)), it will return a vector with the 0.1, 0.2 and 0.3 percentile.
-
-```{r}
-qnorm(c(0.1,0.2,0.3))
-```
-
-The quantile function and the cumulative distirbution function are by defnition inverse functions. $Q_p$ is the p-percentile. Then $Q_p$ gives you the value such that $P(X < Q_p) = p$. Conversly, the cumulative distirbution function is given by $F(x) = P(X < x)$. Alternatively, one can see that the $Q_{F(x)}$ percentile satisifies $P(X < Q_{F(x)}) = F(x)$.
-
-
-### Student Question 5 
-Exercise 17: Why did you calculate the p-value wit this "-abs"-part? And is it also fine to just type "2*pt(test.statistic, df = 8)"?
-
-### Student Question 6
-Exercise 17: Why did you add the "-9" in the command of the t-test (t.test(stalkie$eyespan-9))? I don't get this "-9"-part when looking at the help page on R.
-
-### Answer
-
-By default the one sample t.test() function test the null hypotehsis $mu_0  = 0$. If i substract 9 from each data point i test the nul hypotehsis $mu_0 = 9$. A better way would be to specify the null hypothesis in the t.test function via the parameter mu:
-
-t.test(x, mu = 9)
-
-### Student Question 7
-Exercise 17: In the description of the exercise you write that we should use a threshold value alpha of 0.05. How do we include this in our calculations? Or if it is already a standard setting in one of our functions we used, how would you proceed if we had to choose a threshold value alpha of 0.1?
-
-### Answer
-
-The threshold value is only used for the interpreation part here. If the P-value is smaller than the threshold, you reject the null hypothesis. Otherwise you don't. 
-
-### Student Question 8
-And last but not least a more general question: How do you proceed when you have an exercise like e.g. exercise 16a)? I mean I did not get that I would have to make a dataframe of the means, lower and upper confidence intervalls and genotypes at first...Do you e.g. first imagine yourself how the plot should look like, or how do you know what to do? 
-
-### Answer
-There are many ways to do such plots and I usually proceed like this:
-
-- make a sketch of your plot (on paper or in your mind)
-- think what information you need for such a plot
-- find a function that you want to use and look up how it works
-- organize your data so that you can "feed" it to the functions you want to use
-
-For ggplot functions, this means organizing yur data in a data frame. In base R this is often not necessary. 
-
-
-
-
-
-## Week 9 (28.04.2021)
-### Exercise 18
-Perform a goodness-of-fit test for a data set with two categories. The data file is "chap08e4XGeneContent.csv" and can be found on ilias. Start by reading and inspecting the data. Each row is a different gene, with its occurrence on the X chromosome indicated.  Then test if the proportion of genes on the X chromsome (among all genes in the genome) is the same as the proportional length of the X chromosome measured in base pairs (among the whole genome). The relative size  of the X chromosome is given by $propX = 1055/20290$ and that of the other chromomoses is $propRest = 19235/20290$.
-
-a) Plot a frequency table showing the number of genes on the X and on other chromosomes.
-
-b) Perform a $\chi^2$ goodness-of-fit test to the proportional model.
-
-c) Draw a conclusion from your test.
-
-
-### Exercise 19
-Load the dataset chap08e1DayOfBirth.csv. Each row represents a single birth, and shows the day of the week of birth. Test the null hypothesis that birthdays are randomly distributed in the sense that each day occurs with the same probability. Visualize your results and give an interpretation of the test results. Can you come a up with a potential explanation? 
-
-
-
-
-
-
-
-## Week 10 (05.05.2021)
-### Exercise 20
 Assume that Z is a number randomly chosen from a standard normal distribution. Calculate each of the following probabilities :
+
 a) P(Z > 1.34)
+
 b) P(Z < 1.34)
+
 c) P(Z < 2.15)
+
 d) P(Z < 1.2)
+
 e) P(0.52 < Z < 2.34)
+
 f) P(-2.34 < Z < -0.52)
+
 g) P(Z < -0.93)
+
 h) P(-1.57 < Z < - 0.32)
 
 Make a sketch for each case and calculate the values using R functions.
 
 
-### Exercise 21
-As the world warms, the geographic ranges of species might shift toward cooler areas. Chen et al. (2011) studied recent changes  in the highest elevation of 31 taxa, in meters, over the late 1900s and early 2000s. Positive numbers indicate upward shifts in elevation, and negative numbers indicate shifts to lower elevations. The values are given by:
-```{r}
-data = c(58.9, 7.8, 108.6, 44.8, 11.1, 19.2, 61.9, 30.5, 12.7, 35.8, 7.4, 39.3, 24.0, 62.1, 24.3, 55.3, 32.7, 65.3, -19.3, 7.6, -5.2, -2.1, 31.0, 69.0, 88.6, 39.5, 20.7, 89.0, 69.0, 64.9, 64.8)
+### Exercise 18 
+Use the data set "chap11e2Stalkies.csv" of  eye span measurements from a sample of stalk-eyed flies: 
+
+
+```{r} 
+ read.csv(url("http://www.zoology.ubc.ca/~schluter/WhitlockSchluter/wp-content/data/chapter11/chap11e2Stalkies.csv")) 
 ```
 
-a) What is the sample size n?
+a) Assume that data is normally distributed.  Transform the data into a standard normally distributed data set. Compare the distribution to a standard normal distribution.
 
-b) What is the mean of these data points? Remember to give the units.
+b) Assume that the true mean of the distribution of eye spans is 9 mm. Calculate the t-statistic from the lecture by hand. Check your results using the function t-test. 
 
-c) What is the standard deviation of elevational range shift? (Give the units 
-as well.)
+c) Make a sketch showing the standard normal distribution (or better the student t-distribution) and your observed t-statistics. 
 
-d) What is the standard error of the mean for these data?
+d) Can you calculate the probability that you observer a more extreme results than the t-statistic you observed. (That is, the probability P( T > abs(t)) ) + P (T < -abs(t)), where T is a standard normally distributed (or better: use the student t-distribution) random variable and abs(t) is the absolute value of the test statistic you calculated. 
 
-e) How many degrees of freedom will be associated with a confidence interval and a one-sample t-test for the mean elevation shift?
 
-f) Calculate the 95 % confidence interval for the mean using these data.
 
-g) For the one-sample t-test, write down the appropriate null and alternative hypotheses.
 
-h) Calculate the test statistic t for this test.
 
-i) What assumptions are necessary to do a one-sample t-test?
 
-j) Calculate the P-value for this test as accurately as you can.
 
-k) Did species change their highest elevation on average?
+<!-- ## Week 8 (21.04.2021) -->
+<!-- Q & A and repetitorium -->
 
-### Exercise 22
-A four-year review at the provincial Hospital in Alotau, Papua New Guinea (Barss 1984), found that 1/40 of their hospital admissons were injuries due to falling coconuts. If coconuts weigh on average 3.2 kg, and the upper bound of the 95% CI is 3.5 kg, what is the lower bound of this CI? Assume a normal distribution of coconut weights.
+<!-- ### Student Question 1 -->
+<!-- What are the $Z_{1 - alpha/2}$ in the formula for confidence intervalls ? What is the onfidence level? Why to you use  $1 - alpha/2$ and not $1 - alpha$? -->
 
+<!-- ### Answer -->
+<!-- The formula can be found on page 159 of the lecture slides. In a nutshell, we use the width of the sampling distribution to tell us how wide our confidence interval should be. For this we need to calculate the quantiles of the sampling distribution. For large samples, this can be approximated by a normal distribution. This is where $Z_{1 - \alpha/2}$ value comes into play: it is the $1-\alpha/2$ percentile of the standard normal distribution. This means that it is the value that delimits the smallest $1-alpha/2$ of the distribution from the largest $\alpha/2$. We call $1- \alpha$ the confidence level. Note that $Z_{1 - \alpha/2} = - Z_{\alpha/2}$, thus we calculate the range in which the $1-\alpha$ most common observation lie. The quantiles cannot be calculated straightforwardly by hand, but R can solve this for us.  The following plot illustrates the quantiles. -->
 
 
+<!-- ```{r} -->
+<!-- mu = 0 -->
+<!-- sigma = 1  -->
+<!-- x = seq(mu-4*sigma,mu+4*sigma,by=0.1) -->
+<!-- y = dnorm(x, mean = mu, sd = sigma) -->
 
-## Week 11 (12.05.2021)
+<!-- plot(x,y,type="l",col="slategray",lwd=2,axes=F) -->
+<!-- axis(1) -->
+<!-- axis(2) -->
 
-### Exercise 23
-A forensic pathologist wants to know whether
-there is a difference between the rate of
-cooling of freshly killed bodies and those which
-were reheated, to determine whether you can
-detect an attempt to mislead a coroner about
-time of death. He tested several mice for their
-"cooling constant" both when the mouse was
-originally killed and then after the mouse was
-re-heated. The data can be found in the file "mouse_cooling.csv" on ilias.
-Test whether there is any difference in the cooling constants between freshly killed and reheated corpses. Check whether you can use a t-test and justify your decision to use it. 
-If a t-test is notjsutified, try to use an alternative strategy (e.g., non-parametric test). 
+<!-- alpha = 0.05 -->
 
-### Exercise 24
-For each of the following scenarios, identify the best statistical test to use and state the null hypothesis. (Please note, do not give the answer to the specific question, but simply state the best test to use and the null hypothesis for the scenario.)
 
-a. Asking whether stickleback fish occur with equal probability through all areas of a pond. We have raken random samples at various locations of the pond (all the same size) and have recorded the number of fish in each sampled location.
+<!-- z1 = qnorm(alpha/2,mu,sigma) -->
+<!-- z2 = qnorm(1-alpha/2,mu,sigma) -->
 
-b. We want to know which of two tumor treatments showed better results. We recorded the change in tumor size during the treatment in two groups of patients, group 1 was treated with drug A and group 2 with drug B.
+<!-- abline(v=c(z1,z2)) -->
 
-c. We want to know whether a new tumor treatment showed good results. We recorded the change in tumor size before and after the treatment in each patient.
 
-d. Asking whether the number of smokers in a list of cities is proportional to the population size of those cities.
+<!-- ``` -->
 
-e. Testing whether patients change in body mass during a hospital stay.
 
-### Exercise 25
-Health spending per person from a random sample of 20 countries is given in the file "healt_expenditure.csv" on ilias. We will use this sample to estimate the mean of log health expenditure, including a confidence interval.
 
-a) Visualize the frequency distribtuion using a
-histogram. Does the data deviate from a normal distribution? If yes, how?
 
-b) Why is a log transformation a good choice
-for these data?
+<!-- ### Student Question 2  -->
+<!-- Why do we always set y as the dnorm() of our x values when we plot a normal distribution? -->
 
-c) What is the sample size?
+<!-- ### Answer -->
+<!-- Because the function dnorm gives us the density function of a noraml distribution. You can try using the hepl function to see what a function does: -->
 
-d) Calcualte the natural logarithm of each
-data point.
+<!-- ```{r} -->
+<!-- ?dnorm -->
+<!-- ``` -->
 
-e) What is the mean log health expenditure?
+<!-- ### Student Question 3  -->
+<!-- I want to define e.g. "N" as the number of numeric values that are in column 3 of my dataframe. So if my dataframe has 9 numeric values in column 3, how can I set N = 9 without typing N = 9, but rather N = "number of numeric values in column 3 of my data frame"? This might be useful if a column has 345 values and I don't want to count them or without using the str() function to actually show me the number. I could only find one solution and that is using the function "length()"...but is there another way? -->
 
-f) What is the standard deviation of the log
-health expenditure?
+<!-- ### Answer -->
+<!-- The function *length()* is a good option. For dataframes, you can alos use *dim()* to get the number of rows and columns of the dataframe. -->
 
-g) Calculate the standard error of the mean
-log health expenditure?
+<!-- ### Student Question 4  -->
+<!-- Exercise 14: Could you explain again what you did in Exercise 14. Why did you need to put a vector of probabilities into the qnorm function and what does this qnorm function then do with this vector of probabilities in detail? And maybe also explain again why pnorm is the inverse of qnorm; also how this is shown with mathematical reasoning? This was not clear in the exercise lecture/podcast! -->
 
-h) Calculate the 95% confidence interval of the
-mean log health expenditure.
+<!-- ### Answer -->
 
-i) What are the limits of this confidence interval expressed on
-original (non-log) scale?
+<!-- If I pass a vector of probailites to the function qnorm, eg, qnorm(c(0.1,0.2,0.3)), it will return a vector with the 0.1, 0.2 and 0.3 percentile. -->
 
+<!-- ```{r} -->
+<!-- qnorm(c(0.1,0.2,0.3)) -->
+<!-- ``` -->
 
-## Week 12 (19.05.2021)
+<!-- The quantile function and the cumulative distirbution function are by defnition inverse functions. $Q_p$ is the p-percentile. Then $Q_p$ gives you the value such that $P(X < Q_p) = p$. Conversly, the cumulative distirbution function is given by $F(x) = P(X < x)$. Alternatively, one can see that the $Q_{F(x)}$ percentile satisifies $P(X < Q_{F(x)}) = F(x)$. -->
 
-### Exercise 26
 
-Recycling paper has some obvious benefits, but it may have unintended
-consequences. For example, perhaps people are less careful about how much paper they use if they know their waste will be recycled. Catlin and Wang (2013) tested this idea by measuring paper use in two groups of experimental participants. Each person was placed in a room alone with scissors, paper and a trash can, and was told that he or she was testing the scissors. In the “recycling” group only, there was
-also a recycling bin in the room. The amount of paper used by each participants was measured in grams.
+<!-- ### Student Question 5  -->
+<!-- Exercise 17: Why did you calculate the p-value wit this "-abs"-part? And is it also fine to just type "2*pt(test.statistic, df = 8)"? -->
 
-No recycling bin: 4,4,4,4,4,4,4,5,8,9,9,9,9,12,12,13,14,14,14,14,15,23
-With recycling bin: 4,5,8,8,8,9,9,9,12,14,14,15,16,19,23,28,40,43,129,130
+<!-- ### Student Question 6 -->
+<!-- Exercise 17: Why did you add the "-9" in the command of the t-test (t.test(stalkie$eyespan-9))? I don't get this "-9"-part when looking at the help page on R. -->
 
-a) Make and examine a histogram of these data. Are the frequency distributions of the two groups similar in shape and spread?
+<!-- ### Answer -->
 
-b) Based on (a), discuss your options for testing a difference between the groups.
+<!-- By default the one sample t.test() function test the null hypotehsis $mu_0  = 0$. If i substract 9 from each data point i test the nul hypotehsis $mu_0 = 9$. A better way would be to specify the null hypothesis in the t.test function via the parameter mu: -->
 
-c) Apply a Mann-Whitney U-test (R function _wilcox.test_). State the null and alternative hypotheses.
+<!-- t.test(x, mu = 9) -->
 
-d) Calculate the P-value as accurately as you can and interpret the result.
+<!-- ### Student Question 7 -->
+<!-- Exercise 17: In the description of the exercise you write that we should use a threshold value alpha of 0.05. How do we include this in our calculations? Or if it is already a standard setting in one of our functions we used, how would you proceed if we had to choose a threshold value alpha of 0.1? -->
 
-### Exercise 27
+<!-- ### Answer -->
 
-Use the data from exercise 26 and perform permutation test on the data. Visulaize the empirical sampling distribution and calcualte a P-value. Compare it to the results fromthe exercise 26. Hint: Use a for loop for the permutations. Alternatively, take a look at the package: _perm_ and the function _permTS_.
+<!-- The threshold value is only used for the interpreation part here. If the P-value is smaller than the threshold, you reject the null hypothesis. Otherwise you don't.  -->
 
+<!-- ### Student Question 8 -->
+<!-- And last but not least a more general question: How do you proceed when you have an exercise like e.g. exercise 16a)? I mean I did not get that I would have to make a dataframe of the means, lower and upper confidence intervalls and genotypes at first...Do you e.g. first imagine yourself how the plot should look like, or how do you know what to do?  -->
 
-## Week 13 (26.05.2021)
+<!-- ### Answer -->
+<!-- There are many ways to do such plots and I usually proceed like this: -->
 
-### Exercise 28
+<!-- - make a sketch of your plot (on paper or in your mind) -->
+<!-- - think what information you need for such a plot -->
+<!-- - find a function that you want to use and look up how it works -->
+<!-- - organize your data so that you can "feed" it to the functions you want to use -->
 
-A plant ecologist wishes to test the hypothesis that the height of species X depends on the type of soil it grows in. She measures the height of 3 plants in each of 4 plots representing 4 different soil types. The results are tabulated below. (Height in centimeters.) Do the results support her hypothesis, assuming normality and equality of
-variances?
+<!-- For ggplot functions, this means organizing yur data in a data frame. In base R this is often not necessary.  -->
 
-The data is
-```{r}
-height = c(15,25,17,10,9,21,23,13,4,19,20,16)
-plots = rep(c(1,2,3,4),each=3)
 
-data = data.frame(height = height,plots = as.factor(plots))
 
-ggplot(data,aes(x=plots, y=height,col=plots)) + 
-    geom_jitter(position=position_jitter(0.1))
-```
 
-#### Solution
-```{r}
-model = lm(height ~ plots, data = data)
-anova(model)
-```
-We cannot conclude that the different soild types affect the height. 
 
-### Exercise 29
-Test a linear correlation between inbreeding coefficients of litters of mated wolf pairs and the number of pups surviving their first winter.
+<!-- ## Week 9 (28.04.2021) -->
+<!-- ### Exercise 18 -->
+<!-- Perform a goodness-of-fit test for a data set with two categories. The data file is "chap08e4XGeneContent.csv" and can be found on ilias. Start by reading and inspecting the data. Each row is a different gene, with its occurrence on the X chromosome indicated.  Then test if the proportion of genes on the X chromsome (among all genes in the genome) is the same as the proportional length of the X chromosome measured in base pairs (among the whole genome). The relative size  of the X chromosome is given by $propX = 1055/20290$ and that of the other chromomoses is $propRest = 19235/20290$. -->
 
+<!-- a) Plot a frequency table showing the number of genes on the X and on other chromosomes. -->
 
-```{r}
-wolf <- read.csv(url("http://www.zoology.ubc.ca/~schluter/WhitlockSchluter/wp-content/data/chapter16/chap16e2InbreedingWolves.csv"))
-head(wolf)
-```
+<!-- b) Perform a $\chi^2$ goodness-of-fit test to the proportional model. -->
 
-a) Calculate the correlation coefficient.
+<!-- c) Draw a conclusion from your test. -->
 
-b) Perform a test of the null hyptohesis that $\rho = 0$. Do all calcualtions "by hand".
 
-c) Perform the test with the function _cor.test_.
+<!-- ### Exercise 19 -->
+<!-- Load the dataset chap08e1DayOfBirth.csv. Each row represents a single birth, and shows the day of the week of birth. Test the null hypothesis that birthdays are randomly distributed in the sense that each day occurs with the same probability. Visualize your results and give an interpretation of the test results. Can you come a up with a potential explanation?  -->
 
-#### Solution
-a) 
-```{r}
-ggplot(data= wolf, aes(x = nPups,y=inbreedCoef))+
-  geom_point()
 
-cor(wolf$inbreedCoef,wolf$nPups)
-```
 
-b)  and c)
-```{r}
-r = cor(wolf$inbreedCoef,wolf$nPups)
-n = length(wolf$inbreedCoef)
-SE = sqrt((1-r^2)/(n-2))
-t =  r/SE
-t
-p.value = 2*pt(t,df=n-2)
 
-cor.test(wolf$inbreedCoef,wolf$nPups)
-```
 
-### Exercise 30
-Test the null hypothesis of zero regression slope. The data are from an experiment investigating the effect of plant species diversity on the stability of plant biomass production.
 
-Data: 
-```{r}
-plant <- read.csv(url("http://www.zoology.ubc.ca/~schluter/WhitlockSchluter/wp-content/data/chapter17/chap17e3PlantDiversityAndStability.csv"))
-head(plant)
-```
 
-a) Inspect the data. Would a log trandform make sense? 
+<!-- ## Week 10 (05.05.2021) -->
+<!-- ### Exercise 20 -->
+<!-- Use the data set "chap11e2Stalkies.csv" of  eye span measurements from a sample of stalk-eyed flies: -->
 
 
-b) Make a scatter plot of the data. Add a regression line.
+<!-- ```{r} -->
+<!-- read.csv(url("http://www.zoology.ubc.ca/~schluter/WhitlockSchluter/wp-content/data/chapter11/chap11e2Stalkies.csv")) -->
+<!-- ``` -->
 
-c) Test if the null hypothesis of a slop of zero can be rejected. 
+<!-- a) Assume that data is normally distributed.  Transform the data into a standard normally distributed data set. Compare the distribution to a standard normal distribution. -->
 
-d) Write down the model with the estimated parameters.
+<!-- b) Assume that the true mean of the distribution of eye spans is 9 mm. Calculate the t-statistic from the lecture by hand. Check your results using    -->
+<!-- Perform the function t-test. Make a sketch with the standard normal distribution (or better the student t-distribution) and your observed t-statistics. Can you calculate the probability that you observer a more extreme results than the t-statistic you observed. (That is, the probability P( T > abs(t)) ) + P (T < -abs(t)), where T is a standard normally distributed (or better: use the student t-distribution) random variable and abs(t) is the absolute value of the test statistic you calculated. -->
 
 
-#### Solution
 
-a) Inspect the data. Would a log trandform make sense? 
-```{r}
-ggplot(data= plant,aes(x = nSpecies,y= biomassStability))+
-  geom_point()
-```
-We see that the variance is increasing with increasing number of species. A log transform seems appropriate. 
-```{r}
-ggplot(data= plant,aes(x = nSpecies,y= log(biomassStability)))+
-  geom_point()
-```
-Note the change in the y axis scale. The varaince is now much more similar across values for nSpecies. 
+<!-- ### Exercise 21 -->
+<!-- As the world warms, the geographic ranges of species might shift toward cooler areas. Chen et al. (2011) studied recent changes  in the highest elevation of 31 taxa, in meters, over the late 1900s and early 2000s. Positive numbers indicate upward shifts in elevation, and negative numbers indicate shifts to lower elevations. The values are given by: -->
+<!-- ```{r} -->
+<!-- data = c(58.9, 7.8, 108.6, 44.8, 11.1, 19.2, 61.9, 30.5, 12.7, 35.8, 7.4, 39.3, 24.0, 62.1, 24.3, 55.3, 32.7, 65.3, -19.3, 7.6, -5.2, -2.1, 31.0, 69.0, 88.6, 39.5, 20.7, 89.0, 69.0, 64.9, 64.8) -->
+<!-- ``` -->
 
-```{r}
-plant$logBiomass = log(plant$biomassStability)
-```
+<!-- a) What is the sample size n? -->
 
-b) Make a scatter plot of the data. Add a regression line.
+<!-- b) What is the mean of these data points? Remember to give the units. -->
 
-```{r}
-ggplot(data= plant,aes(x = nSpecies,y= logBiomass))+
-  geom_point() + 
-  geom_smooth(method = "lm")
+<!-- c) What is the standard deviation of elevational range shift? (Give the units  -->
+<!-- as well.) -->
 
-```
+<!-- d) What is the standard error of the mean for these data? -->
 
-c) Test if the null hypothesis of a slop of zero can be rejected. 
+<!-- e) How many degrees of freedom will be associated with a confidence interval and a one-sample t-test for the mean elevation shift? -->
 
-```{r}
-model =lm(logBiomass~nSpecies,data=plant)
-summary(model)
-```
-We find that the p value is extremely small, we therefore can reject the null hypothesis of $\beta_1 = 0$.
+<!-- f) Calculate the 95 % confidence interval for the mean using these data. -->
 
+<!-- g) For the one-sample t-test, write down the appropriate null and alternative hypotheses. -->
 
+<!-- h) Calculate the test statistic t for this test. -->
 
-d) Write down the model with the estimated parameters.
+<!-- i) What assumptions are necessary to do a one-sample t-test? -->
 
-```{r}
-beta0 = model$coefficients[1]
-beta1 = model$coefficients[2]
-sigma = sd(model$residuals)
-sigma
-```
+<!-- j) Calculate the P-value for this test as accurately as you can. -->
 
-our model is thus
+<!-- k) Did species change their highest elevation on average? -->
 
-$Y_i = \beta_0 + \beta_1 x_i + \epsilon_i$
+<!-- ### Exercise 22 -->
+<!-- A four-year review at the provincial Hospital in Alotau, Papua New Guinea (Barss 1984), found that 1/40 of their hospital admissons were injuries due to falling coconuts. If coconuts weigh on average 3.2 kg, and the upper bound of the 95% CI is 3.5 kg, what is the lower bound of this CI? Assume a normal distribution of coconut weights. -->
 
-with 
-```{r}
-beta0
-beta1
-````
-and
 
-$\epsilon$ is drawn from a normal distribution with mean 0 and standard deviation
-```{r}
-sigma
-````
+
+
+<!-- ## Week 11 (12.05.2021) -->
+
+<!-- ### Exercise 23 -->
+<!-- A forensic pathologist wants to know whether -->
+<!-- there is a difference between the rate of -->
+<!-- cooling of freshly killed bodies and those which -->
+<!-- were reheated, to determine whether you can -->
+<!-- detect an attempt to mislead a coroner about -->
+<!-- time of death. He tested several mice for their -->
+<!-- "cooling constant" both when the mouse was -->
+<!-- originally killed and then after the mouse was -->
+<!-- re-heated. The data can be found in the file "mouse_cooling.csv" on ilias. -->
+<!-- Test whether there is any difference in the cooling constants between freshly killed and reheated corpses. Check whether you can use a t-test and justify your decision to use it.  -->
+<!-- If a t-test is notjsutified, try to use an alternative strategy (e.g., non-parametric test).  -->
+
+<!-- ### Exercise 24 -->
+<!-- For each of the following scenarios, identify the best statistical test to use and state the null hypothesis. (Please note, do not give the answer to the specific question, but simply state the best test to use and the null hypothesis for the scenario.) -->
+
+<!-- a. Asking whether stickleback fish occur with equal probability through all areas of a pond. We have raken random samples at various locations of the pond (all the same size) and have recorded the number of fish in each sampled location. -->
+
+<!-- b. We want to know which of two tumor treatments showed better results. We recorded the change in tumor size during the treatment in two groups of patients, group 1 was treated with drug A and group 2 with drug B. -->
+
+<!-- c. We want to know whether a new tumor treatment showed good results. We recorded the change in tumor size before and after the treatment in each patient. -->
+
+<!-- d. Asking whether the number of smokers in a list of cities is proportional to the population size of those cities. -->
+
+<!-- e. Testing whether patients change in body mass during a hospital stay. -->
+
+<!-- ### Exercise 25 -->
+<!-- Health spending per person from a random sample of 20 countries is given in the file "healt_expenditure.csv" on ilias. We will use this sample to estimate the mean of log health expenditure, including a confidence interval. -->
+
+<!-- a) Visualize the frequency distribtuion using a -->
+<!-- histogram. Does the data deviate from a normal distribution? If yes, how? -->
+
+<!-- b) Why is a log transformation a good choice -->
+<!-- for these data? -->
+
+<!-- c) What is the sample size? -->
+
+<!-- d) Calcualte the natural logarithm of each -->
+<!-- data point. -->
+
+<!-- e) What is the mean log health expenditure? -->
+
+<!-- f) What is the standard deviation of the log -->
+<!-- health expenditure? -->
+
+<!-- g) Calculate the standard error of the mean -->
+<!-- log health expenditure? -->
+
+<!-- h) Calculate the 95% confidence interval of the -->
+<!-- mean log health expenditure. -->
+
+<!-- i) What are the limits of this confidence interval expressed on -->
+<!-- original (non-log) scale? -->
+
+
+<!-- ## Week 12 (19.05.2021) -->
+
+<!-- ### Exercise 26 -->
+
+<!-- Recycling paper has some obvious benefits, but it may have unintended -->
+<!-- consequences. For example, perhaps people are less careful about how much paper they use if they know their waste will be recycled. Catlin and Wang (2013) tested this idea by measuring paper use in two groups of experimental participants. Each person was placed in a room alone with scissors, paper and a trash can, and was told that he or she was testing the scissors. In the “recycling” group only, there was -->
+<!-- also a recycling bin in the room. The amount of paper used by each participants was measured in grams. -->
+
+<!-- No recycling bin: 4,4,4,4,4,4,4,5,8,9,9,9,9,12,12,13,14,14,14,14,15,23 -->
+<!-- With recycling bin: 4,5,8,8,8,9,9,9,12,14,14,15,16,19,23,28,40,43,129,130 -->
+
+<!-- a) Make and examine a histogram of these data. Are the frequency distributions of the two groups similar in shape and spread? -->
+
+<!-- b) Based on (a), discuss your options for testing a difference between the groups. -->
+
+<!-- c) Apply a Mann-Whitney U-test (R function _wilcox.test_). State the null and alternative hypotheses. -->
+
+<!-- d) Calculate the P-value as accurately as you can and interpret the result. -->
+
+<!-- ### Exercise 27 -->
+
+<!-- Use the data from exercise 26 and perform permutation test on the data. Visulaize the empirical sampling distribution and calcualte a P-value. Compare it to the results fromthe exercise 26. Hint: Use a for loop for the permutations. Alternatively, take a look at the package: _perm_ and the function _permTS_. -->
+
+
+<!-- ## Week 13 (26.05.2021) -->
+
+<!-- ### Exercise 28 -->
+
+<!-- A plant ecologist wishes to test the hypothesis that the height of species X depends on the type of soil it grows in. She measures the height of 3 plants in each of 4 plots representing 4 different soil types. The results are tabulated below. (Height in centimeters.) Do the results support her hypothesis, assuming normality and equality of -->
+<!-- variances? -->
+
+<!-- The data is -->
+<!-- ```{r} -->
+<!-- height = c(15,25,17,10,9,21,23,13,4,19,20,16) -->
+<!-- plots = rep(c(1,2,3,4),each=3) -->
+
+<!-- data = data.frame(height = height,plots = as.factor(plots)) -->
+
+<!-- ggplot(data,aes(x=plots, y=height,col=plots)) +  -->
+<!--     geom_jitter(position=position_jitter(0.1)) -->
+<!-- ``` -->
+
+<!-- #### Solution -->
+<!-- ```{r} -->
+<!-- model = lm(height ~ plots, data = data) -->
+<!-- anova(model) -->
+<!-- ``` -->
+<!-- We cannot conclude that the different soild types affect the height.  -->
+
+<!-- ### Exercise 29 -->
+<!-- Test a linear correlation between inbreeding coefficients of litters of mated wolf pairs and the number of pups surviving their first winter. -->
+
+
+<!-- ```{r} -->
+<!-- wolf <- read.csv(url("http://www.zoology.ubc.ca/~schluter/WhitlockSchluter/wp-content/data/chapter16/chap16e2InbreedingWolves.csv")) -->
+<!-- head(wolf) -->
+<!-- ``` -->
+
+<!-- a) Calculate the correlation coefficient. -->
+
+<!-- b) Perform a test of the null hyptohesis that $\rho = 0$. Do all calcualtions "by hand". -->
+
+<!-- c) Perform the test with the function _cor.test_. -->
+
+<!-- #### Solution -->
+<!-- a)  -->
+<!-- ```{r} -->
+<!-- ggplot(data= wolf, aes(x = nPups,y=inbreedCoef))+ -->
+<!--   geom_point() -->
+
+<!-- cor(wolf$inbreedCoef,wolf$nPups) -->
+<!-- ``` -->
+
+<!-- b)  and c) -->
+<!-- ```{r} -->
+<!-- r = cor(wolf$inbreedCoef,wolf$nPups) -->
+<!-- n = length(wolf$inbreedCoef) -->
+<!-- SE = sqrt((1-r^2)/(n-2)) -->
+<!-- t =  r/SE -->
+<!-- t -->
+<!-- p.value = 2*pt(t,df=n-2) -->
+
+<!-- cor.test(wolf$inbreedCoef,wolf$nPups) -->
+<!-- ``` -->
+
+<!-- ### Exercise 30 -->
+<!-- Test the null hypothesis of zero regression slope. The data are from an experiment investigating the effect of plant species diversity on the stability of plant biomass production. -->
+
+<!-- Data:  -->
+<!-- ```{r} -->
+<!-- plant <- read.csv(url("http://www.zoology.ubc.ca/~schluter/WhitlockSchluter/wp-content/data/chapter17/chap17e3PlantDiversityAndStability.csv")) -->
+<!-- head(plant) -->
+<!-- ``` -->
+
+<!-- a) Inspect the data. Would a log trandform make sense?  -->
+
+
+<!-- b) Make a scatter plot of the data. Add a regression line. -->
+
+<!-- c) Test if the null hypothesis of a slop of zero can be rejected.  -->
+
+<!-- d) Write down the model with the estimated parameters. -->
+
+
+<!-- #### Solution -->
+
+<!-- a) Inspect the data. Would a log trandform make sense?  -->
+<!-- ```{r} -->
+<!-- ggplot(data= plant,aes(x = nSpecies,y= biomassStability))+ -->
+<!--   geom_point() -->
+<!-- ``` -->
+<!-- We see that the variance is increasing with increasing number of species. A log transform seems appropriate.  -->
+<!-- ```{r} -->
+<!-- ggplot(data= plant,aes(x = nSpecies,y= log(biomassStability)))+ -->
+<!--   geom_point() -->
+<!-- ``` -->
+<!-- Note the change in the y axis scale. The varaince is now much more similar across values for nSpecies.  -->
+
+<!-- ```{r} -->
+<!-- plant$logBiomass = log(plant$biomassStability) -->
+<!-- ``` -->
+
+<!-- b) Make a scatter plot of the data. Add a regression line. -->
+
+<!-- ```{r} -->
+<!-- ggplot(data= plant,aes(x = nSpecies,y= logBiomass))+ -->
+<!--   geom_point() +  -->
+<!--   geom_smooth(method = "lm") -->
+
+<!-- ``` -->
+
+<!-- c) Test if the null hypothesis of a slop of zero can be rejected.  -->
+
+<!-- ```{r} -->
+<!-- model =lm(logBiomass~nSpecies,data=plant) -->
+<!-- summary(model) -->
+<!-- ``` -->
+<!-- We find that the p value is extremely small, we therefore can reject the null hypothesis of $\beta_1 = 0$. -->
+
+
+
+<!-- d) Write down the model with the estimated parameters. -->
+
+<!-- ```{r} -->
+<!-- beta0 = model$coefficients[1] -->
+<!-- beta1 = model$coefficients[2] -->
+<!-- sigma = sd(model$residuals) -->
+<!-- sigma -->
+<!-- ``` -->
+
+<!-- our model is thus -->
+
+<!-- $Y_i = \beta_0 + \beta_1 x_i + \epsilon_i$ -->
+
+<!-- with  -->
+<!-- ```{r} -->
+<!-- beta0 -->
+<!-- beta1 -->
+<!-- ```` -->
+<!-- and -->
+
+<!-- $\epsilon$ is drawn from a normal distribution with mean 0 and standard deviation -->
+<!-- ```{r} -->
+<!-- sigma -->
+<!-- ```` -->
 
 
 
