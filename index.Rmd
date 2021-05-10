@@ -3215,62 +3215,280 @@ data = c(58.9, 7.8, 108.6, 44.8, 11.1, 19.2, 61.9, 30.5, 12.7, 35.8, 7.4, 39.3, 
 j) Perform a one-sample t-test on this data set. Calculate the t-statistics and the P-value for this test as accurately as you can.
 
 
-<!-- The most accurate way is either to use t-test again -->
-<!-- ```{r} -->
-<!-- tt$p.value -->
-<!-- ``` -->
+The most accurate way is either to use t-test again
+```{r}
+tt$p.value
+```
 
-<!-- We can also do it by hand. For this it is good to make a sketch first: -->
-<!-- ```{r} -->
-<!-- # we first calcualte the null distirbution of our t statisitc -->
-<!-- x = seq(-8,8,by=0.01) -->
-<!-- y = dt(x,df = n-1) -->
+We can also do it by hand. For this it is good to make a sketch first:
+```{r}
+# we first calcualte the null distirbution of our t statisitc
+x = seq(-8,8,by=0.01)
+y = dt(x,df = n-1)
 
-<!-- # and plot it -->
-<!-- plot(x,y,type="l",xlab="t",ylab="density") -->
+# and plot it
+plot(x,y,type="l",xlab="t",ylab="density")
 
-<!-- # we add the observed t statistic -->
-<!-- abline(v = t.stat,col="slategray") -->
-<!-- ``` -->
-<!-- We see in the figure that the observed t statistic is far away from the mode of the t distribution. The p value should therefore be very small. To calculate it, we calculate the area under the curve to the right of the statistic, and double this value to account for extreme events on the left end of the distribution (we perform a two-sided test). The function pt would give us the area to the left of the test statistic, so we use 2*(1-pt(t.stat,df = n-1)) to get the p-value: -->
+# we add the observed t statistic
+abline(v = t.stat,col="slategray")
+```
+We see in the figure that the observed t statistic is far away from the mode of the t distribution. The p value should therefore be very small. To calculate it, we calculate the area under the curve to the right of the statistic, and double this value to account for extreme events on the left end of the distribution (we perform a two-sided test). The function pt would give us the area to the left of the test statistic, so we use 2*(1-pt(t.stat,df = n-1)) to get the p-value:
 
-<!-- ```{r} -->
-<!-- 2*(1-pt(t.stat,df = n-1)) -->
-<!-- ``` -->
+```{r}
+2*(1-pt(t.stat,df = n-1))
+```
 
 
 k) Interpret your results: Did species change their highest elevation on average? Use a significance threshold of $\alpha = 0.05$.
 
 
-<!-- We choose a significance threshold of 5 percent, i.e., we want to be 95 percent certain that we do not have a false positive. Th p-value is clearly smaller than that. Thus, the t-test  shows that there is a statistically significant change in the highest elevation. Because the p-value is so small, we can be very certain of this result as it would also hold at much lower significance thresholds.  -->
+We choose a significance threshold of 5 percent, i.e., we want to be 95 percent certain that we do not have a false positive. Th p-value is clearly smaller than that. Thus, the t-test  shows that there is a statistically significant change in the highest elevation. Because the p-value is so small, we can be very certain of this result as it would also hold at much lower significance thresholds.
 
 ### Exercise 22
 
 Use the stickleback data set yet again. Perform a t.test for each comparison of plate numbers between genotypes. Compare the outcome of the t.tests with the results from the confidence intervals. What do you find? 
 
-<!-- #### Solution  -->
+#### Solution
 
+```{r}
+t.test(stickleback$plates[stickleback$genotype=="mm"],
+       stickleback$plates[stickleback$genotype=="Mm"])
+
+t.test(stickleback$plates[stickleback$genotype=="mm"],
+       stickleback$plates[stickleback$genotype=="MM"])
+
+t.test(stickleback$plates[stickleback$genotype=="Mm"],
+       stickleback$plates[stickleback$genotype=="MM"])
+
+```
+
+We find that all t-test yield a significant result (small p values). This means that the null hypothesis of the mean of two groups being the same can be rejected for all comparisons.
+
+A shorter way is by using the function pairwise.t.tests. The First argument is the variable on which the t-test should be performed. The second parameters is the grouping factor: the categorical variable that separates the first argument into different groups.
+
+```{r}
+ pairwise.t.test(stickleback$plates,stickleback$genotype)
+```
+
+How does this finding relate to the confidence intervals? The confidence intervals are not overlapping, strongly suggesting that the means between groups are indeed different (at the 95 percent level). Thus, the t-test and the confidence interval indicate the same result.
+
+
+## Week 11 (11.05.2021)
+
+### Exercise 23
+A forensic pathologist wants to know whether
+there is a difference between the rate of
+cooling of freshly killed bodies and those which were reheated, to determine whether you can detect an attempt to mislead a coroner about time of death. He tested several mice for their "cooling constant" both when the mouse was originally killed and then after the mouse was re-heated. The data can be found in the file "mouse_cooling.csv" on ilias.
+Test whether there is any difference in the cooling constants between freshly killed and reheated corpses. Check whether you can use a t-test and justify your decision to use it. 
+If a t-test is not justified, try to use an alternative strategy (e.g., non-parametric test). 
+
+
+<!-- ### Solution  -->
 <!-- ```{r} -->
-<!-- t.test(stickleback$plates[stickleback$genotype=="mm"], -->
-<!--        stickleback$plates[stickleback$genotype=="Mm"]) -->
+<!-- library(tidyverse) -->
 
-<!-- t.test(stickleback$plates[stickleback$genotype=="mm"], -->
-<!--        stickleback$plates[stickleback$genotype=="MM"]) -->
+<!-- mouse_cooling <- read.csv("~/Dropbox/Teaching/StatisticsForBiology/mouse_cooling.csv") -->
 
-<!-- t.test(stickleback$plates[stickleback$genotype=="Mm"], -->
-<!--        stickleback$plates[stickleback$genotype=="MM"]) -->
+<!-- mouse_cooling = mutate(mouse_cooling,diff = freshly.killed - reheated)    -->
+<!-- ggplot(mouse_cooling) +  -->
+<!--   geom_histogram(aes(x = diff),bins=7) -->
 
 <!-- ``` -->
 
-<!-- We find that all t-test yield a significant result (small p values). This means that the null hyptohesis of the mean of two groups being the same can be rejected for all comparisons.  -->
-
-<!-- A shorter way is by using the function pairwise.t.tests. The First argument is the variable on which the t-test should be performed. The second parameters is the grouping factor: the categorical variable that separates the first argument into different groups. -->
-
+<!-- The data is clearly right skewed. This can also be seen with a QQ plot: -->
 <!-- ```{r} -->
-<!--  pairwise.t.test(stickleback$plates,stickleback$genotype) -->
+<!-- library(car) -->
+<!-- qqPlot(mouse_cooling$diff) -->
+<!-- ``` -->
+<!-- The null hypothesis is  -->
+
+<!-- $H_0:$ The true mean of the differences is $\mu_0 = 0$. -->
+
+<!-- We try the following log transformation: $x' = log(100,100+x)$. Note that we add a constant so that we do not get negative values and then use the base 100 logarithm. The new value of our null hpyothesis is then $\mu_0' = 1$ because $x' = log(100,100+x)$ and therefore $\mu_0' = log(100,100 + \mu_0) = 1$. -->
+<!-- ```{r} -->
+<!-- library(car) -->
+<!-- qqPlot(log(100,100+mouse_cooling$diff)) -->
+<!-- ggplot(mouse_cooling) +  -->
+<!--   geom_histogram(aes(x = log(100,100+diff)),bins=7) -->
+
+<!-- ``` -->
+<!-- This looks much better now and we perform a t-test on these data: -->
+<!-- ```{r} -->
+<!-- results = t.test(log(100,100+mouse_cooling$diff),mu = 1) -->
+<!-- results -->
+
 <!-- ``` -->
 
-<!-- How does this finding relate to the confidence intervals? The confidence intervals are not overlapping, strongly suggesting that the means between groups are indeed different (at the 95 percent level). Thus, the t-test and the confidence interval indicate the same result. -->
+<!-- An alternative would be the sign test: -->
+<!-- ```{r} -->
+<!-- k = sum(mouse_cooling$diff<0) -->
+<!-- results.sign = binom.test(k,n=19,p=0.5) -->
+<!-- results.sign -->
+<!-- ``` -->
+<!-- In both cases we find no significant devation from 0 in the differnces. We thus cannot reject the null hypothesis.  -->
+
+
+### Exercise 24
+For each of the following scenarios, identify the best statistical test to use and state the null hypothesis. (Please note, do not give the answer to the specific question, but simply state the best test to use and the null hypothesis for the scenario.)
+
+a. Asking whether stickleback fish occur with equal probability through all areas of a pond. We have raken random samples at various locations of the pond (all the same size) and have recorded the number of fish in each sampled location.
+
+b. We want to know which of two tumor treatments showed better results. We recorded the change in tumor size during the treatment in two groups of patients, group 1 was treated with drug A and group 2 with drug B.
+
+c. We want to know whether a new tumor treatment showed good results. We recorded the change in tumor size before and after the treatment in each patient.
+
+d. Asking whether the number of smokers in a list of cities is proportional to the population size of those cities.
+
+e. Testing whether patients change in body mass during a hospital stay.
+
+
+<!-- ### Solution -->
+<!-- For each of the following scenarios, identify the best statistical test to use and state the -->
+<!-- null hypothesis. (Please note, do not give the answer to the specific question, but simply -->
+<!-- state the best test to use and the null hypothesis for the scenario.) -->
+
+<!-- a. $\chi^2$ Goodness of fit test -->
+<!-- H0: Fish numbers per unit area follow a Poisson distribution. -->
+
+<!-- b. Two sample t-test or a non-parametric alternative. -->
+<!-- H0: There is no difference in the mean tumor size change in the two groups. -->
+
+<!-- c. One sample t-test or a non-parametric alternative. -->
+<!-- H0: Themean tumor size change durign the treatment is 0. -->
+
+<!-- d. $\chi^2$ Goodness-of-fit test -->
+<!-- H0: The number of smokers in a city is proportional to the number of people in that city. -->
+
+<!-- e. One-sample t-test -->
+<!-- H0: Mean change in patient body mass during hospital stay is zero. -->
+
+
+
+### Exercise 25
+Health spending per person from a randomsample of 20 countries is given in the file "healt_expenditure.csv" on ilias. We will use this sample to estimate the mean of log health expenditure, including a confidence interval.
+
+a) Visualize the frequency distribution using a histogram. Does the data deviate from a normal distribution? If yes, how?
+
+b) Why is a log transformation a good choice
+for these data?
+
+c) What is the sample size?
+
+d) Calcualte the natural logarithm of each
+data point.
+
+e) What is the mean log health expenditure?
+
+f) What is the standard deviation of the log
+health expenditure?
+
+g) Calculate the standard error of the mean
+log health expenditure?
+
+h) Calculate the 95% confidence interval of the
+mean log health expenditure.
+
+i) What are the limits of this confidence interval expressed on
+original (non-log) scale?
+
+
+
+<!-- ### Solution -->
+
+<!-- ```{r} -->
+<!-- health.expenditure <- read.csv("~/Dropbox/Teaching/StatisticsForBiology/health_expenditure.csv") -->
+<!-- ``` -->
+
+<!-- a) Visualize the frequency distribution using a -->
+<!-- histogram. Does the data deviate from a -->
+<!-- normal distribution? If yes, how? -->
+
+
+<!-- ```{r} -->
+<!-- ggplot(health.expenditure) + -->
+<!--   geom_histogram(aes(x = Per.capita.health.expenditure.in.2010),bins=10) -->
+<!-- ``` -->
+
+<!-- b) Why is a log transformation a good choice -->
+<!-- for these data? -->
+
+<!-- Becaue it is highly right skewed. -->
+
+<!-- c) What is the sample size? -->
+
+<!-- The sample size is -->
+<!-- ```{r} -->
+<!-- n = dim(health.expenditure)[1] -->
+<!-- n -->
+<!-- ``` -->
+
+
+<!-- d) Calcualte the natural logarithm of each -->
+<!-- data point. -->
+
+<!-- ```{r} -->
+<!-- data = mutate(health.expenditure,log.expend=  log(Per.capita.health.expenditure.in.2010)) -->
+<!-- data$log.expend -->
+<!-- ggplot(data) + -->
+<!--   geom_histogram(aes(x = log.expend),bins=4) -->
+
+<!-- qqPlot(data$log.expend) -->
+<!-- ``` -->
+
+<!-- e) What is the mean log health expenditure? -->
+
+<!-- The mean is -->
+<!-- ```{r} -->
+<!--  M =mean(data$log.expend) -->
+<!-- M -->
+<!-- ``` -->
+
+<!-- f) What is the standard deviation of the log -->
+<!-- health expenditure? -->
+
+<!-- The standard deviation is -->
+<!-- ```{r} -->
+<!-- SD = sd(data$log.expend) -->
+<!-- SD -->
+<!-- ``` -->
+
+<!-- g) Calculate the standard error of the mean -->
+<!-- log health expenditure? -->
+
+<!-- The standard error is -->
+<!-- ```{r} -->
+<!-- SE = SD/sqrt(n) -->
+<!-- SE -->
+<!-- ``` -->
+
+<!-- h) Calculate the 95% confidence interval of the -->
+<!-- mean log health expenditure. -->
+
+<!-- ```{r} -->
+<!-- CI.log = t.test(data$log.expend)$conf.int -->
+<!-- CI.log -->
+<!-- ``` -->
+
+<!-- or alterantively we can approximate it by: -->
+
+<!-- ```{r} -->
+<!-- CI.log.app = c(M-2*SE,M+2*SE) -->
+<!-- CI.log.app -->
+<!-- ``` -->
+
+<!-- i) What are the limits of this confidence interval expressed on -->
+<!-- original (non-log) scale? -->
+<!-- ```{r} -->
+<!-- CI.nonlog = exp(CI.log) -->
+<!-- CI.nonlog -->
+<!-- M.nonlog = mean(data$Per.capita.health.expenditure.in.2010) -->
+<!-- hist(data$Per.capita.health.expenditure.in.2010,col="firebrick",main="",breaks=10) -->
+<!-- abline(v = CI.nonlog,lty=2) -->
+<!-- abline(v = M.nonlog,lwd=2) -->
+<!-- ``` -->
+<!-- Note how asymmetric the back transformed CI is - this reflects the asymmetry of the data. Be careful however, as this is an approximation! (Note: mean of logarithm transformed data is not the same as the logarithm of the mean of the data). -->
+
+
 
 
 
