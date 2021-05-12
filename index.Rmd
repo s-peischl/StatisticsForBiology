@@ -3273,7 +3273,7 @@ A shorter way is by using the function pairwise.t.tests. The First argument is t
 How does this finding relate to the confidence intervals? The confidence intervals are not overlapping, strongly suggesting that the means between groups are indeed different (at the 95 percent level). Thus, the t-test and the confidence interval indicate the same result.
 
 
-## Week 11 (11.05.2021)
+## Week 11 (12.05.2021)
 
 ### Exercise 23
 A forensic pathologist wants to know whether
@@ -3494,3 +3494,5 @@ original (non-log) scale?
 
 
 
+
+### Exercise 26
