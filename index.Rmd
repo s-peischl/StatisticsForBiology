@@ -3283,49 +3283,49 @@ Test whether there is any difference in the cooling constants between freshly ki
 If a t-test is not justified, try to use an alternative strategy (e.g., non-parametric test). 
 
 
-<!-- ### Solution  -->
-<!-- ```{r} -->
-<!-- library(tidyverse) -->
+### Solution
+```{r}
+library(tidyverse)
 
-<!-- mouse_cooling <- read.csv("~/Dropbox/Teaching/StatisticsForBiology/mouse_cooling.csv") -->
+mouse_cooling <- read.csv("~/Dropbox/Teaching/StatisticsForBiology/mouse_cooling.csv")
 
-<!-- mouse_cooling = mutate(mouse_cooling,diff = freshly.killed - reheated)    -->
-<!-- ggplot(mouse_cooling) +  -->
-<!--   geom_histogram(aes(x = diff),bins=7) -->
+mouse_cooling = mutate(mouse_cooling,diff = freshly.killed - reheated)
+ggplot(mouse_cooling) +
+  geom_histogram(aes(x = diff),bins=7)
 
-<!-- ``` -->
+```
 
-<!-- The data is clearly right skewed. This can also be seen with a QQ plot: -->
-<!-- ```{r} -->
-<!-- library(car) -->
-<!-- qqPlot(mouse_cooling$diff) -->
-<!-- ``` -->
-<!-- The null hypothesis is  -->
+The data is clearly right skewed. This can also be seen with a QQ plot:
+```{r}
+library(car)
+qqPlot(mouse_cooling$diff)
+```
+The null hypothesis is
 
-<!-- $H_0:$ The true mean of the differences is $\mu_0 = 0$. -->
+$H_0:$ The true mean of the differences is $\mu_0 = 0$.
 
-<!-- We try the following log transformation: $x' = log(100,100+x)$. Note that we add a constant so that we do not get negative values and then use the base 100 logarithm. The new value of our null hpyothesis is then $\mu_0' = 1$ because $x' = log(100,100+x)$ and therefore $\mu_0' = log(100,100 + \mu_0) = 1$. -->
-<!-- ```{r} -->
-<!-- library(car) -->
-<!-- qqPlot(log(100,100+mouse_cooling$diff)) -->
-<!-- ggplot(mouse_cooling) +  -->
-<!--   geom_histogram(aes(x = log(100,100+diff)),bins=7) -->
+We try the following log transformation: $x' = log(100,100+x)$. Note that we add a constant so that we do not get negative values and then use the base 100 logarithm. The new value of our null hpyothesis is then $\mu_0' = 1$ because $x' = log(100,100+x)$ and therefore $\mu_0' = log(100,100 + \mu_0) = 1$.
+```{r}
+library(car)
+qqPlot(log(100,100+mouse_cooling$diff))
+ggplot(mouse_cooling) +
+  geom_histogram(aes(x = log(100,100+diff)),bins=7)
 
-<!-- ``` -->
-<!-- This looks much better now and we perform a t-test on these data: -->
-<!-- ```{r} -->
-<!-- results = t.test(log(100,100+mouse_cooling$diff),mu = 1) -->
-<!-- results -->
+```
+This looks much better now and we perform a t-test on these data:
+```{r}
+results = t.test(log(100,100+mouse_cooling$diff),mu = 1)
+results
 
-<!-- ``` -->
+```
 
-<!-- An alternative would be the sign test: -->
-<!-- ```{r} -->
-<!-- k = sum(mouse_cooling$diff<0) -->
-<!-- results.sign = binom.test(k,n=19,p=0.5) -->
-<!-- results.sign -->
-<!-- ``` -->
-<!-- In both cases we find no significant devation from 0 in the differnces. We thus cannot reject the null hypothesis.  -->
+An alternative would be the sign test:
+```{r}
+k = sum(mouse_cooling$diff<0)
+results.sign = binom.test(k,n=19,p=0.5)
+results.sign
+```
+In both cases we find no significant deviation from 0 in the differences. We thus cannot reject the null hypothesis.
 
 
 ### Exercise 24
@@ -3342,25 +3342,25 @@ d. Asking whether the number of smokers in a list of cities is proportional to t
 e. Testing whether patients change in body mass during a hospital stay.
 
 
-<!-- ### Solution -->
-<!-- For each of the following scenarios, identify the best statistical test to use and state the -->
-<!-- null hypothesis. (Please note, do not give the answer to the specific question, but simply -->
-<!-- state the best test to use and the null hypothesis for the scenario.) -->
+### Solution
+For each of the following scenarios, identify the best statistical test to use and state the
+null hypothesis. (Please note, do not give the answer to the specific question, but simply
+state the best test to use and the null hypothesis for the scenario.)
 
-<!-- a. $\chi^2$ Goodness of fit test -->
-<!-- H0: Fish numbers per unit area follow a Poisson distribution. -->
+a. $\chi^2$ Goodness of fit test
+H0: Fish numbers per unit area follow a Poisson distribution.
 
-<!-- b. Two sample t-test or a non-parametric alternative. -->
-<!-- H0: There is no difference in the mean tumor size change in the two groups. -->
+b. Two sample t-test or a non-parametric alternative.
+H0: There is no difference in the mean tumor size change in the two groups.
 
-<!-- c. One sample t-test or a non-parametric alternative. -->
-<!-- H0: Themean tumor size change durign the treatment is 0. -->
+c. One sample t-test or a non-parametric alternative.
+H0: Themean tumor size change durign the treatment is 0.
 
-<!-- d. $\chi^2$ Goodness-of-fit test -->
-<!-- H0: The number of smokers in a city is proportional to the number of people in that city. -->
+d. $\chi^2$ Goodness-of-fit test
+H0: The number of smokers in a city is proportional to the number of people in that city.
 
-<!-- e. One-sample t-test -->
-<!-- H0: Mean change in patient body mass during hospital stay is zero. -->
+e. One-sample t-test
+H0: Mean change in patient body mass during hospital stay is zero.
 
 
 
@@ -3374,7 +3374,7 @@ for these data?
 
 c) What is the sample size?
 
-d) Calcualte the natural logarithm of each
+d) Calculate the natural logarithm of each
 data point.
 
 e) What is the mean log health expenditure?
@@ -3393,106 +3393,104 @@ original (non-log) scale?
 
 
 
-<!-- ### Solution -->
+### Solution
 
-<!-- ```{r} -->
-<!-- health.expenditure <- read.csv("~/Dropbox/Teaching/StatisticsForBiology/health_expenditure.csv") -->
-<!-- ``` -->
+```{r}
+health.expenditure <- read.csv("~/Dropbox/Teaching/StatisticsForBiology/health_expenditure.csv")
+```
 
-<!-- a) Visualize the frequency distribution using a -->
-<!-- histogram. Does the data deviate from a -->
-<!-- normal distribution? If yes, how? -->
-
-
-<!-- ```{r} -->
-<!-- ggplot(health.expenditure) + -->
-<!--   geom_histogram(aes(x = Per.capita.health.expenditure.in.2010),bins=10) -->
-<!-- ``` -->
-
-<!-- b) Why is a log transformation a good choice -->
-<!-- for these data? -->
-
-<!-- Becaue it is highly right skewed. -->
-
-<!-- c) What is the sample size? -->
-
-<!-- The sample size is -->
-<!-- ```{r} -->
-<!-- n = dim(health.expenditure)[1] -->
-<!-- n -->
-<!-- ``` -->
+a) Visualize the frequency distribution using a
+histogram. Does the data deviate from a
+normal distribution? If yes, how?
 
 
-<!-- d) Calcualte the natural logarithm of each -->
-<!-- data point. -->
+```{r}
+ggplot(health.expenditure) +
+  geom_histogram(aes(x = Per.capita.health.expenditure.in.2010),bins=10)
+```
 
-<!-- ```{r} -->
-<!-- data = mutate(health.expenditure,log.expend=  log(Per.capita.health.expenditure.in.2010)) -->
-<!-- data$log.expend -->
-<!-- ggplot(data) + -->
-<!--   geom_histogram(aes(x = log.expend),bins=4) -->
+b) Why is a log transformation a good choice
+for these data?
 
-<!-- qqPlot(data$log.expend) -->
-<!-- ``` -->
+Becaue it is highly right skewed.
 
-<!-- e) What is the mean log health expenditure? -->
+c) What is the sample size?
 
-<!-- The mean is -->
-<!-- ```{r} -->
-<!--  M =mean(data$log.expend) -->
-<!-- M -->
-<!-- ``` -->
-
-<!-- f) What is the standard deviation of the log -->
-<!-- health expenditure? -->
-
-<!-- The standard deviation is -->
-<!-- ```{r} -->
-<!-- SD = sd(data$log.expend) -->
-<!-- SD -->
-<!-- ``` -->
-
-<!-- g) Calculate the standard error of the mean -->
-<!-- log health expenditure? -->
-
-<!-- The standard error is -->
-<!-- ```{r} -->
-<!-- SE = SD/sqrt(n) -->
-<!-- SE -->
-<!-- ``` -->
-
-<!-- h) Calculate the 95% confidence interval of the -->
-<!-- mean log health expenditure. -->
-
-<!-- ```{r} -->
-<!-- CI.log = t.test(data$log.expend)$conf.int -->
-<!-- CI.log -->
-<!-- ``` -->
-
-<!-- or alterantively we can approximate it by: -->
-
-<!-- ```{r} -->
-<!-- CI.log.app = c(M-2*SE,M+2*SE) -->
-<!-- CI.log.app -->
-<!-- ``` -->
-
-<!-- i) What are the limits of this confidence interval expressed on -->
-<!-- original (non-log) scale? -->
-<!-- ```{r} -->
-<!-- CI.nonlog = exp(CI.log) -->
-<!-- CI.nonlog -->
-<!-- M.nonlog = mean(data$Per.capita.health.expenditure.in.2010) -->
-<!-- hist(data$Per.capita.health.expenditure.in.2010,col="firebrick",main="",breaks=10) -->
-<!-- abline(v = CI.nonlog,lty=2) -->
-<!-- abline(v = M.nonlog,lwd=2) -->
-<!-- ``` -->
-<!-- Note how asymmetric the back transformed CI is - this reflects the asymmetry of the data. Be careful however, as this is an approximation! (Note: mean of logarithm transformed data is not the same as the logarithm of the mean of the data). -->
+The sample size is
+```{r}
+n = dim(health.expenditure)[1]
+n
+```
 
 
+d) Calcualte the natural logarithm of each
+data point.
+
+```{r}
+data = mutate(health.expenditure,log.expend=  log(Per.capita.health.expenditure.in.2010))
+data$log.expend
+ggplot(data) +
+  geom_histogram(aes(x = log.expend),bins=4)
+
+qqPlot(data$log.expend)
+```
+
+e) What is the mean log health expenditure?
+
+The mean is
+```{r}
+ M =mean(data$log.expend)
+M
+```
+
+f) What is the standard deviation of the log
+health expenditure?
+
+The standard deviation is
+```{r}
+SD = sd(data$log.expend)
+SD
+```
+
+g) Calculate the standard error of the mean
+log health expenditure?
+
+The standard error is
+```{r}
+SE = SD/sqrt(n)
+SE
+```
+
+h) Calculate the 95% confidence interval of the
+mean log health expenditure.
+
+```{r}
+CI.log = t.test(data$log.expend)$conf.int
+CI.log
+```
+
+or alterantively we can approximate it by:
+
+```{r}
+CI.log.app = c(M-2*SE,M+2*SE)
+CI.log.app
+```
+
+i) What are the limits of this confidence interval expressed on
+original (non-log) scale?
+```{r}
+CI.nonlog = exp(CI.log)
+CI.nonlog
+M.nonlog = mean(data$Per.capita.health.expenditure.in.2010)
+hist(data$Per.capita.health.expenditure.in.2010,col="firebrick",main="",breaks=10)
+abline(v = CI.nonlog,lty=2)
+abline(v = M.nonlog,lwd=2)
+```
+Note how asymmetric the back transformed CI is - this reflects the asymmetry of the data. Be careful however, as this is an approximation! (Note: mean of logarithm transformed data is not the same as the logarithm of the mean of the data).
 
 
 
 
 
 
-### Exercise 26
+
