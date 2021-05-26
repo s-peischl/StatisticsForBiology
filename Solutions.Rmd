@@ -230,6 +230,9 @@ ggplot(data = genes) +
 
 ggplot(data = genes) + 
   geom_density(mapping = aes(x = geneLength),color="black",fill="darkred") + 
+  xlab("Länge der Gene") +
+  ylab("Häufigkeit") +
+  scale_x_log10() +
   theme_classic()
 
 ggplot(data = genes) + 
@@ -504,13 +507,13 @@ c)	If you picked up one snake and it didn't bite you, what is the probability th
           $$P(defanged  \mid no  \,  bite) = (1*3/8 )/ (0.5) = 0.75 = 75\%.$$
             
             
-            ### Exercise 12
+### Exercise 12
             
-            a)	What is the probability that all five researchers have calculated an interval that includes the true  value of the parameter?
+a)	What is the probability that all five researchers have calculated an interval that includes the true  value of the parameter?
   
   $0.95^5 =  0.774$
     
-    b)	What is the probability that at least one does not include the true parameter value. 
+b)	What is the probability that at least one does not include the true parameter value. 
 
 $1- 0.95^5  = 0.226$
   
@@ -521,7 +524,7 @@ $1- 0.95^5  = 0.226$
   
   a) Make a plot of the probability density funciton of a Normal distribution. Choose values for the mean and variance. Next make a plot of the probability density function of the standard Normal distribution. What do you see? How are these plots different / similar?
   
-  #### Solution
+#### Solution
   
   We first choose values for $\mu$ and $\sigma$ (you can chose any values you want)
 ```{r}
@@ -663,6 +666,7 @@ rug(random.sample[random.sample < c2[1] | random.sample > c2[2]],col="red")
 We see that roughly 5 eprcent fall into the exterme tails of the distirbution. this is snesible, becasue we have defined the extreme part here as the range $(-\infty,c_2] \cup [c_2,\infty]$, where $-c_2$ ($c_2$) is the 2.5 (97.5) percentile of the distribution. 
 
 
+
 ## Week 7 (08.04.2020)
 
 ### Exercise 16
@@ -671,10 +675,10 @@ a) Use the stickleback data set. Calculate a confidence interval for the mean pl
 b) Now perform a t.test for each comparison of plate numbers between genotypes. Compare the outcome of the t.tests with the results from the confidence intervals. What do you find?
   
   
-  ### Solution 
+### Solution 
   Part a)
 
-We first calcualte the mean for each genotype:
+We first calculate the mean for each genotype:
 
 ```{r}
 
@@ -823,7 +827,7 @@ kableExtra::kable(dat)
 
 ## Week 9 (29.04.2020)
 ### Exercise 18 
-Perform a goodness-of-fit test for a data set with two categories. The data file is "chap08e4XGeneContent.csv" and can be found on ilias. Start by reading and inspecting the data. Each row is a different gene, with its occurrence on the X chromosome indicated.  Then test if the proportion of genes on the X chromsome (among all genes in the genome) is the same as the proportional length of the X chromosome measured in base pairs (among the whole genome). The relative size  of the X chromosome is given by $propX = 1055/20290$ and that of the other chromomoses is $propRest = 19235/20290$.
+Perform a goodness-of-fit test for a data set with two categories. The data file is "chap08e4XGeneContent.csv" and can be found on ilias. Start by reading and inspecting the data. Each row is a different gene, with its occurrence on the X chromosome indicated.  Then test if the proportion of genes on the X chromosome (among all genes in the genome) is the same as the proportional length of the X chromosome measured in base pairs (among the whole genome). The relative size  of the X chromosome is given by $propX = 1055/20290$ and that of the other chromosomes is $propRest = 19235/20290$.
 
 a) Plot a frequency table showing the number of genes on the X and on other chromosomes.
 
@@ -868,7 +872,7 @@ $H_A:$ The proportion of genes on the X-chromomose is not the same as the propor
 
 
 ### Exercise 19
-Load the dataset chap08e1DayOfBirth.csv. Each row represents a single birth, and shows the day of the week of birth. Test the null hypothesis that birthdays are randomly distributed in the sense that each day occurs with a probaility of $1/7$. Visualize your results and give an interpretation of the test results. Can you come a up with a potential explanation? 
+Load the dataset chap08e1DayOfBirth.csv. Each row represents a single birth, and shows the day of the week of birth. Test the null hypothesis that birthdays are randomly distributed in the sense that each day occurs with a probability of $1/7$. Visualize your results and give an interpretation of the test results. Can you come a up with a potential explanation? 
 
 
 ### Solution
@@ -1197,7 +1201,7 @@ time of death. He tested several mice for their
 originally killed and then after the mouse was
 re-heated. The data can be found in the file "mouse_cooling.csv" on ilias.
 Test whether there is any difference in the cooling constants between freshly killed and reheated corpses. Check whether you can use a t-test and justify your decision to use it. 
-If a t-test is notjsutified, try to use an alternative strategy (e.g., non-parametric test). 
+If a t-test is not justified, try to use an alternative strategy (e.g., non-parametric test). 
 
 
 ### Solution 
@@ -1284,8 +1288,7 @@ H0: Mean change in patient body mass during hospital stay is zero.
 ### Exercise 25
 Health spending per person from a randomsample of 20 countries is given in the file "healt_expenditure.csv" on ilias. We will use this sample to estimate the mean of log health expenditure, including a confidence interval.
 
-a) Visualize the frequency distribtuion using a
-histogram. Does the data deviate from a normal distribution? If yes, how?
+a) Visualize the frequency distribution using a histogram. Does the data deviate from a normal distribution? If yes, how?
 
 b) Why is a log transformation a good choice
 for these data?
@@ -1317,7 +1320,7 @@ original (non-log) scale?
 health.expenditure <- read.csv("~/Dropbox/Teaching/StatisticsForBiology/health_expenditure.csv")
 ```
 
-a) Visualize the frequency distribtuion using a
+a) Visualize the frequency distribution using a
 histogram. Does the data deviate from a
 normal distribution? If yes, how?
 
@@ -1405,6 +1408,7 @@ abline(v = CI.nonlog,lty=2)
 abline(v = M.nonlog,lwd=2)
 ```
 Note how asymmetric the back transformed CI is - this reflects the asymmetry of the data. Be careful however, as this is an approximation! (Note: mean of logarithm transformed data is not the same as the logarithm of the mean of the data).
+
 
 
 
