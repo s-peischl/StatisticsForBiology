@@ -3757,7 +3757,10 @@ Note that these p-values are automatically adjusted for multiple testing!
 d) The results do not confirm the original study's claim that light treatment behind the knee leads to changes  phase shift  melatonin production. Experimental design is important, as is replication of scientific findings. In general it is advised to use a double blind study setup, to make sure there are no biases introduced by the experimenter as well as the subjects of the study. 
 
 
-## Week 14 (02.06.2021) ### Exercise 29 Load the following data set: 
+## Week 14 (02.06.2021) 
+
+### Exercise 29 Load the following data set: 
+
 ```{r} 
 lion <- read.csv(url("http://www.zoology.ubc.ca/~schluter/WhitlockSchluter/wp-content/data/chapter17/chap17e1LionNoses.csv"))
 head(lion) 
@@ -3781,6 +3784,7 @@ f) Test if the slope of the model significantly different from 0.
 
 g) Plot the data and add a regression line and a confidence band for the
 regression line.
+
 
 <!-- #### Solution -->
 
