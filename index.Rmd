@@ -3676,8 +3676,11 @@ We again find that we can reject the Null Hypothesis.
 
 
 ## Week 13 (26.05.2021)
-## Exercise 28
-Many biological processes display circadian rhythms in activity, which presumably operate to coordinate cellular functions with daily environmental oscillations. Many tissues themselves exhibit circadian rhythms of activity to optimize specific processes which require coordination with the light-dark cycle.  We want to investigate the phase shift in the circadian rhythm of melatonin production in participants given alternative light treatments. Light treatments were applied to the knees or the eyes, as well as a control group without any treatment. The phase shift in the circadian rhythm of melatonin production was recorded.  You can download the data with this command (original publication DOI: 10.1126/science.1071697):
+### Exercise 28
+Many biological processes display circadian rhythms in activity, which presumably operate to coordinate cellular functions with daily environmental oscillations. Many tissues themselves exhibit circadian rhythms of activity to optimize specific processes which require coordination with the light-dark cycle.  We want to investigate the phase shift in the circadian rhythm of melatonin production in participants g
+
+
+iven alternative light treatments. Light treatments were applied to the knees or the eyes, as well as a control group without any treatment. The phase shift in the circadian rhythm of melatonin production was recorded.  You can download the data with this command (original publication DOI: 10.1126/science.1071697):
 
 ```{r}
 circadian <- read.csv(url("https://whitlockschluter3e.zoology.ubc.ca/Data/chapter15/chap15e1KneesWhoSayNight.csv"), stringsAsFactors = FALSE)
@@ -3691,6 +3694,132 @@ c) If the ANOVA tells you that one of the groups is significantly different from
 
 d) The original goal of this publication was to replicate findings from an earlier study that showed that light treatment behind the knee can alter your circadian rhythm of melatonin production. The authors replicated the experiment using the same setup and machines, but improved the study design by including a proper control group and using a double-blind experimental design. What did the new study find? Do the new results support the original findings? What can we learn from this?
 
+
+
+
+
+
+#### Solution
+I first change the order of the groups for better comparison:
+```{r}
+
+circadian$treatment <- factor(circadian$treatment, 
+    levels = c("control", "knee", "eyes")) 
+
+```
+
+
+
+The data can be visualized in several different ways and I chose a simple strip chart. This looks nice and has the advantage that we can actually see the raw data.
+
+```{r}
+ggplot(circadian, aes(x = treatment, y = shift)) +
+    geom_point(color = "firebrick", size = 3, shape = 1) +
+    labs(x = "Light treatment", y = "Shift in circadian rhythm (h)") + 
+    theme_classic()
+```
+
+If you want to also include error bars you have already seen many ways to do this, so I use a new one that is relatively elegant:
+
+```{r}
+ggplot(circadian, aes(x = treatment, y = shift)) +
+    geom_point(color = "firebrick", size = 3, shape = 1) +
+    stat_summary(fun.data = mean_se, geom = "errorbar", 
+        colour = "black", width = 0.1, 
+        position=position_nudge(x = 0.15)) +
+    stat_summary(fun.y = mean, geom = "point", 
+        colour = "firebrick", size = 3, 
+        position=position_nudge(x = 0.15)) +
+    labs(x = "Light treatment", y = "Shift in circadian rhythm (h)") + 
+    theme_classic()
+```
+
+b) 
+
+The ANOVA table is made in two steps. The first step involves fitting the ANOVA model to the data using lm() (“lm” stands for “linear model”, of which ANOVA is one type). Then we use the command anova() to assemble the table. 
+
+```{r}
+circadianAnova <- lm(shift ~ treatment, data = circadian)
+anova(circadianAnova)
+```
+
+
+In the ANOVA table we see that the F statistic is quite large and the P value is small. That means that we can reject the null hypothesis that all means are equal for any significance threshold of $0.005$ or higher. We can thus be fairly certain that one of the three groups is different from the others. 
+
+c) It can be seen directly from the visualization of the data that the kne and control group are very similar, whereas the eye group is different from the other two groups. We can also try pairwise t-tests to make this more formal:
+
+```{r}
+pairwise.t.test(circadian$shift,circadian$treatment)
+```
+
+Note that these p-values are automatically adjusted for multiple testing!
+
+d) The results do not confirm the original study's claim that light treatment behind the knee leads to changes  phase shift  melatonin production. Experimental design is important, as is replication of scientific findings. In general it is advised to use a double blind study setup, to make sure there are no biases introduced by the experimenter as well as the subjects of the study. 
+
+
+## Week 14 (02.06.2021)
+### Exercise 29
+Load the following data set:
+```{r}
+lion <- read.csv(url("http://www.zoology.ubc.ca/~schluter/WhitlockSchluter/wp-content/data/chapter17/chap17e1LionNoses.csv"))
+head(lion)
+```
+The data set consists of two mesurements. The age of lions and the proportion of bacl pigmentation ont he nose of the lion. 
+
+a) Visualize and inspect the data
+
+b) Calcualte the correlation coefficient of the two variables.
+
+c) Estimate a linear regression model using the data. Inspect the output - is the slope of the model significantly different from 0?
+
+d) Calculate a confidence interval for the slope of the regression line.
+
+e) Plot the data and add a regression line and a confidence band for the regression line.
+
+#### Solution
+
+
+<!-- ```{r} -->
+<!-- plot(ageInYears ~ proportionBlack, data = lion) -->
+<!-- ``` -->
+
+<!-- ```{r} -->
+<!-- lionRegression <- lm(ageInYears ~ proportionBlack, data = lion) -->
+<!-- summary(lionRegression) -->
+<!-- ``` -->
+
+
+<!-- ```{r} -->
+<!-- plot(ageInYears ~ proportionBlack, data = lion) -->
+<!-- abline(lionRegression) -->
+<!-- ``` -->
+<!-- or -->
+
+<!-- ```{r} -->
+<!-- ggplot(data = lion) + -->
+<!--   geom_point(mapping = aes(x = proportionBlack,y = ageInYears)) + -->
+<!--   geom_smooth(mapping = aes(x = proportionBlack,y = ageInYears), method = "lm") -->
+
+<!-- ``` -->
+<!-- ```{r} -->
+<!-- xpt <- seq(min(lion$proportionBlack), max(lion$proportionBlack),  -->
+<!-- 	length.out = 100) -->
+<!-- ypt <- data.frame( predict(lionRegression,  -->
+<!-- 	newdata = data.frame(proportionBlack = xpt),  -->
+<!-- 	interval = "confidence") ) -->
+
+<!-- plot(ageInYears ~ proportionBlack, data = lion) -->
+<!-- abline(lionRegression) -->
+<!-- lines(ypt$lwr ~ xpt, lwd = 1.5, lty = 2) -->
+<!-- lines(ypt$upr ~ xpt, lwd = 1.5, lty = 2) -->
+
+<!-- ypt.pred <- data.frame( predict(lionRegression,  -->
+<!-- 	newdata = data.frame(proportionBlack = xpt),  -->
+<!-- 	interval = "prediction") ) -->
+
+<!-- lines(ypt.pred$lwr ~ xpt, lwd = 1.5, lty = 3) -->
+<!-- lines(ypt.pred$upr ~ xpt, lwd = 1.5, lty = 3) -->
+<!-- ``` -->
 
 
 
