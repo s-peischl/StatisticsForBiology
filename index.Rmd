@@ -3759,7 +3759,9 @@ d) The results do not confirm the original study's claim that light treatment be
 
 ## Week 14 (02.06.2021) 
 
-### Exercise 29 Load the following data set: 
+### Exercise 29 
+
+Load the following data set: 
 
 ```{r} 
 lion <- read.csv(url("http://www.zoology.ubc.ca/~schluter/WhitlockSchluter/wp-content/data/chapter17/chap17e1LionNoses.csv"))
@@ -3786,103 +3788,105 @@ g) Plot the data and add a regression line and a confidence band for the
 regression line.
 
 
-<!-- #### Solution -->
+#### Solution
 
-<!-- a) We first plot the data:  -->
-<!-- ```{r}  -->
-<!-- plot(ageInYears ~ proportionBlack, data = -->
-<!-- lion)  -->
-<!-- ``` -->
+a) We first plot the data:
+```{r}
+plot(ageInYears ~ proportionBlack, data =
+lion)
+```
 
-<!-- It looks like a linear regression model can make sense here. -->
+It looks like a linear regression model can make sense here.
 
-<!-- b) We next calcaulte the correlation coefficient using the function _cor()_: -->
+b) We next calcaulte the correlation coefficient using the function _cor()_:
 
-<!-- ```{r}  -->
-<!-- ?cor  -->
-<!-- cor(lion$proportionBlack,lion$ageInYears)  -->
-<!-- ``` -->
+```{r}
+?cor
+cor(lion$proportionBlack,lion$ageInYears)
+```
 
-<!-- The correlation coefficient is $0.79$ indicating that there is indeed a -->
-<!-- relationship between the two variables. c) We next fit a model and then test -->
-<!-- whether the assumptions of the model are met. -->
+The correlation coefficient is $0.79$ indicating that there is indeed a
+relationship between the two variables. c) We next fit a model and then test
+whether the assumptions of the model are met.
 
-<!-- The model is fit using the function _lm()_:  -->
-<!-- ```{r}  -->
-<!-- lionRegression <- -->
-<!-- lm(ageInYears ~ proportionBlack, data = lion) -->
-<!-- summary(lionRegression)  -->
-<!-- ``` -->
+The model is fit using the function _lm()_:
+```{r}
+lionRegression <-
+lm(ageInYears ~ proportionBlack, data = lion)
+summary(lionRegression)
+```
 
-<!-- The function summary tells us the variable "proportionBlack" has a coefficient -->
-<!-- $\beta_1 = 10.6471$ and the intercept of our model is $\beta_0 =  0.8790$. The -->
-<!-- formula for our linear regression model is thus: -->
+The function summary tells us the variable "proportionBlack" has a coefficient
+$\beta_1 = 10.6471$ and the intercept of our model is $\beta_0 =  0.8790$. The
+formula for our linear regression model is thus:
 
-<!-- $$ age = 0.8790 + proportionBlack * 10.6471 + \epsilon,$$ where $\epsilon$ is -->
-<!-- normally distributed with mean 0 and standard deviation $\sigma = 1.669$. This -->
-<!-- can be seen from the output or calcualted directly: -->
+$$ age = 0.8790 + proportionBlack * 10.6471 + \epsilon,$$ where $\epsilon$ is
+normally distributed with mean 0 and standard deviation $\sigma = 1.669$. This
+can be seen from the output or calcualted directly:
 
-<!-- ```{r} -->
-<!-- sd(lionRegression$residuals)  -->
-<!-- ``` -->
+```{r}
+sd(lionRegression$residuals)
+```
 
-<!-- d) We first check whether the residuals are normally distributed: -->
+d) We first check whether the residuals are normally distributed:
 
-<!-- ```{r}  -->
-<!-- library(car)  -->
-<!-- qqPlot(lionRegression$residuals,dist="norm")  -->
-<!-- ```  -->
-<!-- The QQ-Plot -->
-<!-- looks good. So we next see wheter the variance of residuals is constant across -->
-<!-- the range of fitted values: -->
+```{r}
+library(car)
+qqPlot(lionRegression$residuals,dist="norm")
+```
+The QQ-Plot
+looks good. So we next see wheter the variance of residuals is constant across
+the range of fitted values:
 
-<!-- ```{r}  -->
-<!-- plot(lionRegression$fitted.values,lionRegression$residuals)  -->
-<!-- ```  -->
-<!-- This looks ok. -->
+```{r}
+plot(lionRegression$fitted.values,lionRegression$residuals)
+```
+This looks ok.
 
-<!-- e)  The function _confint()_ does that automatically for us: -->
+e)  The function _confint()_ does that automatically for us:
 
-<!-- ```{r}  -->
-<!-- confint(lionRegression)  -->
-<!-- ``` -->
+```{r}
+confint(lionRegression)
+```
 
-<!-- f) The summary outpout gives us the p-value for the null hypothesis that the -->
-<!-- slope $\beta_1$ is significantly different from 0. We choose a significance -->
-<!-- threshold of $alpha = 0.05$. Becasue the p-value is very small, we can reject the Null hypothesis that the slope is not different from 0. -->
+f) The summary outpout gives us the p-value for the null hypothesis that the
+slope $\beta_1$ is significantly different from 0. We choose a significance
+threshold of $alpha = 0.05$. Because the p-value is very small, we can reject the Null hypothesis that the slope is not different from 0.
 
 
 
-<!-- g) I show to examples, one in base R and one using ggplot: -->
+g) I show to examples, one in base R and one using ggplot:
 
-<!-- ```{r}  -->
-<!-- plot(ageInYears ~ proportionBlack, data = lion) -->
-<!-- abline(lionRegression) -->
-<!-- ```  -->
-<!-- or -->
+```{r}
+plot(ageInYears ~ proportionBlack, data = lion)
+abline(lionRegression)
+```
+or
 
-<!-- ```{r}  -->
-<!-- ggplot(data = lion) + geom_point(mapping = aes(x = proportionBlack,y = ageInYears)) + geom_smooth(mapping = aes(x = proportionBlack,y = ageInYears), -->
-<!-- method = "lm") -->
+```{r}
+ggplot(data = lion) + geom_point(mapping = aes(x = proportionBlack,y = ageInYears)) + geom_smooth(mapping = aes(x = proportionBlack,y = ageInYears),
+method = "lm")
 
-<!-- ```  -->
+```
 
-<!-- Next we add a prediction interval: -->
-<!-- ```{r}  -->
-<!-- xpt <- seq(min(lion$proportionBlack), max(lion$proportionBlack),length.out = 100) -->
+Next we add a prediction interval:
+```{r}
 
-<!-- ypt <- data.frame( predict(lionRegression, newdata = data.frame(proportionBlack = xpt), interval = "confidence") ) -->
+xpt <- seq(min(lion$proportionBlack), max(lion$proportionBlack),length.out = 100)
 
-<!-- plot(ageInYears ~ proportionBlack, data = lion) -->
+ypt <- data.frame( predict(lionRegression, newdata = data.frame(proportionBlack = xpt), interval = "confidence") )
 
-<!-- abline(lionRegression)  -->
+plot(ageInYears ~ proportionBlack, data = lion)
 
-<!-- lines(ypt$lwr ~ xpt, lwd = 1.5, lty = 2) lines(ypt$upr ~ xpt, lwd = 1.5, lty = -->
-<!-- 2) -->
+abline(lionRegression)
 
-<!-- ypt.pred <- data.frame( predict(lionRegression, newdata = -->
-<!-- data.frame(proportionBlack = xpt), interval = "prediction") ) -->
+lines(ypt$lwr ~ xpt, lwd = 1.5, lty = 2)
 
-<!-- lines(ypt.pred$lwr ~ xpt, lwd = 1.5, lty = 3)  -->
-<!-- lines(ypt.pred$upr ~ xpt, lwd = 1.5, lty = 3)  -->
-<!-- ``` -->
+lines(ypt$upr ~ xpt, lwd = 1.5, lty = 2)
+
+ypt.pred <- data.frame( predict(lionRegression, newdata =
+data.frame(proportionBlack = xpt), interval = "prediction") )
+
+lines(ypt.pred$lwr ~ xpt, lwd = 1.5, lty = 3)
+lines(ypt.pred$upr ~ xpt, lwd = 1.5, lty = 3)
+```
