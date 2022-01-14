@@ -1,84 +1,48 @@
-\contentsline {section}{Introduction}{2}{section*.2}
-\contentsline {section}{Visualizations with ggplot2 and base R}{2}{section*.3}
-\contentsline {subsection}{GGplot 2}{2}{section*.4}
-\contentsline {subsubsection}{The MPG dataset}{3}{section*.5}
-\contentsline {subsubsection}{The grammar of ggplot2}{3}{section*.6}
-\contentsline {subsection}{Base R graphics}{9}{section*.7}
-\contentsline {section}{Working with data frames}{12}{section*.8}
-\contentsline {subsection}{Loading datasets}{12}{section*.9}
-\contentsline {subsection}{Manipulating data frames}{14}{section*.10}
-\contentsline {subsection}{Adding variables to data frames}{15}{section*.11}
-\contentsline {subsection}{Subsetting a data frame}{16}{section*.12}
-\contentsline {subsubsection}{\emph {Practice Questions:}}{18}{section*.13}
-\contentsline {section}{Calculating Descriptive Statistics}{18}{section*.14}
-\contentsline {subsection}{Plots}{19}{section*.15}
-\contentsline {section}{A bit of workflow}{22}{section*.16}
-\contentsline {subsection}{What is an R script}{22}{section*.17}
-\contentsline {subsection}{Defining and using Variables}{23}{section*.18}
-\contentsline {subsection}{Loops}{24}{section*.19}
-\contentsline {subsection}{If / else}{25}{section*.20}
-\contentsline {section}{Working with Distributions and random variables}{26}{section*.21}
-\contentsline {subsection}{Functions to work with probaility distributions}{26}{section*.22}
-\contentsline {subsection}{Quantiles}{28}{section*.23}
-\contentsline {subsection}{Drawing random numbers}{29}{section*.24}
-\contentsline {subsection}{Plotting Confidence intervalls}{32}{section*.25}
-\contentsline {subsection}{Putting everything together: A simple simulation}{35}{section*.26}
-\contentsline {section}{Hypothesis Tests}{36}{section*.27}
-\contentsline {subsection}{Binomial-test}{36}{section*.28}
-\contentsline {subsection}{\(\chi ^2\) test}{38}{section*.29}
-\contentsline {subsection}{t-test}{42}{section*.30}
-\contentsline {subsubsection}{One-sample t-test}{42}{section*.31}
-\contentsline {subsubsection}{Two-sample t-test}{44}{section*.32}
-\contentsline {section}{Deviations from Normailty}{47}{section*.33}
-\contentsline {subsection}{QQ Plots and Transformations}{47}{section*.34}
-\contentsline {subsection}{Non-Parametric Alternatives}{50}{section*.35}
-\contentsline {subsection}{Permutation Test}{51}{section*.36}
-\contentsline {section}{ANOVA}{54}{section*.37}
-\contentsline {subsection}{One way ANOVA}{54}{section*.38}
-\contentsline {subsection}{Two way ANOVA}{55}{section*.39}
-\contentsline {section}{Linear Regression}{58}{section*.40}
-\contentsline {section}{Additional notes to the course slides}{62}{section*.41}
-\contentsline {subsection}{Law of total probability}{62}{section*.42}
-\contentsline {section}{Exercises}{63}{section*.43}
-\contentsline {subsection}{Week 1 (24.02.2021)}{63}{section*.44}
-\contentsline {paragraph}{Exercise 1}{63}{section*.45}
-\contentsline {paragraph}{Exercise 2}{64}{section*.46}
-\contentsline {paragraph}{Exercise 3}{64}{section*.47}
-\contentsline {paragraph}{Exercise 4}{64}{section*.48}
-\contentsline {paragraph}{Exercise 5}{64}{section*.49}
-\contentsline {subsubsection}{Solutions}{65}{section*.50}
-\contentsline {paragraph}{Exercise 1}{65}{section*.51}
-\contentsline {paragraph}{Exercise 2}{65}{section*.52}
-\contentsline {paragraph}{Exercise 3}{65}{section*.53}
-\contentsline {paragraph}{Exercise 4}{66}{section*.54}
-\contentsline {paragraph}{Exercise 5}{66}{section*.55}
-\contentsline {subsection}{Week 2 (03.03.2021)}{66}{section*.56}
-\contentsline {paragraph}{Exercise 6}{66}{section*.57}
-\contentsline {subsubsection}{Solutions}{67}{section*.58}
-\contentsline {subsection}{Week 3 (10.03.2021)}{72}{section*.59}
-\contentsline {paragraph}{Exercise 7}{72}{section*.60}
-\contentsline {paragraph}{Solution}{72}{section*.61}
-\contentsline {subsection}{Week 4 (17.03.2021)}{77}{section*.62}
-\contentsline {paragraph}{Exercise 8}{77}{section*.63}
-\contentsline {subparagraph}{Solution}{78}{section*.64}
-\contentsline {paragraph}{Exercise 9 (standard)}{79}{section*.65}
-\contentsline {subparagraph}{Solution}{80}{section*.66}
-\contentsline {paragraph}{Exercise 9 (challenging)}{80}{section*.67}
-\contentsline {subparagraph}{Solution}{81}{section*.68}
-\contentsline {subsection}{Week 5 (24.03.2021)}{81}{section*.69}
-\contentsline {subsubsection}{Exercise 10}{81}{section*.70}
-\contentsline {paragraph}{Solution}{82}{section*.71}
-\contentsline {subsubsection}{Exercise 11}{84}{section*.72}
-\contentsline {paragraph}{Solution}{85}{section*.73}
-\contentsline {subsubsection}{Exercise 12}{86}{section*.74}
-\contentsline {paragraph}{Solution}{86}{section*.75}
-\contentsline {subsection}{Week 6 (31.03.2021)}{86}{section*.76}
-\contentsline {subsubsection}{Exercsie 13}{86}{section*.77}
-\contentsline {paragraph}{Solution}{86}{section*.78}
-\contentsline {subsubsection}{Exercise 14}{89}{section*.79}
-\contentsline {paragraph}{Solution}{89}{section*.80}
-\contentsline {subsubsection}{Exercise 15}{91}{section*.81}
-\contentsline {paragraph}{Solutions}{91}{section*.82}
-\contentsline {subsection}{Week 7 (14.04.2021)}{94}{section*.83}
-\contentsline {paragraph}{Exercise 16}{94}{section*.84}
-\contentsline {paragraph}{Exercise 17}{94}{section*.85}
+\contentsline {section}{\numberline {1}Introduction}{3}{section.1}
+\contentsline {section}{\numberline {2}Visualizations with ggplot2 and base R}{3}{section.2}
+\contentsline {subsection}{\numberline {2.1}GGplot 2}{3}{subsection.2.1}
+\contentsline {subsubsection}{\numberline {2.1.1}The MPG dataset}{3}{subsubsection.2.1.1}
+\contentsline {subsubsection}{\numberline {2.1.2}The grammar of ggplot2}{4}{subsubsection.2.1.2}
+\contentsline {subsection}{\numberline {2.2}Base R graphics}{7}{subsection.2.2}
+\contentsline {section}{\numberline {3}Working with data frames}{9}{section.3}
+\contentsline {subsection}{\numberline {3.1}Loading datasets}{9}{subsection.3.1}
+\contentsline {subsection}{\numberline {3.2}Manipulating data frames}{11}{subsection.3.2}
+\contentsline {subsection}{\numberline {3.3}Adding variables to data frames}{12}{subsection.3.3}
+\contentsline {subsection}{\numberline {3.4}Subsetting a data frame}{13}{subsection.3.4}
+\contentsline {subsubsection}{\numberline {3.4.1}\emph {Practice Questions:}}{15}{subsubsection.3.4.1}
+\contentsline {section}{\numberline {4}Calculating Descriptive Statistics}{15}{section.4}
+\contentsline {subsection}{\numberline {4.1}Plots}{16}{subsection.4.1}
+\contentsline {section}{\numberline {5}A bit of workflow}{19}{section.5}
+\contentsline {subsection}{\numberline {5.1}What is an R script}{19}{subsection.5.1}
+\contentsline {subsection}{\numberline {5.2}Defining and using Variables}{19}{subsection.5.2}
+\contentsline {subsection}{\numberline {5.3}Loops}{21}{subsection.5.3}
+\contentsline {subsection}{\numberline {5.4}If / else}{22}{subsection.5.4}
+\contentsline {section}{\numberline {6}Working with Distributions and random variables}{22}{section.6}
+\contentsline {subsection}{\numberline {6.1}Functions to work with probaility distributions}{22}{subsection.6.1}
+\contentsline {subsection}{\numberline {6.2}Quantiles}{25}{subsection.6.2}
+\contentsline {subsection}{\numberline {6.3}Drawing random numbers}{26}{subsection.6.3}
+\contentsline {subsection}{\numberline {6.4}Plotting Confidence intervalls}{28}{subsection.6.4}
+\contentsline {subsection}{\numberline {6.5}Putting everything together: A simple simulation}{31}{subsection.6.5}
+\contentsline {section}{\numberline {7}Hypothesis Tests}{32}{section.7}
+\contentsline {subsection}{\numberline {7.1}Binomial-test}{32}{subsection.7.1}
+\contentsline {subsection}{\numberline {7.2}\(\chi ^2\) test}{34}{subsection.7.2}
+\contentsline {subsection}{\numberline {7.3}t-test}{39}{subsection.7.3}
+\contentsline {subsubsection}{\numberline {7.3.1}One-sample t-test}{39}{subsubsection.7.3.1}
+\contentsline {subsubsection}{\numberline {7.3.2}Two-sample t-test}{40}{subsubsection.7.3.2}
+\contentsline {section}{\numberline {8}Deviations from Normailty}{42}{section.8}
+\contentsline {subsection}{\numberline {8.1}QQ Plots and Transformations}{42}{subsection.8.1}
+\contentsline {subsection}{\numberline {8.2}Non-Parametric Alternatives}{46}{subsection.8.2}
+\contentsline {subsection}{\numberline {8.3}Permutation Test}{47}{subsection.8.3}
+\contentsline {section}{\numberline {9}ANOVA}{49}{section.9}
+\contentsline {subsection}{\numberline {9.1}One way ANOVA}{49}{subsection.9.1}
+\contentsline {subsection}{\numberline {9.2}Two way ANOVA}{51}{subsection.9.2}
+\contentsline {section}{\numberline {10}Linear Regression}{53}{section.10}
+\contentsline {section}{\numberline {11}Additional notes to the course slides}{56}{section.11}
+\contentsline {subsection}{\numberline {11.1}Law of total probability}{56}{subsection.11.1}
+\contentsline {section}{\numberline {12}Exercises}{58}{section.12}
+\contentsline {subsection}{\numberline {12.1}Week 1 (23.02.2022)}{58}{subsection.12.1}
+\contentsline {paragraph}{\numberline {12.1.0.1}Exercise 1}{58}{paragraph.12.1.0.1}
+\contentsline {paragraph}{\numberline {12.1.0.2}Exercise 2}{58}{paragraph.12.1.0.2}
+\contentsline {paragraph}{\numberline {12.1.0.3}Exercise 3}{59}{paragraph.12.1.0.3}
+\contentsline {paragraph}{\numberline {12.1.0.4}Exercise 4}{59}{paragraph.12.1.0.4}
+\contentsline {paragraph}{\numberline {12.1.0.5}Exercise 5}{59}{paragraph.12.1.0.5}

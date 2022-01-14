@@ -1,19 +1,33 @@
 ---
-title: "Exercises and Additional Lecture Notes for Statistics for Biology - FS 2022"
+title: "Statistik für Biologie FS 2022"
+
 author: "Stephan Peischl"
+abstract: "These notes provide a short introduction to R as well as the exercises for the pracitcal part of the course. The aim of these notes is to provide you with a tool to solve the exercises for each week and to learn some R along the way. "
+
 output:
+  pdf_document:
+    toc: yes
+    number_sections: yes
+    fig_width: 5
+    fig_height: 4
+    fig_caption: true
+    df_print: kable
+    highlight: tango
+    
+   
+  word_document:
+    toc: yes
   html_document:
     toc: yes
     toc_float: yes
-  word_document:
-    toc: yes
-  pdf_document:
-    toc: yes
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+
+
+\newpage
 
 # Introduction
 
@@ -88,7 +102,7 @@ To learn more about mpg, open its help page by running ?mpg. in the next seciton
 In general you begin a plot with the function *ggplot()*. ggplot() creates a coordinate system that you can add layers to. The first argument of ggplot() is the dataset to use in the graph. For instance, typing ggplot(data = mpg)
 into the console creates an empty graph (which is boring so it is not shown here). You can now add layers to your plot. For example, the function geom_point() adds a layer of points to your plot, thus creating  a scatterplot.
 
-```{r }
+```,{r,fig.align='center',}
 ggplot(data = mpg) + 
   geom_point(mapping = aes(x = displ, y = hwy)) 
 ```
@@ -99,7 +113,7 @@ Each geom function in ggplot2 takes a mapping argument. This defines how variabl
 
 Next, we use a different theme beacuse this gray background in the standard design is ugly.
 
-```{r mileage2}
+```,{r,fig.align='center',mileage2}
 ggplot(data = mpg) + 
   geom_point(mapping = aes(x = displ, y = hwy)) +
   theme_classic()
@@ -117,7 +131,7 @@ We will explain each part step by step in examples. The DATA argument should be 
 The second part, GEOM_FUNCTION, specifies what kind of plot you want. As mentioned above *geom_point* gives you a classic scatter plot. Many other such funtions exist and we will encounter some of them. 
 
 Finally, MAPPING specifies which variables hould be plotted. We ussually specify this with an aesthetics mapping of the form *mapping = aes(x = ..., y =...)* to deterimne the variables that give us the x- and y-coordinates. We can however also change the aesthetics of our plot in various way, for instance by giving data points different colors that indicate the value of a third variable:  
-```{r mileage_aes}
+```,{r,fig.align='center',mileage_aes}
 ggplot(data = mpg) + 
   geom_point(mapping = aes(x = displ, y = hwy,color = class)) +
   theme_classic()
@@ -248,7 +262,9 @@ and the 5th row by
 ```{r}
 stickleback[5,]
 ```
-Note that stickleback[[,3]] gives you all measurment of the 3rd variable in our dataframe and is hence equivalent to stickleback$genotype. The vector stickleback[5,] on the other hand gives you a vector with the 3 measured values of the 5 th individual. 
+
+
+Note that stickleback[[,3]] gives you all measurement of the 3rd variable in our dataframe and is hence equivalent to stickleback$genotype. The vector stickleback[5,] on the other hand gives you a vector with the 3 measured values of the 5 th individual. 
 
 We can also use this way of accessing elements to find elements of a certain type, for instance, fi we want to know the genotype of all individuals with more then 30 plates, we can get this in the following way:
 ```{r results = "hide"}
@@ -297,6 +313,7 @@ There are a few *mm* genotypes with more than 20 plates. But how many?
 subset(stickleback,plates > 20 & genotype == "mm")
 
 ```
+
 It turns out there are exactly two: one with 37 plates and one with 22. We have used logical operators here: "&" means that both conditions need to be satisfied. In contrast, try to see what the symbol " | " means:
 ```{r}
 head(subset(stickleback,plates > 20  |  genotype == "mm"))
